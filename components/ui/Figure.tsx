@@ -38,6 +38,14 @@ type Props = {
  * Por eso el hueco lleva el rótulo de lo que debería verse (`label`) y no un texto
  * genérico. Es a la vez el placeholder y la lista de la compra.
  *
+ * **Se probó a rellenar estos huecos con fotografía de archivo, y se descartó.** Lo único
+ * que hay con licencia libre para este sector es una serie de rollos de hilo de ACERO de
+ * un patio, con óxido a la vista. Sobre una ficha que dice «99,99 % de aluminio», una foto
+ * de hilo herrumbroso no ambienta: desmiente, y ante un comprador que decide por las cotas
+ * eso cuesta más que un hueco honesto. El plan es fotografía de stock **de pago** hasta que
+ * Swiftmet entregue la suya; ambas entran por el panel, así que este componente no cambia.
+ * El razonamiento completo, en el README, «Fotografía».
+ *
  * **El hueco es más plano que la foto que lo sustituirá** (`placeholderRatio`), y esto se
  * decidió viendo el resultado: con la proporción 4:3 de la foto real, siete productos sin
  * fotografía convertían el catálogo en un muro de tramas de dos pantallas de alto, con más
