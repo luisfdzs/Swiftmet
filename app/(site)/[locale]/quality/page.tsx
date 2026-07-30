@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { Figure } from '@/components/ui/Figure'
 import { Reveal } from '@/components/ui/Reveal'
 import { getCompanyInfo } from '@/lib/content'
+import { stockQualityPhoto } from '@/lib/photos'
 import { isLocale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 
@@ -45,7 +46,9 @@ export default async function QualityPage({ params }: { params: Promise<{ locale
       <p className="mx-auto mt-8 max-w-2xl text-lead text-ink-soft">{t.quality.lead}</p>
 
       <Figure
-        image={null}
+        // Foto de archivo de una línea de trefilado, no de la planta de Baghola: es un
+        // ambiente, no una prueba. La de verdad sigue pendiente (ver `lib/photos.ts`).
+        image={stockQualityPhoto}
         locale={locale}
         ratio="21 / 9"
         sizes="100vw"

@@ -38,6 +38,14 @@ type Props = {
  * Por eso el hueco lleva el rótulo de lo que debería verse (`label`) y no un texto
  * genérico. Es a la vez el placeholder y la lista de la compra.
  *
+ * **Lo de arriba se ha desandado en parte, y conviene saber por qué.** Hoy los huecos de
+ * producto y el de calidad reciben una foto de archivo con licencia libre
+ * (`lib/photos.ts`), así que en pantalla ya no queda ese recordatorio. El aviso se ha
+ * mudado al código y al README: la decisión de enseñar ambiente en vez de un hueco se
+ * tomó a sabiendas de este coste. El componente no ha cambiado —sigue pintando el hueco
+ * en cuanto se le pasa `image={null}`—, y el día que Swiftmet suba sus fotos al panel
+ * basta con borrar los ficheros de `public/photos`.
+ *
  * **El hueco es más plano que la foto que lo sustituirá** (`placeholderRatio`), y esto se
  * decidió viendo el resultado: con la proporción 4:3 de la foto real, siete productos sin
  * fotografía convertían el catálogo en un muro de tramas de dos pantallas de alto, con más

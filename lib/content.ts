@@ -3,6 +3,9 @@ import { z } from 'zod'
 import { client } from '@/sanity/client'
 import { COMPANY_QUERY, PRODUCTS_QUERY, PRODUCT_SLUGS_QUERY, SPOOLS_QUERY } from '@/sanity/queries'
 import type { Localized } from '@/lib/i18n/config'
+// `photos.ts` sólo importa un TIPO de este fichero, así que el ciclo se borra al compilar
+// y en ejecución la dependencia va en un único sentido: contenido → fotos de archivo.
+import { stockPhotoForProduct } from '@/lib/photos'
 
 /**
  * ÚNICA PUERTA DE ACCESO AL CONTENIDO
@@ -232,7 +235,14 @@ export async function getProducts(): Promise<ProductEntry[]> {
       ...product,
       images,
       applications: product.applications ?? [],
-      cover: images[0] ?? null,
+      /**
+       * Sanity manda; la foto de archivo es sólo el respaldo mientras Swiftmet no suba
+       * la suya (ver `lib/photos.ts`). El respaldo va **aquí y no en `images`**: la
+       * galería de la ficha enseña lo que hay del producto de verdad, y una foto de
+       * archivo repetida en ella daría a entender que hay reportaje donde no lo hay. En
+       * cuanto el panel tenga una imagen, `images[0]` gana y el archivo desaparece solo.
+       */
+      cover: images[0] ?? stockPhotoForProduct(product.slug),
     }
   })
 }

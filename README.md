@@ -126,6 +126,7 @@ components/
   ui/                    · Figure (toda imagen pasa por aquí), Media, SpecList, Reveal
 lib/
   content.ts             ← única puerta de acceso al contenido
+  photos.ts              ← fotos de archivo provisionales; respaldo si Sanity no tiene imagen
   format.ts              ← formato de cifras técnicas por idioma (2.75 vs 2,75)
   i18n/ cn.ts site-env.ts
 content/site.ts          ← sólo constantes técnicas; lo editorial vive en el panel
@@ -172,23 +173,34 @@ El hindi carga **IBM Plex Sans Devanagari** y una interlínea propia: los signos
 encima y por debajo de la línea base, y con la interlínea apretada de los titulares latinos se
 pisaban. Se vio en `/hi` antes de escribir la regla.
 
-## Fotografía: no hay, y se ve que no hay
+## Fotografía: de archivo, prestada y provisional
 
-**La web está construida sin ninguna fotografía.** No tenemos imágenes de la planta de Palwal, ni del
-hilo, ni de las bobinas. La decisión de diseño fue **no disimularlo**:
+**Swiftmet no ha entregado ninguna fotografía.** No hay imágenes de la planta de Baghola, ni del hilo,
+ni de las bobinas. Mientras lleguen, la web enseña **fotografía genérica de archivo con licencia
+libre** —rollos de hilo trefilado, carretes, una línea de trefilado— sacada de Wikimedia Commons y
+recortada a la proporción de cada hueco: ocho ficheros en `public/photos`, declarados en
+`lib/photos.ts`.
 
-- Los huecos de foto se pintan tramados, con el rótulo de **qué foto falta** y quién la aporta
-  (`components/ui/Figure.tsx`). Así la propia web es la lista de la compra.
-- En cuanto alguien suba la imagen al panel, el hueco desaparece solo. **No hay nada que borrar en el
-  código.**
-- Lo que sí hay es **dibujo técnico de verdad**: las secciones de bobina se generan de las cotas, a
-  escala común. No es un placeholder — es información que la competencia no publica.
+- **Ninguna es de Swiftmet, y la web no dice que lo sea.** Los pies y los `alt` describen lo que se ve
+  —«rollos de varilla», «carrete de hilo trefilado»— y nunca un grado, una pureza ni una planta
+  concretos. En su mayoría son fotos de hilo de **acero**, no de aluminio de alta pureza.
+- **Todas son CC BY-SA y exigen atribución**, que vive en `public/photos/CREDITS.md` y se publica con
+  la web. Si tocas las fotos, ese fichero se actualiza en el mismo cambio.
+- **En cuanto alguien suba la imagen al panel, la de archivo deja de usarse.** No hay nada que borrar
+  en el código: el respaldo sólo actúa si el producto no tiene imagen en Sanity (`getProducts` en
+  `lib/content.ts`). Para retirarlas del todo, borrar los ficheros.
+- **El programa de bobinas no lleva fotografía de archivo.** Las catorce bobinas se dibujan a escala
+  desde sus cotas: es información que la competencia no publica, y una bobina de stock que no midiera
+  lo que dice la tabla convertiría el único dato firme de la web en decoración.
 - El favicon y la imagen de compartir se dibujan en SVG desde `npm run brand`, sin depender de ningún
   fichero de imagen que no tenemos.
 
-Un placeholder que imita una foto (un gris liso, una foto de stock de «industria») consigue que la web
-parezca terminada y que nadie se acuerde de pedir las fotos. Seis meses después sigue ahí y ya nadie
-sabe si es intencionado.
+**El coste de esta decisión, dicho claro:** una foto de stock de «industria» consigue que la web
+parezca terminada y que nadie se acuerde de pedir las de verdad. El diseño original pintaba los huecos
+tramados con el rótulo de qué foto faltaba, precisamente para que la propia pantalla fuera la lista de
+la compra (`components/ui/Figure.tsx` sigue haciéndolo si se le pasa `image={null}`). Ese recordatorio
+ya no está a la vista: ahora vive aquí. Seis meses después nadie mira el código, así que **esta
+sección es lo único que queda pidiéndolas**.
 
 **Fotos que hacen falta, por orden de valor:** la línea de trefilado con el calibre en proceso o la
 máquina de tracción (es la prueba visual de toda la página de calidad), un juego de bobinas reales, la
@@ -277,6 +289,10 @@ señalado también dentro de `scripts/migration/content-snapshot.json`, con la p
 
 **Decisiones abiertas:**
 
+- **Fotografía propia.** Lo que se ve hoy es **foto de archivo con licencia libre, y de hilo de acero**
+  (ver «Fotografía» más arriba y `public/photos/CREDITS.md`). Sirve para no publicar huecos, pero no es
+  el destino: pedir a Swiftmet las fotos de la planta, del hilo y de las bobinas, y subirlas al panel
+  —la de archivo se retira sola—.
 - **Logotipo.** No hay logotipo vectorial de Swiftmet. El de la web es provisional: símbolo geométrico
   (la sección de una bobina, la misma vista que dibuja `SpoolDiagram`) + el nombre en la tipografía del
   sistema. Cuando llegue el real, se sustituye el `<svg>` de `components/layout/Wordmark.tsx` y el de

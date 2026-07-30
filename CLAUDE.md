@@ -54,6 +54,10 @@ proyecto.
   declarado en `vercel.json`.
 - **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (33
   comprobaciones en Chrome real a 390×844, por idioma).
+- **Fotografía:** Swiftmet no ha entregado ninguna. Los huecos llevan **foto de archivo CC BY-SA de
+  Wikimedia** (`lib/photos.ts`, atribución obligatoria en `public/photos/CREDITS.md`), que se retira
+  sola en cuanto el panel tiene imagen. Ambienta, no acredita: ningún `alt` afirma grado, pureza ni
+  planta. Las bobinas no llevan foto: se dibujan a escala desde sus cotas.
 - **Navegación:** en escritorio, la cabecera; en móvil (`< lg`), una **barra inferior fija de cinco
   iconos** —inicio, productos, bobinas, contacto y el menú completo— al estilo de bonsaiartesania.com.
   Los textos van **centrados en su sección** en toda la web; el eje central es la decisión de
