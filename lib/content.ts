@@ -3,6 +3,9 @@ import { z } from 'zod'
 import { client } from '@/sanity/client'
 import { COMPANY_QUERY, PRODUCTS_QUERY, PRODUCT_SLUGS_QUERY, SPOOLS_QUERY } from '@/sanity/queries'
 import type { Localized } from '@/lib/i18n/config'
+// `photos.ts` sólo importa un TIPO de este fichero, así que el ciclo desaparece al compilar
+// y en ejecución la dependencia va en un único sentido: contenido → fotos de archivo.
+import { stockPhotoForProduct, unusedStockProductKeys } from '@/lib/photos'
 
 /**
  * ÚNICA PUERTA DE ACCESO AL CONTENIDO
@@ -226,13 +229,32 @@ function keepValid<T>(items: unknown[], schema: z.ZodType<T>, label: string): T[
 
 export async function getProducts(): Promise<ProductEntry[]> {
   const raw = await fetchContent<unknown[]>(PRODUCTS_QUERY)
-  return keepValid(raw, productSchema, 'el producto').map((product) => {
+  const valid = keepValid(raw, productSchema, 'el producto')
+
+  // Una foto de archivo declarada para un slug que no existe no rompe nada: la ficha se
+  // queda con el hueco y nadie se entera. Ya pasó, así que se avisa. Ver `lib/photos.ts`.
+  const huerfanas = unusedStockProductKeys(valid.map((product) => product.slug))
+  if (huerfanas.length > 0) {
+    console.warn(
+      `[fotos] Estas fotos de archivo no corresponden a ningún producto y no se están usando: ${huerfanas.join(', ')}. ` +
+        'La clave tiene que ser `product-<slug>` exacto.',
+    )
+  }
+
+  return valid.map((product) => {
     const images = product.images ?? []
     return {
       ...product,
       images,
       applications: product.applications ?? [],
-      cover: images[0] ?? null,
+      /**
+       * Sanity manda; la foto de archivo es sólo el respaldo mientras Swiftmet no entregue
+       * la suya (ver `lib/photos.ts`). El respaldo va **aquí y no en `images`**: la galería
+       * de la ficha enseña lo que hay del producto de verdad, y una foto de archivo
+       * repetida en ella daría a entender que hay reportaje donde no lo hay. En cuanto el
+       * panel tenga una imagen, `images[0]` gana y el archivo desaparece solo.
+       */
+      cover: images[0] ?? stockPhotoForProduct(product.slug),
     }
   })
 }
