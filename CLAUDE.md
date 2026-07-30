@@ -18,9 +18,15 @@ Se construye como **competencia directa de [electrolead.co.in](https://www.elect
 replicando el stack, la arquitectura y la metodología del proyecto `C:\Proyectos\sangilstudio`
 (rama `test`).
 
-**Estado actual (2026-07-30):** web completa y verificada en local. Falta **crear el proyecto de
-Sanity** (sin sus variables de entorno, `npm run build` no arranca a propósito) y **confirmar con el
-cliente** los datos marcados en el README.
+**Estado actual (2026-07-30): DESPLEGADA.**
+[swiftmet.vercel.app](https://swiftmet.vercel.app) (producción, rama `main`) y
+[swiftmettest.vercel.app](https://swiftmettest.vercel.app) (test, rama `test`), con Sanity `3caofriy`
+y los webhooks de revalidación funcionando —publicar se refleja en 9 segundos, sin desplegar—. IDs y
+detalles en la memoria `despliegue`.
+
+Lo único que queda es de **cliente, no de código**: confirmar email, teléfono, dominio y grados de
+pureza (ver «Pendiente de confirmar con Swiftmet» en el README) e invitar a quien vaya a editar en
+sanity.io/manage › Members.
 
 ## 2. La tesis competitiva (lo más importante de entender)
 
