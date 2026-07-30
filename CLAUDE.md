@@ -54,10 +54,12 @@ proyecto.
   declarado en `vercel.json`.
 - **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (33
   comprobaciones en Chrome real a 390×844, por idioma).
-- **Fotografía:** Swiftmet no ha entregado ninguna. Los huecos llevan **foto de archivo CC BY-SA de
-  Wikimedia** (`lib/photos.ts`, atribución obligatoria en `public/photos/CREDITS.md`), que se retira
-  sola en cuanto el panel tiene imagen. Ambienta, no acredita: ningún `alt` afirma grado, pureza ni
-  planta. Las bobinas no llevan foto: se dibujan a escala desde sus cotas.
+- **Fotografía:** no hay ninguna, y los huecos se pintan tramados diciendo qué falta. Se probó archivo
+  libre de Wikimedia y **se descartó**: lo único disponible es hilo de acero oxidado, y sobre la ficha
+  del 99,99 % de aluminio la foto desmiente al dato. Descartada también la imagen generada por IA
+  (regla 8). El puente acordado es **stock de pago subido al panel**; el destino, las fotos de Swiftmet.
+  Motivos y búsquedas, en el README, «Fotografía». Regla que deja: **una foto puede ambientar, nunca
+  ilustrar una afirmación.**
 - **Navegación:** en escritorio, la cabecera; en móvil (`< lg`), una **barra inferior fija de cinco
   iconos** —inicio, productos, bobinas, contacto y el menú completo— al estilo de bonsaiartesania.com.
   Los textos van **centrados en su sección** en toda la web; el eje central es la decisión de
@@ -110,5 +112,6 @@ Regla de oro: **el contexto nunca debe quedar desactualizado respecto al estado 
 ---
 
 _Última actualización: 2026-07-30 — textos centrados en toda la web y navegación de móvil en una barra
-inferior de iconos, al estilo de bonsaiartesania.com. Verificado en los tres idiomas (33/33 en
-`check:mobile`) y revisado a ojo en escritorio y móvil._
+inferior de iconos, al estilo de bonsaiartesania.com (33/33 en `check:mobile`, tres idiomas, revisado a
+ojo). Y descartada la fotografía de archivo gratuita tras verla en pantalla: los huecos siguen
+tramados, con el porqué escrito en el README y el stock de pago como puente._
