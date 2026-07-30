@@ -76,3 +76,7 @@ scripts/migration/import.ndjson
 # El listado de bobinas en PDF es el documento maestro del que salió
 # scripts/migration/content-snapshot.json. Se guarda aparte, no en git.
 *.pdf
+
+# `vercel link` añade aquí `.vercel` y `.env*` por su cuenta. Ya estaban declarados
+# arriba (secretos y Vercel), así que se han quitado las líneas duplicadas: si vuelven
+# a aparecer tras un `vercel link`, es esto y se pueden borrar sin pensar.
