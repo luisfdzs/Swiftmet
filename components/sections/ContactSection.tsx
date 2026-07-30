@@ -23,9 +23,9 @@ export function ContactSection({ locale, company }: { locale: Locale; company: C
   return (
     <div className="pt-(--spacing-section)">
       {/* Ver `CompanySection`: el `scroll-mt` despega el encabezado de la barra. */}
-      <section id={sections.contact} className="page-gutter scroll-mt-8">
+      <section id={sections.contact} className="page-gutter scroll-mt-8 text-center">
         <h2 className="eyebrow border-b border-line pb-4">{t.contact.title}</h2>
-        <p className="mt-10 max-w-3xl text-lead text-balance md:mt-16">{t.contact.lead}</p>
+        <p className="mx-auto mt-10 max-w-3xl text-lead text-balance md:mt-16">{t.contact.lead}</p>
 
         <div className="mt-16 grid gap-12 md:mt-24 md:grid-cols-3">
           <div>

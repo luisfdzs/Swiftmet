@@ -44,9 +44,9 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
     .filter((group) => group.items.length > 0)
 
   return (
-    <div className="page-gutter pt-32 md:pt-40">
-      <h1 className="text-display max-w-3xl text-balance">{t.products.title}</h1>
-      <p className="mt-8 max-w-2xl text-lead text-ink-soft">{t.products.lead}</p>
+    <div className="page-gutter pt-32 text-center md:pt-40">
+      <h1 className="text-display mx-auto max-w-3xl text-balance">{t.products.title}</h1>
+      <p className="mx-auto mt-8 max-w-2xl text-lead text-ink-soft">{t.products.lead}</p>
 
       {groups.length === 0 ? (
         <p className="mt-16 text-ink-soft">{t.products.empty}</p>

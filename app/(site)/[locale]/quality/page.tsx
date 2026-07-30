@@ -40,9 +40,9 @@ export default async function QualityPage({ params }: { params: Promise<{ locale
   const certifications = company.certifications ?? []
 
   return (
-    <div className="page-gutter pt-32 md:pt-40">
-      <h1 className="text-display max-w-3xl text-balance">{t.quality.title}</h1>
-      <p className="mt-8 max-w-2xl text-lead text-ink-soft">{t.quality.lead}</p>
+    <div className="page-gutter pt-32 text-center md:pt-40">
+      <h1 className="text-display mx-auto max-w-3xl text-balance">{t.quality.title}</h1>
+      <p className="mx-auto mt-8 max-w-2xl text-lead text-ink-soft">{t.quality.lead}</p>
 
       <Figure
         image={null}
@@ -60,21 +60,21 @@ export default async function QualityPage({ params }: { params: Promise<{ locale
         <h2 className="eyebrow border-b border-line pb-4">{t.quality.stepsTitle}</h2>
         <ol className="mt-10 grid gap-x-12 gap-y-12 md:grid-cols-2">
           {company.qualitySteps.map((step, index) => (
+            // El número va ENCIMA del título y no a su izquierda: en columna es lo que
+            // deja el punto de control centrado sobre el mismo eje que el resto de la
+            // página, y de paso el título ya no arranca con una sangría distinta de la del
+            // párrafo que lleva debajo.
             <Reveal key={step.title.en} as="li" step={index % 2}>
-              <div className="flex gap-5">
-                <span
-                  className="figure-num text-lead text-ink-faint"
-                  // El número es ornamento de lectura: el orden ya lo aporta el <ol>, y
-                  // un lector de pantalla que lo leyera diría «uno, uno».
-                  aria-hidden
-                >
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-                <div>
-                  <h3 className="text-lead text-ink">{step.title[locale]}</h3>
-                  <p className="mt-2 text-ink-soft">{step.body[locale]}</p>
-                </div>
-              </div>
+              <span
+                className="figure-num block text-lead text-ink-faint"
+                // El número es ornamento de lectura: el orden ya lo aporta el <ol>, y
+                // un lector de pantalla que lo leyera diría «uno, uno».
+                aria-hidden
+              >
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <h3 className="mt-2 text-lead text-ink">{step.title[locale]}</h3>
+              <p className="mx-auto mt-2 max-w-prose text-ink-soft">{step.body[locale]}</p>
             </Reveal>
           ))}
         </ol>

@@ -71,6 +71,14 @@
   --spacing-gutter: clamp(1.25rem, 4vw, 3.5rem); /* margen lateral de página */
   --spacing-section: clamp(4rem, 9vw, 9rem); /* aire vertical entre bloques */
 
+  /* Alto de la barra de navegación inferior de móvil. Vive en el sistema porque lo
+     necesitan cuatro sitios que tienen que cuadrar al píxel: la barra, el panel del
+     menú que se abre justo encima, el hueco que el hero se reserva para no meter sus
+     cifras debajo de ella y el que el <body> se reserva bajo el pie.
+     El `env()` es la franja del gesto de inicio del iPhone: sin sumarla, los iconos
+     caen debajo de la rayita del sistema. */
+  --spacing-nav-mobile: calc(4rem + env(safe-area-inset-bottom));
+
   /* --- Movimiento -------------------------------------------------------- */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --animate-reveal: reveal 0.9s var(--ease-out-soft) both;
@@ -152,6 +160,17 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* La barra de navegación de móvil va fija sobre el contenido, así que el documento se
+     reserva su alto por debajo del pie. Sin esto, el copyright y los enlaces del pie
+     quedan tapados justo en el final de la página, que es donde más se nota. Sólo por
+     debajo de `lg`, que es donde existe la barra: el salto del menú de escritorio de
+     esta web es `lg` y no `md` (cinco entradas más tres idiomas). */
+  @media (width < 64rem) {
+    body {
+      padding-bottom: var(--spacing-nav-mobile);
+    }
+  }
+
   /* Foco visible y coherente en todo el sitio (accesibilidad). */
   :focus-visible {
     outline: 2px solid var(--color-signal);
@@ -212,7 +231,10 @@
   font-feature-settings: 'zero' 1;
 }
 
-/* Enlace con subrayado que se dibuja al hacer hover. */
+/* Enlace con subrayado que se dibuja al hacer hover.
+   El trazo crece desde el CENTRO y no desde la izquierda: con el texto de las secciones
+   centrado, un subrayado que arranca en el borde izquierdo tira del ojo hacia fuera del
+   eje en el que está montada toda la página. Desde el centro, crece sobre ese mismo eje. */
 @utility link-underline {
   position: relative;
   display: inline-block;
@@ -225,7 +247,7 @@
     height: 1px;
     background: currentColor;
     transform: scaleX(0);
-    transform-origin: left;
+    transform-origin: center;
     transition: transform 0.45s var(--ease-out-soft);
   }
 
