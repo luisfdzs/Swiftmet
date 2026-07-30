@@ -59,10 +59,10 @@ export default async function SpoolsPage({ params }: { params: Promise<{ locale:
   ]
 
   return (
-    <div className="pt-32 md:pt-40">
+    <div className="pt-32 text-center md:pt-40">
       <div className="page-gutter">
-        <h1 className="text-display max-w-3xl text-balance">{t.spools.title}</h1>
-        <p className="mt-8 max-w-2xl text-lead text-ink-soft">{t.spools.lead}</p>
+        <h1 className="text-display mx-auto max-w-3xl text-balance">{t.spools.title}</h1>
+        <p className="mx-auto mt-8 max-w-2xl text-lead text-ink-soft">{t.spools.lead}</p>
       </div>
 
       <div className="page-gutter mt-16 md:mt-24">
@@ -85,7 +85,7 @@ export default async function SpoolsPage({ params }: { params: Promise<{ locale:
       {spools.length > 0 && (
         <section className="page-gutter mt-(--spacing-section)">
           <h2 className="eyebrow border-b border-line pb-4">{t.spools.drawingTitle}</h2>
-          <p className="mt-8 max-w-2xl text-ink-soft">{t.spools.drawingLead}</p>
+          <p className="mx-auto mt-8 max-w-2xl text-ink-soft">{t.spools.drawingLead}</p>
 
           {/* Cuatro columnas en pantalla ancha, no tres. La silueta de una bobina es
               estrecha y alta, así que en una celda de un tercio de página queda un dibujo

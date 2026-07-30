@@ -53,10 +53,10 @@ export default async function ProductPage({
   const neighbours = await getProductNeighbours(slug)
 
   return (
-    <article className="page-gutter pt-32 md:pt-40">
+    <article className="page-gutter pt-32 text-center md:pt-40">
       <p className="eyebrow">{t.family[product.family]}</p>
-      <h1 className="text-display mt-4 max-w-3xl text-balance">{product.name}</h1>
-      <p className="mt-8 max-w-2xl text-lead text-ink-soft">{product.summary[locale]}</p>
+      <h1 className="text-display mx-auto mt-4 max-w-3xl text-balance">{product.name}</h1>
+      <p className="mx-auto mt-8 max-w-2xl text-lead text-ink-soft">{product.summary[locale]}</p>
 
       <div className="mt-16 grid gap-12 md:mt-24 md:grid-cols-12 md:gap-16">
         {/* La ficha técnica va PRIMERO en el orden del documento y a la derecha en
@@ -78,7 +78,9 @@ export default async function ProductPage({
           />
 
           {product.spoolWound && (
-            <p className="mt-8 border-l-2 border-signal pl-4 text-small text-ink-soft">
+            // El filete del aviso pasa de la izquierda a ARRIBA: una barra vertical junto a
+            // un texto centrado señala un margen que ya no existe.
+            <p className="mt-8 border-t-2 border-signal pt-4 text-small text-ink-soft">
               {t.product.spoolWound}{' '}
               <Link href={href(locale, 'spools')} className="link-underline tap text-ink">
                 {t.product.viewSpools}
@@ -137,7 +139,7 @@ export default async function ProductPage({
         </div>
       </div>
 
-      <div className="mt-(--spacing-section) flex flex-wrap items-center justify-between gap-6 border-t border-line pt-8">
+      <div className="mt-(--spacing-section) flex flex-wrap items-center justify-center gap-x-8 gap-y-4 border-t border-line pt-8">
         <Link href={href(locale, 'products')} className="link-underline tap text-small">
           {t.product.backToProducts}
         </Link>
