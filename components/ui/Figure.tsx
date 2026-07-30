@@ -79,7 +79,7 @@ export function Figure({
       aria-label={`${t.figure.photoPending}: ${label}`}
       style={{ aspectRatio: placeholderRatio }}
       className={cn(
-        'placeholder-grid relative flex w-full flex-col justify-end gap-1 border border-line p-4',
+        'placeholder-grid relative flex w-full flex-col items-center justify-end gap-1 border border-line p-4 text-center',
         className,
       )}
     >

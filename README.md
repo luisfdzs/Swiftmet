@@ -121,7 +121,7 @@ app/
   globals.css            ← SISTEMA DE DISEÑO: todos los tokens, y sólo aquí
   sitemap.ts robots.ts   ← generados del contenido real
 components/
-  layout/                · Header, Footer, Wordmark
+  layout/                · Header, MobileNav (barra inferior de iconos), NavIcons, Footer, Wordmark
   sections/              · Hero, ProductCard, SpoolTable, SpoolDiagram, CompanySection, ContactSection
   ui/                    · Figure (toda imagen pasa por aquí), Media, SpecList, Reveal
 lib/
@@ -228,12 +228,14 @@ para posicionar por «high purity aluminium wire manufacturer», y dos copias co
 
 1. `npm run check` — typecheck, ESLint y Prettier.
 2. `npm run check:mobile` con el servidor levantado. **Obligatorio si has tocado interfaz.** No es un
-   test unitario: es la lista de cosas que ya se han roto. Comprueba 30 cosas, entre ellas dos propias
+   test unitario: es la lista de cosas que ya se han roto. Comprueba 33 cosas, entre ellas tres propias
    de esta web:
    - que **la tabla de bobinas se desplace ella y no la página** — siete columnas de datos en 390 px es
      el caso que lo provoca, y es el contenido más importante del sitio;
    - que todo objetivo pulsable llegue a 24 px (WCAG 2.2). Encontró el enlace del logotipo, de 16 px:
-     invisible mirando la pantalla y el enlace más usado de la cabecera.
+     invisible mirando la pantalla y el enlace más usado de la cabecera;
+   - que **la barra de iconos de móvil se vea y no tape el pie** — va fija abajo y sobre el contenido,
+     así que el documento tiene que reservarle su alto por debajo del pie (`--spacing-nav-mobile`).
 
    Se ejecuta por idioma: `LOCALE=hi npm run check:mobile`. Cuando encuentres un fallo nuevo, añade su
    comprobación al script.

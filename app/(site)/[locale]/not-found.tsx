@@ -13,14 +13,11 @@ export default function NotFound() {
   const t = getDictionary(defaultLocale)
 
   return (
-    <div className="page-gutter flex min-h-[60svh] flex-col justify-center py-24">
+    <div className="page-gutter flex min-h-[60svh] flex-col items-center justify-center py-24 text-center">
       <p className="figure-num eyebrow">404</p>
       <h1 className="text-display mt-6 max-w-2xl text-balance">{t.notFound.title}</h1>
       <p className="mt-6 max-w-md text-ink-soft">{t.notFound.lead}</p>
-      <Link
-        href={href(defaultLocale, 'home')}
-        className="link-underline tap mt-10 w-fit text-small"
-      >
+      <Link href={href(defaultLocale, 'home')} className="link-underline tap mt-10 text-small">
         {t.notFound.cta}
       </Link>
     </div>

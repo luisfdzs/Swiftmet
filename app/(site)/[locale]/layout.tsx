@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, IBM_Plex_Sans, IBM_Plex_Sans_Devanagari } from 'next/fon
 import { notFound } from 'next/navigation'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
+import { MobileNav } from '@/components/layout/MobileNav'
 import { site } from '@/content/site'
 import { isLocale, localeHtmlLang, locales, type Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
@@ -126,6 +127,13 @@ export default async function LocaleLayout({
           {children}
         </main>
         <Footer locale={typedLocale} />
+        {/* La barra de iconos de móvil va FUERA del <header> y al final del documento: la
+            cabecera usa `backdrop-blur`, y un filtro convierte al elemento en bloque
+            contenedor de sus descendientes `fixed` — dentro, el panel del menú calcularía
+            su alto contra una barra de 80 px y se abriría vacío. Es un fallo real del
+            proyecto de referencia y `npm run check:mobile` mide la altura para que no
+            vuelva. */}
+        <MobileNav locale={typedLocale} dictionary={dictionary} />
       </body>
     </html>
   )

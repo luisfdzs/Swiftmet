@@ -34,16 +34,21 @@ export function ProductCard({ product, locale, priority = false, span = 'half' }
           className="transition-opacity duration-500 group-hover:opacity-90"
         />
 
-        <div className="mt-4 flex items-baseline justify-between gap-6 border-t border-line pt-3">
+        {/* Nombre y pureza, apilados y centrados bajo el filete. Antes iban en los dos
+            extremos de la misma línea; con el resto de la web centrada, esa fila era lo
+            único que seguía tirando la mirada a las esquinas. La pureza debajo del nombre
+            se sigue leyendo como el dato de la tarjeta, y en hindi ya no se aprieta contra
+            un nombre de producto largo. */}
+        <div className="mt-4 border-t border-line pt-3 text-center">
           <h3 className="text-lead leading-tight">{product.name}</h3>
           {/* La pureza es el dato por el que se elige entre dos hilos: va en la tarjeta,
               no escondida en la ficha. En mono para que se lea como cifra. */}
           {product.purity && (
-            <span className="figure-num shrink-0 text-small text-signal">{product.purity}</span>
+            <p className="figure-num mt-1 text-small text-signal">{product.purity}</p>
           )}
+          <p className="eyebrow mt-2">{t.family[product.family]}</p>
+          <p className="mt-2 text-small text-ink-soft">{product.summary[locale]}</p>
         </div>
-        <p className="eyebrow mt-2">{t.family[product.family]}</p>
-        <p className="mt-2 text-small text-ink-soft">{product.summary[locale]}</p>
       </Link>
     </article>
   )

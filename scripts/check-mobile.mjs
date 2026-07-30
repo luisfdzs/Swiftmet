@@ -9,12 +9,15 @@
  * Fallos que este script existe para impedir:
  *  1. El menú abriéndose con el texto en color papel sobre fondo papel — ilegible.
  *  2. El panel del menú midiendo 0 px de alto: el `backdrop-blur` de la barra convierte
- *     al <header> en bloque contenedor de sus descendientes `fixed`.
+ *     al elemento que lo contiene en bloque contenedor de sus descendientes `fixed`.
  *  3. Enlaces con menos de 24 px de área pulsable (WCAG 2.2).
  *  4. `href()` devolviendo rutas relativas, que encadenan y dan 404 desde una ficha.
  *  5. **Propio de esta web:** la tabla de bobinas desbordando la PÁGINA en vez de
  *     desplazarse dentro de su caja. Siete columnas en 390 px es el caso que lo provoca,
  *     y es justo el contenido más importante del sitio.
+ *  6. La barra de iconos de móvil —que va fija sobre el contenido— tapando el final del
+ *     documento. Sin el hueco que el <body> se reserva debajo, el copyright y los enlaces
+ *     del pie quedan detrás de ella justo donde más se nota.
  *
  * Usa `playwright-core` con el Chrome ya instalado: no descarga navegadores.
  * Requiere el servidor levantado (`npm run dev`) o un despliegue:
@@ -70,11 +73,26 @@ async function main() {
   await page.goto(`${BASE}/${LOCALE}`, { waitUntil: 'networkidle' })
   check((await horizontalOverflow(page)) <= 1, 'la portada no desborda en horizontal')
 
-  const menuButton = page.locator('header button[aria-controls="mobile-nav"]')
+  // La navegación de móvil es una barra fija ABAJO, al alcance del pulgar, y no un botón
+  // en la esquina de la cabecera. Arriba sólo queda la marca, centrada.
+  const bar = page.locator('nav[aria-label="Mobile"]')
+  const menuButton = bar.locator('button[aria-controls="mobile-nav"]')
+  check(await bar.isVisible(), 'la barra de iconos de móvil se ve')
   check(await menuButton.isVisible(), 'el botón de menú se ve en móvil')
   check(
-    !(await page.locator('header nav[aria-label="Main"]').first().isVisible()),
-    'la navegación de escritorio está oculta',
+    !(await page.locator('header button, header nav[aria-label="Main"]').first().isVisible()),
+    'la cabecera de móvil no lleva navegación: sólo la marca',
+  )
+  check(
+    Math.abs(
+      (await page.evaluate(() => {
+        const mark = document.querySelector('.header-bar a[aria-label] svg')?.parentElement
+        if (!mark) return null
+        const rect = mark.getBoundingClientRect()
+        return rect.left + rect.width / 2 - window.innerWidth / 2
+      })) ?? 999,
+    ) < 12,
+    'la marca va centrada en la barra de móvil',
   )
 
   // --- Menú: abrir, bloquear scroll, cerrar, navegar ------------------------------------
@@ -96,12 +114,22 @@ async function main() {
     'el scroll de la página se bloquea con el menú abierto',
   )
 
-  // La barra deja de ir en color papel al abrir el menú (contraste sobre papel).
+  // El fallo original: el panel hereda el color papel que la cabecera usa sobre el hero
+  // oscuro y pinta papel sobre papel — un menú invisible. Ahora el panel vive fuera de la
+  // cabecera, pero la comprobación sigue: lo que importa es que sus entradas se lean.
   await page.waitForTimeout(700)
-  const barColor = await page.evaluate(
-    () => getComputedStyle(document.querySelector('.header-bar')).color,
+  const panelStyle = await page.evaluate(() => {
+    const link = document.querySelector('#mobile-nav nav a')
+    if (!link) return null
+    return {
+      color: getComputedStyle(link).color,
+      background: getComputedStyle(document.querySelector('#mobile-nav')).backgroundColor,
+    }
+  })
+  check(
+    panelStyle?.color === 'rgb(15, 19, 22)' && panelStyle?.background === 'rgb(242, 243, 244)',
+    `el menú abierto va en tinta sobre papel opaco (${panelStyle?.color} sobre ${panelStyle?.background})`,
   )
-  check(barColor === 'rgb(15, 19, 22)', `la barra usa tinta con el menú abierto (${barColor})`)
 
   await page.keyboard.press('Escape')
   check(!(await panel.isVisible()), 'Escape cierra el menú')
@@ -223,6 +251,23 @@ async function main() {
     small.length === 0
       ? 'todas las áreas pulsables llegan a 24 px'
       : `áreas pulsables por debajo de 24 px: ${JSON.stringify(small.slice(0, 5))}`,
+  )
+
+  // --- El pie, con la barra de iconos delante ---------------------------------------------
+  // La barra va fija sobre el contenido, así que el <body> se reserva su alto por debajo
+  // (`--spacing-nav-mobile` en globals.css). Sin ese hueco, el copyright y los enlaces del
+  // pie quedan detrás de la barra justo al final de la página, que es donde más se nota.
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+  await page.waitForTimeout(400)
+  const clearance = await page.evaluate(() => {
+    const footer = document.querySelector('footer')
+    const navBar = document.querySelector('nav[aria-label="Mobile"]')
+    if (!footer || !navBar) return null
+    return Math.round(navBar.getBoundingClientRect().top - footer.getBoundingClientRect().bottom)
+  })
+  check(
+    clearance !== null && clearance >= -1,
+    `el pie no queda debajo de la barra de iconos (${clearance} px de holgura)`,
   )
 
   // --- Indexación: sólo el dominio real puede aparecer en Google -------------------------

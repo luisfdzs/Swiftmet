@@ -63,21 +63,23 @@ export function Hero({
       data-hero
       className="relative -mt-20 flex min-h-[100svh] flex-col justify-end overflow-hidden bg-inverse pt-32 text-paper md:-mt-24"
     >
-      <div className="page-gutter relative flex flex-col gap-8 pb-12 md:pb-16">
+      <div className="page-gutter relative flex flex-col items-center gap-8 pb-12 text-center md:pb-16">
         <p className="eyebrow text-paper/60">{t.home.heroLead}</p>
         <h1 className="text-display max-w-4xl text-balance">{t.home.heroTitle}</h1>
         <p className="max-w-xl text-lead text-paper/75">{t.home.heroSubtitle}</p>
 
         <Link
           href={href(locale, 'products')}
-          className="link-underline tap w-fit text-small text-paper/85"
+          className="link-underline tap text-small text-paper/85"
         >
           {t.home.viewAllProducts}
         </Link>
 
         {/* Las cifras cierran el hero sobre un filete: es lo primero que un comprador
-            compara entre proveedores, así que no espera al scroll. */}
-        <dl className="mt-6 grid grid-cols-2 gap-x-8 gap-y-8 border-t border-paper/20 pt-8 md:grid-cols-4">
+            compara entre proveedores, así que no espera al scroll. El filete va a todo el
+            ancho —`w-full`— aunque las cifras estén centradas: es lo que sostiene el
+            bloque contra el borde de la pantalla y le da la escala de tabla que tiene. */}
+        <dl className="mt-6 grid w-full grid-cols-2 gap-x-8 gap-y-8 border-t border-paper/20 pt-8 md:grid-cols-4">
           {figures.map((figure) => (
             <div key={figure.label}>
               <dt className="eyebrow text-paper/50">{figure.label}</dt>
@@ -86,6 +88,12 @@ export function Hero({
           ))}
         </dl>
       </div>
+
+      {/* El hueco de la barra de iconos de móvil, que va fija sobre el contenido: sin él,
+          las cifras del hero —lo primero que se compara entre proveedores— quedan medio
+          tapadas por ella justo en la primera pantalla. Desaparece en `lg`, donde la barra
+          ya no existe. */}
+      <div aria-hidden className="h-(--spacing-nav-mobile) shrink-0 lg:hidden" />
     </section>
   )
 }
