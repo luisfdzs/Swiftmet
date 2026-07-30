@@ -122,7 +122,8 @@ app/
   sitemap.ts robots.ts   ← generados del contenido real
 components/
   layout/                · Header, MobileNav (barra inferior de iconos), NavIcons, Footer, Wordmark
-  sections/              · Hero, ProductCard, SpoolTable, SpoolDiagram, CompanySection, ContactSection
+  sections/              · Hero, HeroMontage (el vídeo de portada), ProductCard, SpoolTable,
+                           SpoolDiagram, CompanySection, ContactSection
   ui/                    · Figure (toda imagen pasa por aquí), Media, SpecList, Reveal
 lib/
   content.ts             ← única puerta de acceso al contenido
@@ -134,6 +135,8 @@ scripts/
   migration/             · content-snapshot.json (volcado del listado maestro, con procedencia)
   build-sanity-import.mjs
   generate-brand-assets.mjs  ← favicon + OG, dibujados en SVG (no hay logotipo de Swiftmet)
+  hero-montage-shots.mjs     ← GUION del montaje de portada: once planos, con su encuadre
+  build-hero-montage.mjs     ← lo corta, lo trata y lo codifica (`npm run hero`, pide ffmpeg)
   check-mobile.mjs
 proxy.ts                 ← negocia el idioma y redirige / → /en | /hi | /es
                            (en Next 16 `middleware.ts` se llama `proxy.ts`)
@@ -224,6 +227,39 @@ Swiftmet entregue las suyas. Ambas entran igual, **subiéndolas al panel de Sani
 código ni añadir ficheros al repo, y la comprada se sustituye por la real el día que llegue. Al
 comprarlas, guardar la licencia junto a la factura: el stock de pago no exige atribución en la web,
 pero sí acreditar la compra si alguien la reclama.
+
+### La excepción que confirma la regla: el montaje de la portada
+
+Todo lo anterior es sobre **las fichas**. La portada, en cambio, **sí** abre con imagen en movimiento:
+veinticuatro segundos del proceso del aluminio a cámara rápida —horno, colada, laminación, bobina—, en
+bucle detrás del titular. No contradice nada, porque aplica la regla del punto 3 por su otro lado:
+
+- **Ambienta, no ilustra.** Va detrás del texto, tratada hasta la abstracción y sin un solo plano general
+  reconocible. No afirma nada. Los huecos tramados de `<Figure>` están donde una foto tendría que
+  **demostrar** algo —este calibre, esta bobina, esta máquina— y ahí no vale material ajeno.
+- **No es la planta de Swiftmet, y no lo insinúa.** Son planos de dos películas de **dominio público** de
+  1956 sobre la producción de aluminio (`Aluminum on the March`, en archive.org). El nombre accesible del
+  vídeo dice literalmente _archive footage of aluminium production_. Origen completo de cada plano en
+  `public/hero/CREDITS.md`.
+- **Se rehace con una orden.** `npm run hero` vuelve a cortar, tratar y codificar los cuatro vídeos y los
+  dos pósters desde el guion de `scripts/hero-montage-shots.mjs`. Requiere **ffmpeg** (por `FFMPEG=`, por
+  `ffmpeg-static` o en el PATH); no es dependencia del proyecto porque sólo lo necesita quien rehaga el
+  montaje. Los másteres (~170 MB) no se versionan: el script los baja si faltan.
+- **Se retira sustituyendo ficheros.** Cuando llegue vídeo o fotografía propia de Swiftmet, se reemplaza
+  lo que hay en `public/hero/` y no se toca una línea de componente.
+
+Dos cuidados que ya han hecho falta, y que hay que repetir al tocar el guion:
+
+1. **El material tiene marcas de terceros dentro.** El primer montaje arrastró, sin buscarlo, un cartel a
+   pantalla completa que decía «SHIP TO REYNOLDS ALUMINUM». Al cambiar cualquier `at`, hay que revisar la
+   ventana entera que consume el plano (`out × speed` segundos), no el fotograma de entrada.
+2. **El texto manda sobre el vídeo.** El degradado de `<HeroMontage>` está calibrado para que el titular y
+   las cifras se lean sobre los planos más claros del ciclo. Si se aclara, hay que volver a mirarlo en el
+   segundo 8, que es el plano más brillante.
+
+Quien prefiera no ver animaciones no la descarga: con `prefers-reduced-motion: reduce`, o con ahorro de
+datos, o en red 2G, la portada se queda en el póster —un fotograma del propio montaje— y no se piden los
+dos megas y medio de vídeo.
 
 ## Despliegue
 
@@ -323,3 +359,10 @@ señalado también dentro de `scripts/migration/content-snapshot.json`, con la p
 - **Fichas técnicas descargables.** La competencia ofrece MSDS, hoja de especificaciones y certificado
   de contacto alimentario en PDF. Es un hueco competitivo real y no está cubierto: haría falta que
   Swiftmet aporte los documentos.
+- **El vídeo de la portada es material de archivo ajeno.** Funciona y es de dominio público, pero son
+  planos de 1956 y quien abra la web verá una fábrica que no es la de Baghola (ver «La excepción: el
+  montaje de la portada»). Lo ideal es sustituirlo por **vídeo propio de la planta**: cuarenta segundos
+  de móvil bien iluminados de la línea de trefilado y de la bobinadora dan de sobra para once planos, y
+  entonces el montaje pasa a decir la verdad además de quedar bien. Si no hay vídeo propio, el mismo
+  guion sirve para metraje de stock de pago sin tocar código: se cambian los ficheros de `.hero-src/` y
+  los `at` del guion.
