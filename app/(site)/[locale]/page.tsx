@@ -47,13 +47,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     <>
       <Hero locale={locale} spools={spools} purity={purity} />
 
-      <section className="page-gutter pt-(--spacing-section)">
-        <div className="flex items-baseline justify-between gap-6 border-b border-line pb-4">
-          <h2 className="eyebrow">{t.home.productsTitle}</h2>
-          <Link href={href(locale, 'products')} className="link-underline tap text-small">
-            {t.home.viewAllProducts}
-          </Link>
-        </div>
+      {/* El enlace a la gama completa va DEBAJO de las tarjetas y centrado, no arriba
+          junto al encabezado: al lado del título invitaba a saltarse justo lo que la
+          sección venía a enseñar, y centrado bajo la rejilla se ve desde cualquier
+          columna. */}
+      <section className="page-gutter pt-(--spacing-section) text-center">
+        <h2 className="eyebrow border-b border-line pb-4">{t.home.productsTitle}</h2>
 
         {featured.length === 0 ? (
           <p className="mt-10 text-ink-soft">{t.products.empty}</p>
@@ -66,23 +65,33 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             ))}
           </div>
         )}
+
+        <Link
+          href={href(locale, 'products')}
+          className="link-underline tap mt-14 inline-block text-small"
+        >
+          {t.home.viewAllProducts}
+        </Link>
       </section>
 
       {/* El programa de bobinas, completo y en la portada. Es una decisión comercial
           disfrazada de decisión de diseño: la competencia directa resuelve el embalaje
           con media frase, así que enseñar las catorce medidas antes de que el visitante
           tenga que hacer clic es la ventaja más barata que tiene esta web. */}
-      <section className="page-gutter pt-(--spacing-section)">
-        <div className="flex items-baseline justify-between gap-6 border-b border-line pb-4">
-          <h2 className="eyebrow">{t.home.spoolsTitle}</h2>
-          <Link href={href(locale, 'spools')} className="link-underline tap text-small">
-            {t.home.viewSpools}
-          </Link>
-        </div>
-        <p className="mt-10 max-w-3xl text-lead text-balance md:mt-14">{t.home.spoolsLead}</p>
+      <section className="page-gutter pt-(--spacing-section) text-center">
+        <h2 className="eyebrow border-b border-line pb-4">{t.home.spoolsTitle}</h2>
+        <p className="mx-auto mt-10 max-w-3xl text-lead text-balance md:mt-14">
+          {t.home.spoolsLead}
+        </p>
         <div className="mt-10">
           <SpoolTable spools={spools} locale={locale} />
         </div>
+        <Link
+          href={href(locale, 'spools')}
+          className="link-underline tap mt-10 inline-block text-small"
+        >
+          {t.home.viewSpools}
+        </Link>
       </section>
 
       <CompanySection locale={locale} company={company} />

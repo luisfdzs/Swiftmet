@@ -18,9 +18,15 @@ Se construye como **competencia directa de [electrolead.co.in](https://www.elect
 replicando el stack, la arquitectura y la metodología del proyecto `C:\Proyectos\sangilstudio`
 (rama `test`).
 
-**Estado actual (2026-07-30):** web completa y verificada en local. Falta **crear el proyecto de
-Sanity** (sin sus variables de entorno, `npm run build` no arranca a propósito) y **confirmar con el
-cliente** los datos marcados en el README.
+**Estado actual (2026-07-30): DESPLEGADA.**
+[swiftmet.vercel.app](https://swiftmet.vercel.app) (producción, rama `main`) y
+[swiftmettest.vercel.app](https://swiftmettest.vercel.app) (test, rama `test`), con Sanity `3caofriy`
+y los webhooks de revalidación funcionando —publicar se refleja en 9 segundos, sin desplegar—. IDs y
+detalles en la memoria `despliegue`.
+
+Lo único que queda es de **cliente, no de código**: confirmar email, teléfono, dominio y grados de
+pureza (ver «Pendiente de confirmar con Swiftmet» en el README) e invitar a quien vaya a editar en
+sanity.io/manage › Members.
 
 ## 2. La tesis competitiva (lo más importante de entender)
 
@@ -46,8 +52,12 @@ proyecto.
   `product`, `spool` y el singleton `companyInfo`.
 - **Despliegue: Vercel**, dos entornos (`main` → producción, `test` → test con `noindex`). Framework
   declarado en `vercel.json`.
-- **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (30
+- **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (33
   comprobaciones en Chrome real a 390×844, por idioma).
+- **Navegación:** en escritorio, la cabecera; en móvil (`< lg`), una **barra inferior fija de cinco
+  iconos** —inicio, productos, bobinas, contacto y el menú completo— al estilo de bonsaiartesania.com.
+  Los textos van **centrados en su sección** en toda la web; el eje central es la decisión de
+  maquetación del sitio, no un detalle de una página.
 
 Detalle y razonamiento en el **README.md**, que es extenso a propósito, y en `.claude/memory/`.
 
@@ -95,6 +105,6 @@ Regla de oro: **el contexto nunca debe quedar desactualizado respecto al estado 
 
 ---
 
-_Última actualización: 2026-07-30 — primera versión completa de la web: trilingüe, con Sanity, el
-programa de catorce bobinas como pieza central y verificada en los tres idiomas (30/30 en
-`check:mobile`, build de 50 rutas)._
+_Última actualización: 2026-07-30 — textos centrados en toda la web y navegación de móvil en una barra
+inferior de iconos, al estilo de bonsaiartesania.com. Verificado en los tres idiomas (33/33 en
+`check:mobile`) y revisado a ojo en escritorio y móvil._

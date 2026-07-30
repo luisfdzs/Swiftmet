@@ -29,8 +29,11 @@ export async function Footer({ locale }: { locale: Locale }) {
 
   return (
     <footer className="mt-(--spacing-section) border-t border-line bg-paper">
-      <div className="page-gutter py-16 md:py-20">
-        <div className="grid gap-10 md:grid-cols-4 md:gap-8">
+      <div className="page-gutter py-16 text-center md:py-20">
+        {/* Tres bloques iguales y centrados, no cuatro columnas con la última al doble de
+            ancho: con el texto centrado, una columna que ocupa la mitad del pie deja su
+            contenido flotando en medio de un hueco enorme. */}
+        <div className="grid gap-10 md:grid-cols-3 md:gap-8">
           <div>
             <p className="text-small text-ink">{site.legalName}</p>
             {works && (
@@ -60,9 +63,9 @@ export async function Footer({ locale }: { locale: Locale }) {
             </a>
           </div>
 
-          <div className="md:col-span-2">
+          <div>
             <h2 className="eyebrow">{t.nav.products}</h2>
-            <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-small">
+            <ul className="mt-3 flex flex-wrap justify-center gap-x-6 gap-y-2 text-small">
               <li>
                 <Link
                   className="link-underline tap text-ink-soft hover:text-ink"

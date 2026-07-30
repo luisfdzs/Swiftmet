@@ -42,7 +42,11 @@ export function SpoolTable({ spools, locale }: { spools: SpoolEntry[]; locale: L
 
   return (
     <div className="-mx-(--spacing-gutter) overflow-x-auto px-(--spacing-gutter)">
-      <table className="w-full min-w-[44rem] border-collapse text-left">
+      {/* Cifras CENTRADAS en su columna, no alineadas a la izquierda. Se puede hacer sin
+          perder nada porque toda la tabla va en monoespaciada con `tabular-nums`: los
+          dígitos miden lo mismo, los valores de una misma cota tienen el mismo número de
+          cifras y la columna sigue leyéndose en vertical, que es para lo que está. */}
+      <table className="w-full min-w-[44rem] border-collapse text-center">
         {/* La leyenda de la tabla es su título accesible. Va oculta a la vista porque
             el encabezado de la sección ya dice lo mismo en grande, pero un lector de
             pantalla la necesita para anunciar de qué es esta tabla. */}
@@ -84,7 +88,7 @@ export function SpoolTable({ spools, locale }: { spools: SpoolEntry[]; locale: L
                   // esta columna y, con `table-layout: auto`, se lleva 700 de los 1440 px
                   // disponibles: las seis columnas de cifras —que son el contenido— quedan
                   // apretadas a la derecha por culpa de un pie de nota.
-                  <span className="block max-w-[15rem] font-sans text-micro text-ink-faint">
+                  <span className="mx-auto block max-w-[15rem] font-sans text-micro text-ink-faint">
                     {spool.note[locale]}
                   </span>
                 )}
