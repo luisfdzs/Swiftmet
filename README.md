@@ -7,6 +7,10 @@ pensada para desplegarse en Vercel.
 
 Trilingüe: **inglés** (por defecto), **hindi** y **español**, en `/en`, `/hi` y `/es`.
 
+🌐 **Producción:** [swiftmet.vercel.app](https://swiftmet.vercel.app) · **Test:**
+[swiftmettest.vercel.app](https://swiftmettest.vercel.app) · **Panel:**
+[swiftmet.vercel.app/admin](https://swiftmet.vercel.app/admin)
+
 > ⚠️ **Antes de publicar, leer «Pendiente de confirmar con Swiftmet»** al final de este documento.
 > Hay datos de contacto que son marcadores falsos a propósito y especificaciones de producto que están
 > por verificar con producción.
@@ -80,19 +84,27 @@ Lo que **no** se puede tocar desde el panel, a propósito: el diseño. Las famil
 lista cerrada (la web tiene traducción preparada para cada valor) y las descripciones son párrafos, no
 texto con formato libre, para que nadie rompa la estética con un titular gigante.
 
-### Puesta en marcha del panel (una sola vez)
+### Estado del panel: ya montado
 
-1. Crear el proyecto de Sanity: `npx sanity@latest login` y luego `npx sanity@latest init` (o desde el
-   Marketplace de Vercel: `vercel integration add sanity/project`, que además deja las variables
-   puestas en los dos entornos).
-2. Copiar `.env.example` a `.env.local` y rellenar `NEXT_PUBLIC_SANITY_PROJECT_ID` y
-   `SANITY_REVALIDATE_SECRET` (cualquier cadena larga y aleatoria).
-3. `npm run migrate:build && npx sanity login && npm run migrate:import` — sube los 22 documentos
-   iniciales: las 14 bobinas del listado maestro, 7 referencias de catálogo y la ficha de empresa. Es
-   idempotente: los `_id` son deterministas, así que repetirlo actualiza y no duplica.
-4. En Vercel, las mismas variables en los dos proyectos (`vercel env add`), y en
-   sanity.io/manage › API › Webhooks un webhook a `/api/revalidate` con ese secreto.
-5. Invitar a quien vaya a editar en sanity.io/manage › Members, con rol **Administrator**.
+Hecho el 2026-07-30, no hay que repetirlo:
+
+- **Proyecto de Sanity `3caofriy`**, dataset `production`
+  ([manage](https://www.sanity.io/manage/project/3caofriy)).
+- **22 documentos importados**: 14 bobinas, 7 referencias de catálogo y la ficha de empresa.
+- **Variables** puestas en los dos proyectos de Vercel, en los tres entornos.
+- **Dos webhooks** de revalidación (`production` y `test`), con `rule.on = create/update/delete` y el
+  secreto compartido. Verificado de punta a punta: una publicación se ve en la web **en 9 segundos**,
+  sin desplegar.
+
+Sólo queda una cosa, que la tiene que hacer una persona: **invitar a quien vaya a editar** en
+sanity.io/manage › Members, con rol **Administrator**.
+
+Para reproducirlo en otro entorno desde cero: `npx sanity login`, `npx sanity projects create`,
+rellenar `.env.local` a partir de `.env.example`, `npm run migrate:build && npm run migrate:import`,
+`vercel env add` y crear los webhooks. **Ojo con el webhook:** si se crea por API hay que enviar
+`type: "document"` y luego un PATCH con `rule: {on: ["create","update","delete"]}` — el POST no acepta
+`rule`, y sin él el webhook se crea «activo» pero **no se dispara nunca**. Cuesta un rato darse cuenta
+porque el registro de entregas simplemente sale vacío.
 
 ## Arquitectura
 
@@ -184,11 +196,19 @@ nave, y una foto de producto por referencia de catálogo.
 
 ## Despliegue
 
-Pensado para **Vercel**, con dos entornos que se publican automáticamente al hacer _push_:
+En **Vercel** (cuenta `luis-fernandez`), con dos proyectos que se publican automáticamente al hacer
+_push_:
 
-- **Producción:** rama `main` → dominio real.
-- **Test:** rama `test`. Emite `noindex` y `robots: disallow` automáticamente para no competir en
-  Google con el dominio real.
+- **Producción:** proyecto `swiftmet`, rama `main` → [swiftmet.vercel.app](https://swiftmet.vercel.app).
+- **Test:** proyecto `swiftmettest`, rama `test` →
+  [swiftmettest.vercel.app](https://swiftmettest.vercel.app). Emite `noindex` y `robots: disallow`
+  automáticamente para no competir en Google con el dominio real.
+
+> La rama de producción de cada proyecto (`main` y `test`) **sólo se puede fijar desde el panel de
+> Vercel**: Settings › Environments › Production › Branch Tracking. La API pública no acepta
+> `productionBranch` en ningún endpoint ni versión — se probaron `PATCH /v9|v10|v11/projects`, el
+> `POST .../link` y varios más, y todos lo rechazan o lo ignoran en silencio. Si se crea un tercer
+> entorno, es el único paso manual.
 
 El framework se declara en **`vercel.json`** (`"framework": "nextjs"`), que se versiona y se aplica
 igual a los dos entornos, así que no hace falta tocar el panel de Vercel.
