@@ -3,6 +3,11 @@
 * text=auto eol=lf
 
 # Binarios: nunca convertir.
+# Los vídeos del montaje de portada se declaran igual que las imágenes. `text=auto` los
+# detectaría solo, pero de esto depende que un `git add` en Windows no se ponga a buscar
+# saltos de línea en tres megas de VP9.
+*.mp4 binary
+*.webm binary
 *.png binary
 *.jpg binary
 *.jpeg binary

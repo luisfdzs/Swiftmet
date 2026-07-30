@@ -38,13 +38,16 @@ type Props = {
  * Por eso el hueco lleva el rótulo de lo que debería verse (`label`) y no un texto
  * genérico. Es a la vez el placeholder y la lista de la compra.
  *
- * **Se probó a rellenar estos huecos con fotografía de archivo, y se descartó.** Lo único
- * que hay con licencia libre para este sector es una serie de rollos de hilo de ACERO de
- * un patio, con óxido a la vista. Sobre una ficha que dice «99,99 % de aluminio», una foto
- * de hilo herrumbroso no ambienta: desmiente, y ante un comprador que decide por las cotas
- * eso cuesta más que un hueco honesto. El plan es fotografía de stock **de pago** hasta que
- * Swiftmet entregue la suya; ambas entran por el panel, así que este componente no cambia.
- * El razonamiento completo, en el README, «Fotografía».
+ * **Hoy los huecos de producto y el de calidad SÍ llevan foto**, de archivo industrial de
+ * Pexels (`lib/photos.ts`), así que el recordatorio ya no está en pantalla: vive en el
+ * README y en ese fichero. Se llegó ahí en dos pasadas, y la primera es la que enseña algo:
+ * con material de Wikimedia —rollos de hilo de ACERO OXIDADO— la foto **desmentía** la
+ * ficha, porque el aluminio no se oxida. Se retiró todo y se volvió a buscar con un
+ * criterio explícito: nada de óxido, ninguna marca ajena legible, y `alt` que describen lo
+ * que se ve y no lo que la ficha afirma.
+ *
+ * El componente no ha cambiado: sigue pintando el hueco en cuanto se le pasa `image={null}`,
+ * y es lo que hay que hacer si un día no hay foto que aguante ese criterio.
  *
  * **El hueco es más plano que la foto que lo sustituirá** (`placeholderRatio`), y esto se
  * decidió viendo el resultado: con la proporción 4:3 de la foto real, siete productos sin

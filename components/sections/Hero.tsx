@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { HeroMontage } from '@/components/sections/HeroMontage'
 import type { SpoolEntry } from '@/lib/content'
 import { formatRange } from '@/lib/format'
 import type { Locale } from '@/lib/i18n/config'
@@ -6,13 +7,24 @@ import { getDictionary } from '@/lib/i18n/dictionaries'
 import { href } from '@/lib/i18n/routes'
 
 /**
- * PORTADA, SIN FOTOGRAFÍA.
+ * PORTADA: UN MONTAJE EN BUCLE DETRÁS DE LAS CIFRAS.
  *
- * El proyecto de referencia abre con una foto a sangre porque vende arquitectura: la
- * imagen *es* el producto. Aquí no hay fotografía disponible (ver README) y, aunque la
- * hubiera, una foto de nave industrial no vende hilo de aluminio: todas las naves se
- * parecen. Lo que distingue a Swiftmet de su competencia directa son **cifras**, así que
- * la portada las pone en grande y las saca del contenido real, no de un texto fijo.
+ * Abre con veinticuatro segundos del proceso del aluminio a cámara rápida —horno, colada,
+ * laminación, bobina—, en bucle. El montaje lo pone `<HeroMontage>`, y de dónde sale y cómo
+ * está tratado se explica allí y en `scripts/build-hero-montage.mjs`.
+ *
+ * **Esto sustituye al hero limpio que había antes**, y conviene saber qué argumento tenía.
+ * Era: no hay fotografía de Swiftmet y, aunque la hubiera, una foto de nave industrial no
+ * vende hilo de aluminio porque todas las naves se parecen. El argumento sigue en pie **para
+ * una foto fija de una nave**, y por eso el montaje no es eso: es material de archivo tratado
+ * hasta la abstracción, sin un plano general reconocible, ordenado de caliente a frío para
+ * que se lea como un proceso en tres segundos. No enseña una fábrica; enseña de qué va esto.
+ *
+ * Lo que **no** ha cambiado es quién manda en la portada. Lo que distingue a Swiftmet de su
+ * competencia directa son las cifras, y siguen donde estaban: en grande y sacadas del
+ * contenido real, no de un texto fijo. El montaje va detrás, con un degradado que lo apaga
+ * justo donde empieza el texto (ver `<HeroMontage>`). Si alguna vez hay que elegir entre que
+ * el vídeo luzca y que las cifras se lean, ganan las cifras.
  *
  * `formatRange` calcula el rango de pesos de las bobinas publicadas en el panel. Si
  * mañana alguien añade una bobina de 18 kg, el argumento de la portada se actualiza
@@ -63,6 +75,8 @@ export function Hero({
       data-hero
       className="relative -mt-20 flex min-h-[100svh] flex-col justify-end overflow-hidden bg-inverse pt-32 text-paper md:-mt-24"
     >
+      <HeroMontage label={t.home.heroMontageLabel} />
+
       <div className="page-gutter relative flex flex-col items-center gap-8 pb-12 text-center md:pb-16">
         <p className="eyebrow text-paper/60">{t.home.heroLead}</p>
         <h1 className="text-display max-w-4xl text-balance">{t.home.heroTitle}</h1>

@@ -25,6 +25,10 @@ const en = {
     heroLead: 'Aluminium wire for vacuum metallising',
     heroTitle: 'High-purity aluminium wire, wound jointless on fourteen spool sizes.',
     heroSubtitle: 'Palwal, Haryana — supplying converters and capacitor makers worldwide.',
+    // Nombre accesible del montaje de portada. Dice «archive footage» a propósito: es
+    // material de archivo de la industria del aluminio, no la planta de Swiftmet, y un
+    // texto que describe una imagen no puede afirmar más de lo que la imagen es.
+    heroMontageLabel: 'Archive footage of aluminium production, playing as a silent loop',
     figuresTitle: 'At a glance',
     // «Aluminium purity, up to» + «99.99 % min» se leía «up to … min», que es lo
     // contrario de lo que dice. La etiqueta nombra el grado; el valor trae su propio matiz.
@@ -148,6 +152,7 @@ const hi: Dictionary = {
     heroLead: 'वैक्यूम मेटलाइज़िंग के लिए एल्युमिनियम तार',
     heroTitle: 'उच्च शुद्धता वाला एल्युमिनियम तार, चौदह स्पूल आकारों पर बिना जोड़ लपेटा हुआ।',
     heroSubtitle: 'पलवल, हरियाणा — दुनिया भर के कन्वर्टर और कैपेसिटर निर्माताओं के लिए।',
+    heroMontageLabel: 'एल्युमिनियम उत्पादन का पुरालेख फुटेज, मौन लूप में चल रहा है',
     figuresTitle: 'एक नज़र में',
     purityLabel: 'उच्चतम शुद्धता ग्रेड',
     spoolTypesLabel: 'प्लास्टिक स्पूल प्रकार',
@@ -264,6 +269,7 @@ const es: Dictionary = {
     heroLead: 'Hilo de aluminio para metalizado al vacío',
     heroTitle: 'Hilo de aluminio de alta pureza, bobinado sin empalmes en catorce formatos.',
     heroSubtitle: 'Palwal, Haryana — para transformadores de film y fabricantes de condensadores.',
+    heroMontageLabel: 'Imágenes de archivo de la producción de aluminio, en bucle y sin sonido',
     figuresTitle: 'De un vistazo',
     purityLabel: 'Grado de pureza más alto',
     spoolTypesLabel: 'Tipos de bobina de plástico',
