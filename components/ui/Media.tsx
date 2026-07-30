@@ -25,6 +25,20 @@ type Props = {
  * si hay foto o si toca pintar el hueco marcado.
  */
 export function Media({ image, alt, sizes, priority = false, ratio, className }: Props) {
+  /**
+   * Las imágenes que NO vienen de Sanity —hoy, las fotos de archivo de `public/photos`—
+   * se sirven tal cual. El cargador de la web es el de la CDN de Sanity
+   * (`sanity/imageLoader.ts`) y para una ruta local devuelve el `src` sin tocar, así que
+   * `next/image` avisa por consola de que el cargador «no implementa width» y con razón:
+   * pediría siete anchos distintos del mismo fichero. Declararlo aquí es la solución que
+   * documenta Next, y no cuesta nada porque esos ficheros **ya vienen recortados al
+   * tamaño de su hueco** (1280 px las fichas, 2048 el panorámico) y pesan 80–200 kB.
+   *
+   * Lo que sube Swiftmet al panel sigue pasando por la CDN de Sanity, que es donde una
+   * foto de 25 MB tiene que adelgazar.
+   */
+  const unoptimized = !image.src.startsWith('https://cdn.sanity.io/')
+
   return (
     <div
       className={cn('relative w-full overflow-hidden bg-paper-deep', className)}
@@ -40,6 +54,7 @@ export function Media({ image, alt, sizes, priority = false, ratio, className }:
         placeholder="blur"
         blurDataURL={image.blur}
         quality={75}
+        unoptimized={unoptimized}
         className="object-cover"
       />
     </div>

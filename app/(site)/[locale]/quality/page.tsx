@@ -4,6 +4,7 @@ import { Figure } from '@/components/ui/Figure'
 import { Reveal } from '@/components/ui/Reveal'
 import { getCompanyInfo } from '@/lib/content'
 import { isLocale } from '@/lib/i18n/config'
+import { stockQualityPhoto } from '@/lib/photos'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 
 export async function generateMetadata({
@@ -46,12 +47,17 @@ export default async function QualityPage({ params }: { params: Promise<{ locale
 
       <Figure
         /*
-         * Se probó a abrir esta página con archivo de Wikimedia y se retiró: lo único que
-         * hay de una línea de trefilado es una foto de 1985 de la Comunidad Europea del
-         * Carbón y del Acero, y a 21:9 en la cabecera contradecía lo que la página afirma
-         * —que aquí se mide cada lote, hoy y en Baghola—. Ver README, «Fotografía».
+         * Foto de archivo de una nave de hilo, no de la planta de Baghola: ambienta la
+         * página, no acredita nada de lo que dice. El primer intento (un archivo de 1985 de
+         * la Comunidad Europea del Carbón y del Acero) se descartó por eso mismo: a 21:9 y
+         * en la cabecera, una nave de acero de época contradecía lo que la página afirma
+         * —que aquí se mide cada lote, hoy—. Ver README, «Fotografía».
+         *
+         * Sigue pendiente la de verdad, que es la primera de la lista: la línea de
+         * trefilado con el calibre en proceso, o la máquina de tracción. Con ella, esta
+         * imagen pasaría de ambientar a demostrar, que es lo que esta página necesita.
          */
-        image={null}
+        image={stockQualityPhoto}
         locale={locale}
         ratio="21 / 9"
         sizes="100vw"

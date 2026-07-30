@@ -54,12 +54,14 @@ proyecto.
   declarado en `vercel.json`.
 - **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (33
   comprobaciones en Chrome real a 390×844, por idioma).
-- **Fotografía:** no hay ninguna, y los huecos se pintan tramados diciendo qué falta. Se probó archivo
-  libre de Wikimedia y **se descartó**: lo único disponible es hilo de acero oxidado, y sobre la ficha
-  del 99,99 % de aluminio la foto desmiente al dato. Descartada también la imagen generada por IA
-  (regla 8). El puente acordado es **stock de pago subido al panel**; el destino, las fotos de Swiftmet.
-  Motivos y búsquedas, en el README, «Fotografía». Regla que deja: **una foto puede ambientar, nunca
-  ilustrar una afirmación.**
+- **Fotografía:** Swiftmet no ha entregado ninguna. Las siete fichas de producto y la apertura de
+  `/quality` llevan **archivo industrial de Pexels** (`lib/photos.ts`, procedencia en
+  `public/photos/CREDITS.md`), que se retira solo en cuanto el panel tiene imagen. **Tres reglas de
+  selección, aprendidas fallando:** nada de óxido —con material de Wikimedia, el hilo herrumbroso
+  desmentía la ficha del 99,99 %, porque el aluminio no se oxida—, ninguna marca ajena legible (pasó con
+  Prysmian y con «Reynolds Aluminum»), y `alt` que describen lo que se ve, nunca un grado ni una planta.
+  Descartada la imagen generada por IA (regla 8). Las bobinas no llevan foto: se dibujan desde sus cotas.
+  Si un día ninguna foto aguanta las tres reglas, `<Figure image={null}>` y vuelve el hueco.
 - **Navegación:** en escritorio, la cabecera; en móvil (`< lg`), una **barra inferior fija de cinco
   iconos** —inicio, productos, bobinas, contacto y el menú completo— al estilo de bonsaiartesania.com.
   Los textos van **centrados en su sección** en toda la web; el eje central es la decisión de
@@ -113,5 +115,6 @@ Regla de oro: **el contexto nunca debe quedar desactualizado respecto al estado 
 
 _Última actualización: 2026-07-30 — textos centrados en toda la web y navegación de móvil en una barra
 inferior de iconos, al estilo de bonsaiartesania.com (33/33 en `check:mobile`, tres idiomas, revisado a
-ojo). Y descartada la fotografía de archivo gratuita tras verla en pantalla: los huecos siguen
-tramados, con el porqué escrito en el README y el stock de pago como puente._
+ojo). Y **todos los huecos de imagen rellenos** con archivo industrial de Pexels, en segundo intento: el
+primero, con hilo de acero oxidado de Wikimedia, se retiró por desmentir las fichas, y de ahí salieron
+las tres reglas de selección que ahora están escritas._
