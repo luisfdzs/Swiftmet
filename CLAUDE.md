@@ -64,6 +64,11 @@ proyecto.
   iconos** —inicio, productos, bobinas, contacto y el menú completo— al estilo de bonsaiartesania.com.
   Los textos van **centrados en su sección** en toda la web; el eje central es la decisión de
   maquetación del sitio, no un detalle de una página.
+- **Portada:** abre con un **montaje de vídeo en bucle de 24,3 s** —el proceso del aluminio a cámara
+  rápida, de caliente a frío— detrás del titular y las cifras. Once planos de dos películas de
+  **dominio público** (archive.org), tratados hasta la abstracción. Guion en
+  `scripts/hero-montage-shots.mjs`, render con `npm run hero` (pide ffmpeg), salida en `public/hero/`.
+  **No es la planta de Swiftmet** y nada en la web dice que lo sea.
 
 Detalle y razonamiento en el **README.md**, que es extenso a propósito, y en `.claude/memory/`.
 
@@ -92,6 +97,13 @@ Heredadas de la metodología de `sangilstudio`:
    no pinta el campo) o se siembra con un marcador imposible de confundir con un dato real
    (`.example`, ceros) y se documenta en el README.
 
+   Corolario para las imágenes: **una imagen ajena puede ambientar, nunca ilustrar una afirmación.**
+   El montaje de la portada es material de archivo y va detrás del titular, abstraído y sin decir de
+   quién es la fábrica: ambienta. Una foto en la ficha del 1199 estaría diciendo «este es nuestro hilo
+   de 99,99 %», y ahí no vale material ajeno — por eso los productos siguen con el hueco tramado de
+   `<Figure>`. Y en cualquier caso hay que mirar el encuadre: el material de archivo trae **marcas de
+   otros fabricantes** dentro (ver `public/hero/CREDITS.md`).
+
 ### Modelo de ramas
 
 `main` (producción) · `develop` (lo que va a producción) · `test` (día a día) · ramas temporales que
@@ -111,7 +123,12 @@ Regla de oro: **el contexto nunca debe quedar desactualizado respecto al estado 
 
 ---
 
-_Última actualización: 2026-07-30 — textos centrados en toda la web y navegación de móvil en una barra
-inferior de iconos, al estilo de bonsaiartesania.com (33/33 en `check:mobile`, tres idiomas, revisado a
-ojo). Y descartada la fotografía de archivo gratuita tras verla en pantalla: los huecos siguen
-tramados, con el porqué escrito en el README y el stock de pago como puente._
+_Última actualización: 2026-07-30 — tres cambios el mismo día. (1) Textos centrados en toda la web y
+navegación de móvil en una barra inferior de iconos, al estilo de bonsaiartesania.com. (2) Descartada la
+fotografía de archivo gratuita en las fichas tras verla en pantalla: los huecos siguen tramados, con el
+porqué en el README y el stock de pago como puente. (3) La portada abre con un montaje de vídeo en bucle
+de 24,3 s —el proceso del aluminio a cámara rápida, once planos de dominio público tratados—, al estilo
+de la portada de sanity.io y reproducible con `npm run hero`. Los dos últimos parecen contradecirse y no
+lo hacen: el montaje **ambienta** detrás del titular; una foto en una ficha **ilustraría** un dato (ver
+el corolario de la regla 8). Todo verificado en los tres idiomas (33/33 en `check:mobile`) y a ojo en
+escritorio y móvil, con el titular legible sobre los planos más claros del ciclo._
