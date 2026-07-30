@@ -54,12 +54,14 @@ proyecto.
   declarado en `vercel.json`.
 - **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (33
   comprobaciones en Chrome real a 390×844, por idioma).
-- **Fotografía:** no hay ninguna, y los huecos se pintan tramados diciendo qué falta. Se probó archivo
-  libre de Wikimedia y **se descartó**: lo único disponible es hilo de acero oxidado, y sobre la ficha
-  del 99,99 % de aluminio la foto desmiente al dato. Descartada también la imagen generada por IA
-  (regla 8). El puente acordado es **stock de pago subido al panel**; el destino, las fotos de Swiftmet.
-  Motivos y búsquedas, en el README, «Fotografía». Regla que deja: **una foto puede ambientar, nunca
-  ilustrar una afirmación.**
+- **Fotografía:** Swiftmet no ha entregado ninguna. Las siete fichas de producto y la apertura de
+  `/quality` llevan **archivo industrial de Pexels** (`lib/photos.ts`, procedencia en
+  `public/photos/CREDITS.md`), que se retira solo en cuanto el panel tiene imagen. **Tres reglas de
+  selección, aprendidas fallando:** nada de óxido —con material de Wikimedia, el hilo herrumbroso
+  desmentía la ficha del 99,99 %, porque el aluminio no se oxida—, ninguna marca ajena legible (pasó con
+  Prysmian y con «Reynolds Aluminum»), y `alt` que describen lo que se ve, nunca un grado ni una planta.
+  Descartada la imagen generada por IA (regla 8). Las bobinas no llevan foto: se dibujan desde sus cotas.
+  Si un día ninguna foto aguanta las tres reglas, `<Figure image={null}>` y vuelve el hueco.
 - **Navegación:** en escritorio, la cabecera; en móvil (`< lg`), una **barra inferior fija de cinco
   iconos** —inicio, productos, bobinas, contacto y el menú completo— al estilo de bonsaiartesania.com.
   Los textos van **centrados en su sección** en toda la web; el eje central es la decisión de
@@ -124,11 +126,13 @@ Regla de oro: **el contexto nunca debe quedar desactualizado respecto al estado 
 ---
 
 _Última actualización: 2026-07-30 — tres cambios el mismo día. (1) Textos centrados en toda la web y
-navegación de móvil en una barra inferior de iconos, al estilo de bonsaiartesania.com. (2) Descartada la
-fotografía de archivo gratuita en las fichas tras verla en pantalla: los huecos siguen tramados, con el
-porqué en el README y el stock de pago como puente. (3) La portada abre con un montaje de vídeo en bucle
-de 24,3 s —el proceso del aluminio a cámara rápida, once planos de dominio público tratados—, al estilo
-de la portada de sanity.io y reproducible con `npm run hero`. Los dos últimos parecen contradecirse y no
-lo hacen: el montaje **ambienta** detrás del titular; una foto en una ficha **ilustraría** un dato (ver
-el corolario de la regla 8). Todo verificado en los tres idiomas (33/33 en `check:mobile`) y a ojo en
-escritorio y móvil, con el titular legible sobre los planos más claros del ciclo._
+navegación de móvil en una barra inferior de iconos, al estilo de bonsaiartesania.com. (2) La portada
+abre con un montaje de vídeo en bucle de 24,3 s —el proceso del aluminio a cámara rápida, once planos de
+dominio público tratados—, al estilo de la portada de sanity.io y reproducible con `npm run hero`. (3)
+**Todos los huecos de imagen rellenos** con archivo industrial de Pexels, en segundo intento: el primer
+set, con hilo de acero oxidado de Wikimedia, se retiró por desmentir las fichas —el aluminio no se
+oxida—, y de ahí salieron las tres reglas de selección que ahora están escritas. El montaje y las fichas
+no se contradicen: el vídeo **ambienta** detrás del titular y no afirma nada; una foto de ficha va con su
+`alt` describiendo lo que se ve, nunca el grado ni la pureza (ver el corolario de la regla 8). Todo
+verificado en los tres idiomas (33/33 en `check:mobile`) y a ojo en escritorio y móvil, con el titular
+legible sobre los planos más claros del ciclo._
