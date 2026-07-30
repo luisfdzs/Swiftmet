@@ -1,0 +1,553 @@
+{
+  "_readme": [
+    "VOLCADO DE CONTENIDO INICIAL — fuente de `npm run migrate:build`.",
+    "",
+    "PROCEDENCIA DE CADA DATO, para que nadie tenga que adivinar qué es firme y qué no:",
+    "",
+    "  · spools[] — FIRME. Transcrito del documento del cliente «Swiftmet_Plastic Spool",
+    "    List_As on 31-03-2022.pdf»: catorce tipos, con D1/D2/D3/L1/L2 y peso neto tal",
+    "    como constan. Es el único bloque que no hay que confirmar con nadie.",
+    "",
+    "  · company.plants, company.incorporated — FIRME. Registro mercantil indio",
+    "    (CIN U25190DL2010PTC206815, constituida el 07-08-2010) y fichas públicas de",
+    "    directorios B2B.",
+    "",
+    "  · company.people — PARCIAL. Mr. Dilip Rawat consta como Commercial Officer en la",
+    "    ficha de TradeIndia de Swiftmet. Su teléfono directo no es público.",
+    "",
+    "  · company.email, company.phone — MARCADORES FALSOS A PROPÓSITO. El email usa el",
+    "    TLD reservado `.example` y el teléfono es todo ceros: son imposibles de",
+    "    confundir con datos reales y la web no se puede publicar sin sustituirlos.",
+    "",
+    "  · products[].grade / purity / tensile / elongation — POR CONFIRMAR. 1080, 1090 y",
+    "    1199 son designaciones estándar de la Aluminium Association para hilo de",
+    "    metalizado, y los rangos de tracción son los habituales del sector, pero NO",
+    "    consta públicamente que Swiftmet fabrique los tres grados. Hay que cotejarlo",
+    "    con producción antes de publicar.",
+    "",
+    "  · Textos en hindi — BORRADOR. Los resúmenes y las aplicaciones están traducidos;",
+    "    las descripciones largas se dejan sin traducir a propósito y la web las muestra",
+    "    en inglés (ver el fallback en lib/content.ts). Mejor inglés correcto que hindi",
+    "    técnico sin revisar.",
+    "",
+    "Ver README, «Pendiente de confirmar con Swiftmet»."
+  ],
+
+  "spools": [
+    {
+      "code": "SW200",
+      "netWeight": 2.75,
+      "flangeDiameter": 200,
+      "coreDiameter": 120,
+      "boreHole": 38.5,
+      "spoolWidth": 80,
+      "windingWidth": 67
+    },
+    {
+      "code": "SW265",
+      "netWeight": 6.0,
+      "flangeDiameter": 265,
+      "coreDiameter": 120,
+      "boreHole": 38.5,
+      "spoolWidth": 80,
+      "windingWidth": 67
+    },
+    {
+      "code": "SW265-1",
+      "netWeight": 6.0,
+      "flangeDiameter": 265,
+      "coreDiameter": 120,
+      "boreHole": 51.5,
+      "spoolWidth": 80,
+      "windingWidth": 67,
+      "note": {
+        "en": "Wide bore version of the SW265",
+        "hi": "SW265 का चौड़े बोर वाला संस्करण",
+        "es": "Versión de la SW265 con agujero ancho"
+      }
+    },
+    {
+      "code": "SW280",
+      "netWeight": 7.0,
+      "flangeDiameter": 280,
+      "coreDiameter": 120,
+      "boreHole": 38.5,
+      "spoolWidth": 80,
+      "windingWidth": 67
+    },
+    {
+      "code": "SW285",
+      "netWeight": 7.5,
+      "flangeDiameter": 285,
+      "coreDiameter": 120,
+      "boreHole": 38.5,
+      "spoolWidth": 80,
+      "windingWidth": 67
+    },
+    {
+      "code": "SW295",
+      "netWeight": 8.0,
+      "flangeDiameter": 295,
+      "coreDiameter": 120,
+      "boreHole": 38.5,
+      "spoolWidth": 80,
+      "windingWidth": 67
+    },
+    {
+      "code": "SW300",
+      "netWeight": 8.5,
+      "flangeDiameter": 300,
+      "coreDiameter": 120,
+      "boreHole": 38.5,
+      "spoolWidth": 80,
+      "windingWidth": 67
+    },
+    {
+      "code": "SW305",
+      "netWeight": 8.5,
+      "flangeDiameter": 305,
+      "coreDiameter": 120,
+      "boreHole": 38.5,
+      "spoolWidth": 80,
+      "windingWidth": 67
+    },
+    {
+      "code": "SW320",
+      "netWeight": 9.5,
+      "flangeDiameter": 320,
+      "coreDiameter": 120,
+      "boreHole": 38.5,
+      "spoolWidth": 80,
+      "windingWidth": 67
+    },
+    {
+      "code": "SW320-1",
+      "netWeight": 9.5,
+      "flangeDiameter": 320,
+      "coreDiameter": 120,
+      "boreHole": 51.5,
+      "spoolWidth": 80,
+      "windingWidth": 67,
+      "note": {
+        "en": "Wide bore version of the SW320",
+        "hi": "SW320 का चौड़े बोर वाला संस्करण",
+        "es": "Versión de la SW320 con agujero ancho"
+      }
+    },
+    {
+      "code": "SW320-2",
+      "netWeight": 8.5,
+      "flangeDiameter": 320,
+      "coreDiameter": 100,
+      "boreHole": 51.5,
+      "spoolWidth": 71,
+      "windingWidth": 59,
+      "note": {
+        "en": "Narrow barrel, for machines with a shorter traverse",
+        "hi": "छोटा कोर, कम ट्रैवर्स वाली मशीनों के लिए",
+        "es": "Núcleo estrecho, para máquinas con recorrido más corto"
+      }
+    },
+    {
+      "code": "SW360",
+      "netWeight": 11.75,
+      "flangeDiameter": 360,
+      "coreDiameter": 100,
+      "boreHole": 38.5,
+      "spoolWidth": 71,
+      "windingWidth": 59
+    },
+    {
+      "code": "SW360-1",
+      "netWeight": 11.75,
+      "flangeDiameter": 360,
+      "coreDiameter": 100,
+      "boreHole": 51.5,
+      "spoolWidth": 71,
+      "windingWidth": 59,
+      "note": {
+        "en": "Wide bore version of the SW360",
+        "hi": "SW360 का चौड़े बोर वाला संस्करण",
+        "es": "Versión de la SW360 con agujero ancho"
+      }
+    },
+    {
+      "code": "SW360-3 (HW)",
+      "netWeight": 14.5,
+      "flangeDiameter": 360,
+      "coreDiameter": 100,
+      "boreHole": 51.5,
+      "spoolWidth": 85,
+      "windingWidth": 71,
+      "note": {
+        "en": "Heavy wound: the largest spool in the programme, for the longest runs between changeovers",
+        "hi": "हेवी वाउंड: कार्यक्रम की सबसे बड़ी स्पूल, बदलाव के बीच सबसे लंबे रन के लिए",
+        "es": "Bobinado reforzado: la bobina mayor del programa, para las tiradas más largas entre cambios"
+      }
+    }
+  ],
+
+  "products": [
+    {
+      "slug": "1080-metallising-wire",
+      "name": "1080 Metallising Wire",
+      "family": "metallising-wire",
+      "featured": true,
+      "grade": "1080",
+      "purity": "99.80 % min",
+      "diameter": "1.50 mm and above",
+      "tensile": "16–18 kg/mm²",
+      "elongation": "above 1 %",
+      "spoolWound": true,
+      "packing": {
+        "en": "Jointless spools packed in corrugated boxes, shipped by road or sea",
+        "hi": "बिना जोड़ वाली स्पूल, कोरुगेटेड बॉक्स में पैक, सड़क या समुद्र मार्ग से भेजी जाती हैं",
+        "es": "Bobinas sin empalmes en cajas de cartón ondulado, envío por carretera o por barco"
+      },
+      "summary": {
+        "en": "The working grade for film and paper metallising, where deposition rate matters more than the last hundredth of purity.",
+        "hi": "फ़िल्म और पेपर मेटलाइज़िंग के लिए मानक ग्रेड, जहाँ शुद्धता के अंतिम सौवें हिस्से से अधिक निक्षेपण दर मायने रखती है।",
+        "es": "El grado de trabajo para metalizado de film y papel, donde la velocidad de deposición importa más que la última centésima de pureza."
+      },
+      "body": {
+        "en": [
+          "Drawn from 99.80 % aluminium coil, each of which arrives with its own chemical composition certificate. The diameter is gauged continuously during drawing rather than sampled afterwards, because a wire that runs thin for twenty metres will not show up in an end-of-batch check but will show up as a thin patch on the customer's film.",
+          "Supplied layer-wound and jointless on any spool in the programme. Jointless is the specification that matters on an automatic metalliser: a splice is where the run stops, and stopping a metalliser costs more than the spool."
+        ]
+      },
+      "applications": [
+        {
+          "en": "BOPP and polyester film metallising",
+          "hi": "BOPP और पॉलिएस्टर फ़िल्म मेटलाइज़िंग",
+          "es": "Metalizado de film BOPP y poliéster"
+        },
+        {
+          "en": "Paper and board metallising for packaging",
+          "hi": "पैकेजिंग के लिए पेपर और बोर्ड मेटलाइज़िंग",
+          "es": "Metalizado de papel y cartón para envase"
+        },
+        {
+          "en": "Flexible packaging laminates",
+          "hi": "फ़्लेक्सिबल पैकेजिंग लैमिनेट",
+          "es": "Laminados de envase flexible"
+        }
+      ]
+    },
+    {
+      "slug": "1090-metallising-wire",
+      "name": "1090 Metallising Wire",
+      "family": "metallising-wire",
+      "featured": true,
+      "grade": "1090",
+      "purity": "99.90 % min",
+      "diameter": "1.50 mm and above",
+      "tensile": "15–16 kg/mm²",
+      "elongation": "above 1 %",
+      "spoolWound": true,
+      "packing": {
+        "en": "Jointless spools packed in corrugated boxes, shipped by road or sea",
+        "hi": "बिना जोड़ वाली स्पूल, कोरुगेटेड बॉक्स में पैक, सड़क या समुद्र मार्ग से भेजी जाती हैं",
+        "es": "Bobinas sin empalmes en cajas de cartón ondulado, envío por carretera o por barco"
+      },
+      "summary": {
+        "en": "One decimal place up from 1080, for work where the optical density of the deposit is specified and audited.",
+        "hi": "1080 से एक दशमलव अधिक, उन कामों के लिए जहाँ निक्षेप की ऑप्टिकल डेंसिटी निर्दिष्ट और लेखा-परीक्षित होती है।",
+        "es": "Una décima por encima del 1080, para trabajos en los que la densidad óptica del depósito se especifica y se audita."
+      },
+      "body": {
+        "en": [
+          "The same drawing line and the same jointless winding as the 1080, from 99.90 % coil. The softer temper that comes with the higher purity is why the tensile range sits a little lower, and it is worth knowing before the wire feed is set up.",
+          "Chosen when the metallised film has to hold a barrier or optical specification across a whole reel rather than on average."
+        ]
+      },
+      "applications": [
+        {
+          "en": "High barrier film metallising",
+          "hi": "हाई बैरियर फ़िल्म मेटलाइज़िंग",
+          "es": "Metalizado de film de alta barrera"
+        },
+        {
+          "en": "Decorative and holographic film",
+          "hi": "सजावटी और होलोग्राफ़िक फ़िल्म",
+          "es": "Film decorativo y holográfico"
+        },
+        {
+          "en": "Capacitor grade film metallising",
+          "hi": "कैपेसिटर ग्रेड फ़िल्म मेटलाइज़िंग",
+          "es": "Metalizado de film para condensadores"
+        }
+      ]
+    },
+    {
+      "slug": "1199-metallising-wire",
+      "name": "1199 Metallising Wire",
+      "family": "metallising-wire",
+      "featured": true,
+      "grade": "1199",
+      "purity": "99.99 % min",
+      "diameter": "1.50 mm and above",
+      "tensile": "13–14 kg/mm²",
+      "elongation": "above 1 %",
+      "spoolWound": true,
+      "packing": {
+        "en": "Jointless spools packed in corrugated boxes, shipped by road or sea",
+        "hi": "बिना जोड़ वाली स्पूल, कोरुगेटेड बॉक्स में पैक, सड़क या समुद्र मार्ग से भेजी जाती हैं",
+        "es": "Bobinas sin empalmes en cajas de cartón ondulado, envío por carretera o por barco"
+      },
+      "summary": {
+        "en": "Four nines. The grade for electronic capacitors, where an inclusion is not a cosmetic defect but a failure.",
+        "hi": "चार नाइन। इलेक्ट्रॉनिक कैपेसिटर के लिए ग्रेड, जहाँ कोई भी अशुद्धि दिखावटी दोष नहीं बल्कि विफलता है।",
+        "es": "Cuatro nueves. El grado para condensadores electrónicos, donde una inclusión no es un defecto estético sino un fallo."
+      },
+      "body": {
+        "en": [
+          "Drawn from 99.99 % coil and handled as the sensitive product it is: degreased after drawing, wound without a single splice, and released only against the batch tensile result.",
+          "At this purity the wire is noticeably soft, which is why the tensile range is the lowest of the three grades. It is a property of the material, not a concession on quality."
+        ]
+      },
+      "applications": [
+        {
+          "en": "Electronic capacitor electrodes",
+          "hi": "इलेक्ट्रॉनिक कैपेसिटर इलेक्ट्रोड",
+          "es": "Electrodos de condensadores electrónicos"
+        },
+        {
+          "en": "Precision optical coating",
+          "hi": "प्रिसिज़न ऑप्टिकल कोटिंग",
+          "es": "Recubrimiento óptico de precisión"
+        }
+      ]
+    },
+    {
+      "slug": "aluminium-rod",
+      "name": "High Purity Aluminium Rod",
+      "family": "aluminium-rod",
+      "featured": true,
+      "purity": "99.80 % to 99.99 %",
+      "spoolWound": false,
+      "packing": {
+        "en": "Coils, strapped and wrapped to customer requirement",
+        "hi": "कॉइल, ग्राहक की आवश्यकता अनुसार बाँधी और लपेटी हुई",
+        "es": "Rollos, flejados y embalados según requisito del cliente"
+      },
+      "summary": {
+        "en": "The stock our own wire is drawn from, supplied as rod to plants that draw their own.",
+        "hi": "वही स्टॉक जिससे हमारा तार खींचा जाता है, स्वयं तार खींचने वाले संयंत्रों को रॉड रूप में आपूर्ति।",
+        "es": "El material del que trefilamos nuestro propio hilo, servido como varilla a plantas que trefilan el suyo."
+      },
+      "body": {
+        "en": [
+          "Same incoming coil, same composition certificate, same purity grades. Supplied to converters and capacitor makers who run their own drawing line and would rather buy the rod than the finished spool."
+        ]
+      },
+      "applications": [
+        {
+          "en": "Polyester and BOPP film metallising",
+          "hi": "पॉलिएस्टर और BOPP फ़िल्म मेटलाइज़िंग",
+          "es": "Metalizado de film de poliéster y BOPP"
+        },
+        {
+          "en": "Paper metallising",
+          "hi": "पेपर मेटलाइज़िंग",
+          "es": "Metalizado de papel"
+        },
+        {
+          "en": "Electronic capacitor manufacture",
+          "hi": "इलेक्ट्रॉनिक कैपेसिटर निर्माण",
+          "es": "Fabricación de condensadores electrónicos"
+        }
+      ]
+    },
+    {
+      "slug": "tea-bag-wire",
+      "name": "Tea Bag Wire",
+      "family": "tea-bag-wire",
+      "featured": false,
+      "spoolWound": true,
+      "summary": {
+        "en": "Soft aluminium wire for the staple that closes a tea bag, drawn to run on high speed packing machines.",
+        "hi": "टी बैग बंद करने वाले स्टेपल के लिए मुलायम एल्युमिनियम तार, तेज़ पैकिंग मशीनों पर चलने के लिए खींचा गया।",
+        "es": "Hilo de aluminio blando para la grapa que cierra la bolsita de té, trefilado para funcionar en máquinas de envasado rápidas."
+      },
+      "body": {
+        "en": [
+          "A food contact application, so the requirement is not only the diameter tolerance but a clean surface: the wire is degreased after drawing and wound without splices, for the same reason as the metallising grades — a joint is where a high speed machine jams."
+        ]
+      },
+      "applications": [
+        {
+          "en": "Tea bag stapling on automatic packing lines",
+          "hi": "स्वचालित पैकिंग लाइनों पर टी बैग स्टेपलिंग",
+          "es": "Grapado de bolsitas de té en líneas de envasado automáticas"
+        }
+      ]
+    },
+    {
+      "slug": "stainless-steel-mig-welding-wire",
+      "name": "Stainless Steel MIG Welding Wire",
+      "family": "welding-wire",
+      "featured": false,
+      "spoolWound": false,
+      "summary": {
+        "en": "Stainless MIG wire, drawn on the same plant and shipped on standard welding spools.",
+        "hi": "स्टेनलेस MIG तार, उसी संयंत्र पर खींचा गया और मानक वेल्डिंग स्पूल पर भेजा गया।",
+        "es": "Hilo MIG de acero inoxidable, trefilado en la misma planta y servido en bobinas de soldadura estándar."
+      },
+      "body": {
+        "en": [
+          "Outside the metallising range but on the same drawing capability. Diameters and grades to order.",
+          "⚠️ Placeholder text: the grades, diameters and spool formats of this line still have to be confirmed with production."
+        ]
+      },
+      "applications": []
+    },
+    {
+      "slug": "high-carbon-spring-steel-wire",
+      "name": "High Carbon Spring Steel Wire",
+      "family": "spring-steel-wire",
+      "featured": false,
+      "spoolWound": false,
+      "summary": {
+        "en": "High carbon spring steel wire, drawn to order.",
+        "hi": "हाई कार्बन स्प्रिंग स्टील तार, ऑर्डर के अनुसार खींचा गया।",
+        "es": "Hilo de acero al carbono para muelles, trefilado a medida."
+      },
+      "body": {
+        "en": [
+          "⚠️ Placeholder text: this line is listed in Swiftmet's public B2B profiles but its grades, diameters and tolerances still have to be confirmed with production before publishing."
+        ]
+      },
+      "applications": []
+    }
+  ],
+
+  "company": {
+    "statement": {
+      "en": [
+        "Swiftmet Wire & Resin Pvt. Ltd. draws high-purity aluminium wire for vacuum metallising at Baghola, in Palwal district, Haryana, and supplies it to film converters, paper metallisers and capacitor manufacturers in India and for export.",
+        "What we hold stock of is not only wire but spools: fourteen plastic spool types, from 2.75 kg to 14.5 kg net, in two bore sizes and three barrel widths. Most enquiries we receive are not about purity — they are about whether a spool will fit a particular metalliser. Publishing every dimension is our answer to that.",
+        "Every spool leaves the plant jointless. It is the specification our customers care about most, because a splice is where a coating run stops."
+      ],
+      "hi": [
+        "स्विफ्टमेट वायर एंड रेज़िन प्राइवेट लिमिटेड हरियाणा के पलवल ज़िले के बघोला में वैक्यूम मेटलाइज़िंग के लिए उच्च शुद्धता वाला एल्युमिनियम तार खींचती है, और इसे भारत में तथा निर्यात के लिए फ़िल्म कन्वर्टर, पेपर मेटलाइज़र और कैपेसिटर निर्माताओं को आपूर्ति करती है।",
+        "हमारे पास केवल तार ही नहीं, स्पूल का भी स्टॉक है: चौदह प्लास्टिक स्पूल प्रकार, 2.75 किग्रा से 14.5 किग्रा शुद्ध तक, दो बोर आकार और तीन कोर चौड़ाइयों में। हमें मिलने वाली अधिकांश पूछताछ शुद्धता के बारे में नहीं होती — वह इस बारे में होती है कि कोई स्पूल किसी विशेष मेटलाइज़र में फ़िट होगी या नहीं। हर आयाम प्रकाशित करना उसका हमारा उत्तर है।",
+        "हर स्पूल संयंत्र से बिना जोड़ के निकलती है। यही वह विशिष्टि है जिसकी हमारे ग्राहक सबसे अधिक परवाह करते हैं, क्योंकि जोड़ वहीं होता है जहाँ कोटिंग रन रुक जाता है।"
+      ],
+      "es": [
+        "Swiftmet Wire & Resin Pvt. Ltd. trefila hilo de aluminio de alta pureza para metalizado al vacío en Baghola, distrito de Palwal (Haryana), y lo suministra a transformadores de film, metalizadores de papel y fabricantes de condensadores en India y para exportación.",
+        "Lo que tenemos en stock no es sólo hilo, son bobinas: catorce formatos de plástico, de 2,75 kg a 14,5 kg netos, en dos diámetros de agujero y tres anchuras de núcleo. La mayoría de las consultas que recibimos no son sobre pureza, son sobre si una bobina encaja en una metalizadora concreta. Publicar todas las medidas es nuestra respuesta a eso.",
+        "Toda bobina sale de fábrica sin empalmes. Es la especificación que más importa a nuestros clientes, porque un empalme es donde se detiene una tirada de metalizado."
+      ]
+    },
+    "incorporated": "2010",
+    "capacity": null,
+    "qualitySteps": [
+      {
+        "title": {
+          "en": "Incoming coil",
+          "hi": "आने वाली कॉइल",
+          "es": "Bobina de entrada"
+        },
+        "body": {
+          "en": "Every aluminium coil arrives with a chemical composition certificate from the supplier, and a sample from each coil is tested before it goes into production. A certificate is a claim; the sample is the check.",
+          "hi": "प्रत्येक एल्युमिनियम कॉइल आपूर्तिकर्ता से रासायनिक संरचना प्रमाणपत्र के साथ आती है, और उत्पादन में जाने से पहले प्रत्येक कॉइल का नमूना परखा जाता है। प्रमाणपत्र एक दावा है; नमूना जाँच है।",
+          "es": "Cada bobina de aluminio llega con certificado de composición química del proveedor, y de cada una se ensaya una muestra antes de entrar en producción. El certificado es una afirmación; la muestra es la comprobación."
+        }
+      },
+      {
+        "title": {
+          "en": "Drawing",
+          "hi": "ड्रॉइंग",
+          "es": "Trefilado"
+        },
+        "body": {
+          "en": "Diameter is gauged continuously while the wire is drawn, not sampled at the end. A wire that runs thin for twenty metres passes an end-of-batch check and fails on the customer's film.",
+          "hi": "तार खींचे जाने के दौरान व्यास निरंतर मापा जाता है, अंत में नमूना नहीं लिया जाता। बीस मीटर तक पतला चलने वाला तार बैच-अंत जाँच पास कर जाता है और ग्राहक की फ़िल्म पर विफल हो जाता है।",
+          "es": "El diámetro se mide en continuo durante el trefilado, no por muestreo al final. Un hilo que sale fino durante veinte metros pasa el control de fin de lote y falla en el film del cliente."
+        }
+      },
+      {
+        "title": {
+          "en": "Degreasing",
+          "hi": "डीग्रीज़िंग",
+          "es": "Desengrasado"
+        },
+        "body": {
+          "en": "Drawing oils and residue are removed after drawing. What is left on the surface ends up in the vacuum chamber.",
+          "hi": "खींचने के बाद ड्रॉइंग ऑयल और अवशेष हटाए जाते हैं। सतह पर जो बचता है वह वैक्यूम चैंबर में पहुँच जाता है।",
+          "es": "Tras el trefilado se eliminan aceites y residuos. Lo que queda en la superficie acaba en la cámara de vacío."
+        }
+      },
+      {
+        "title": {
+          "en": "Layer winding",
+          "hi": "लेयर वाइंडिंग",
+          "es": "Bobinado por capas"
+        },
+        "body": {
+          "en": "Wire is wound layer to layer on the spool, jointless, so it pays off an automatic metalliser without an operator re-threading it mid-run.",
+          "hi": "तार स्पूल पर परत-दर-परत, बिना जोड़ लपेटा जाता है, ताकि यह स्वचालित मेटलाइज़र पर बीच में दोबारा पिरोए बिना चले।",
+          "es": "El hilo se bobina capa a capa y sin empalmes, para que se desenrolle en una metalizadora automática sin que nadie tenga que volver a enhebrarlo a mitad de tirada."
+        }
+      },
+      {
+        "title": {
+          "en": "Batch tensile test",
+          "hi": "बैच तनन परीक्षण",
+          "es": "Ensayo de tracción por lote"
+        },
+        "body": {
+          "en": "Tensile strength of every batch is tested in house on a tensile machine and recorded against the customer's specification. A batch outside it does not ship.",
+          "hi": "प्रत्येक बैच की तनन सामर्थ्य आंतरिक रूप से तनन मशीन पर परखी जाती है और ग्राहक की विशिष्टि के सापेक्ष दर्ज की जाती है। उससे बाहर का बैच भेजा नहीं जाता।",
+          "es": "La resistencia a tracción de cada lote se ensaya internamente en máquina y se registra contra la especificación del cliente. Un lote fuera de especificación no se envía."
+        }
+      },
+      {
+        "title": {
+          "en": "Packing",
+          "hi": "पैकिंग",
+          "es": "Embalaje"
+        },
+        "body": {
+          "en": "Spools are packed in corrugated boxes to the customer's requirement and shipped by road or by sea.",
+          "hi": "स्पूल ग्राहक की आवश्यकता अनुसार कोरुगेटेड बॉक्स में पैक की जाती हैं और सड़क या समुद्र मार्ग से भेजी जाती हैं।",
+          "es": "Las bobinas se embalan en cajas de cartón ondulado según requisito del cliente y se envían por carretera o por barco."
+        }
+      }
+    ],
+    "certifications": [],
+    "plants": [
+      {
+        "kind": "works",
+        "address": "Baghola village, near HWC godown",
+        "city": "Palwal",
+        "region": "Haryana",
+        "postalCode": "121102",
+        "country": "India"
+      },
+      {
+        "kind": "office",
+        "address": "Registered office",
+        "city": "New Delhi",
+        "region": "Delhi",
+        "postalCode": null,
+        "country": "India"
+      }
+    ],
+    "email": "sales@swiftmet.example",
+    "phone": "+91 000 000 0000",
+    "people": [
+      {
+        "name": "Dilip Rawat",
+        "role": {
+          "en": "Commercial Officer",
+          "hi": "कमर्शियल ऑफ़िसर",
+          "es": "Responsable comercial"
+        },
+        "phone": null,
+        "email": null
+      }
+    ],
+    "linkedin": null
+  }
+}

@@ -1,0 +1,7 @@
+.git
+.claude
+node_modules
+.next
+docs
+*.pdf
+scripts/migration/import.ndjson

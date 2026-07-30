@@ -1,0 +1,277 @@
+@import 'tailwindcss';
+
+/* ============================================================================
+   SWIFTMET · Sistema de diseño
+   Los tokens viven aquí y SÓLO aquí. Las utilidades de Tailwind se generan a
+   partir de este @theme, así que no existe forma de usar un color o un espaciado
+   que no esté declarado en el sistema. Regla: si algo no está en esta lista,
+   no se usa en el diseño.
+
+   Criterio: esto no es un portfolio, es un catálogo técnico. Quien lo lee es un
+   comprador industrial que busca una cifra —pureza, diámetro, peso de bobina— y
+   quiere encontrarla sin leer prosa. De ahí las tres decisiones de fondo:
+
+   1. Paleta fría de aluminio, no papel cálido: el producto es metal pulido.
+   2. Las cifras van en MONOESPACIADA. Es lo que hace que una tabla de catorce
+      bobinas se lea como una tabla y no como un párrafo con números dentro:
+      las columnas de dígitos se alinean solas.
+   3. Un único acento (`signal`), reservado a datos: grados de pureza y cifras
+      destacadas. Nunca decora.
+   ========================================================================= */
+
+@theme {
+  /* --- Color: aluminio, grafito y un acento de dato ----------------------- */
+  --color-paper: #f2f3f4; /* fondo frío, no blanco puro */
+  --color-paper-deep: #e5e8ea; /* bloques alternos, celdas, hovers */
+  --color-ink: #0f1316; /* texto principal, casi negro */
+  --color-ink-soft: #5b646b; /* texto secundario */
+  --color-ink-faint: #949da4; /* metadatos, unidades, numeración */
+  --color-line: #ccd2d6; /* filetes de 1px: la retícula del catálogo */
+  --color-inverse: #0b0e10; /* secciones oscuras (hero, pie) */
+
+  /* Acento único, sólo para datos. Azul acero: se distingue del gris a simple
+     vista y mantiene contraste AA sobre papel (4.9:1) sin gritar. */
+  --color-signal: #0d5c7a;
+
+  /* --- Tipografía: una sans industrial + una mono para las cifras --------- */
+  /* IBM Plex es un sistema pensado para documentación técnica y trae sans y mono
+     con las mismas proporciones, así que una cifra en mono al lado de una
+     etiqueta en sans no se ve como dos tipografías peleando.
+     La variante Devanagari cubre el hindi: sin ella, `hi` cae en la fuente del
+     sistema y el sitio pierde en el único idioma en que el cliente no puede
+     revisar el resultado. */
+  --font-sans:
+    var(--font-plex-sans), var(--font-plex-devanagari), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Escala fluida: un solo valor por peldaño, sin variantes intermedias.
+     clamp() evita media queries para tipografía y elimina saltos bruscos. */
+  --text-micro: 0.6875rem; /* 11px · etiquetas, unidades, numeración */
+  --text-micro--line-height: 1.4;
+  --text-micro--letter-spacing: 0.12em;
+  --text-small: 0.8125rem; /* 13px · metadatos, celdas de tabla */
+  --text-small--line-height: 1.5;
+  --text-body: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
+  --text-body--line-height: 1.65;
+  --text-lead: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+  --text-lead--line-height: 1.5;
+  --text-title: clamp(1.5rem, 1.2rem + 1.4vw, 2.5rem);
+  --text-title--line-height: 1.15;
+  --text-display: clamp(2rem, 1.3rem + 3.4vw, 4.5rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.02em;
+
+  /* Cifra grande de dato (pureza, peso, capacidad). Va siempre en mono y con
+     `tabular-nums`: dos cifras seguidas ocupan lo mismo aunque cambien. */
+  --text-figure: clamp(1.75rem, 1.2rem + 2.4vw, 3.25rem);
+  --text-figure--line-height: 1;
+  --text-figure--letter-spacing: -0.03em;
+
+  /* --- Ritmo espacial: escala limitada, saltos claros -------------------- */
+  --spacing-gutter: clamp(1.25rem, 4vw, 3.5rem); /* margen lateral de página */
+  --spacing-section: clamp(4rem, 9vw, 9rem); /* aire vertical entre bloques */
+
+  /* --- Movimiento -------------------------------------------------------- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-reveal: reveal 0.9s var(--ease-out-soft) both;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ============================================================================
+   Base
+   ========================================================================= */
+
+@layer base {
+  /* Cabecera sobre el hero oscuro: mientras no se ha hecho scroll, el texto pasa
+     a color papel para tener contraste. Se resuelve con :has() — el header no
+     necesita saber en qué página está, sólo si hay un hero debajo.
+
+     OJO: se aplica sólo a la BARRA (.header-bar), no a todo el <header>. El panel
+     del menú móvil también vive dentro del header pero sobre fondo papel: si
+     heredara este color, saldría papel sobre papel — invisible. Es un fallo real
+     del proyecto de referencia, y se hereda ya corregido. */
+  header[data-top='true'] .header-bar {
+    color: var(--color-ink);
+  }
+
+  body:has(main > [data-hero]:first-child) header[data-top='true'] .header-bar {
+    color: var(--color-paper);
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* El header es sticky: los anclajes no deben quedar debajo. */
+    scroll-padding-top: 6rem;
+  }
+
+  /* DEVANAGARI NECESITA MÁS INTERLÍNEA QUE LA LATINA.
+     Los signos vocálicos del devanagari se escriben por encima y por debajo de la
+     línea base (मि, ो, ु), así que una interlínea de 1.02 —que en latina es un
+     titular apretado y elegante— hace que la matra de una línea toque la shirorekha
+     de la siguiente. Se vio en /hi: el titular de la portada salía con los signos
+     pisándose.
+
+     Se corrige redefiniendo los tokens en el elemento raíz cuando el idioma es
+     hindi, no con clases en cada titular: Tailwind 4 compila `text-display` como
+     `line-height: var(--text-display--line-height)`, así que cambiar el token aquí
+     alcanza a todo el sitio de una vez y el sistema de diseño sigue siendo la única
+     fuente. El selector es `^=` porque el atributo real es `hi-IN`.
+
+     Los tres peldaños afectados son los apretados; el texto corrido ya va a 1.65. */
+  html[lang^='hi'] {
+    --text-display--line-height: 1.28;
+    --text-title--line-height: 1.4;
+    --text-lead--line-height: 1.65;
+    --text-figure--line-height: 1.3;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Foco visible y coherente en todo el sitio (accesibilidad). */
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 3px;
+  }
+
+  img,
+  video,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  img,
+  video {
+    height: auto;
+  }
+
+  /* Nadie debería marearse con nuestras animaciones. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ============================================================================
+   Utilidades del sistema
+   Sólo patrones que se repiten de verdad. Todo lo demás, utilidades de Tailwind.
+   ========================================================================= */
+
+@utility page-gutter {
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Etiqueta en versalitas: secciones, unidades, categorías. */
+@utility eyebrow {
+  font-size: var(--text-micro);
+  line-height: var(--text-micro--line-height);
+  letter-spacing: var(--text-micro--letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+/* Cifra técnica. `tabular-nums` es lo que mantiene alineadas las columnas de una
+   tabla de especificaciones cuando los valores tienen distinto número de dígitos:
+   sin ella, 2,75 y 14,5 desplazan la coma y la tabla deja de leerse en vertical. */
+@utility figure-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'zero' 1;
+}
+
+/* Enlace con subrayado que se dibuja al hacer hover. */
+@utility link-underline {
+  position: relative;
+  display: inline-block;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.15em;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s var(--ease-out-soft);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+  }
+}
+
+/* Amplía el área pulsable a los 24 px que exige WCAG 2.2 sin cambiar el diseño:
+   el texto sigue midiendo lo que mide y el subrayado sigue pegado a él; lo que
+   crece es una capa invisible por encima. Imprescindible en los enlaces pequeños
+   (pie, contacto, celdas) cuando se usan con el dedo. */
+@utility tap {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: -0.25rem;
+    inset-block: -0.4rem;
+  }
+}
+
+/* Aparición al entrar en viewport. La hace CSS con scroll-driven animations
+   cuando el navegador las soporta (cero JS); si no, el contenido se ve fijo. */
+@utility reveal {
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      opacity: 0;
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 22%;
+    }
+  }
+}
+
+/* Trama de placeholder de fotografía. Existe porque el sitio se ha construido SIN
+   fotografía de planta ni de producto (ver README, «Fotografía pendiente»): estos
+   huecos deben verse como huecos, no disimularse. Cuando Swiftmet suba la foto al
+   panel, el componente <Figure> deja de pintar esto y no hay nada que borrar. */
+@utility placeholder-grid {
+  background-color: var(--color-paper-deep);
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 8px,
+    color-mix(in srgb, var(--color-line) 55%, transparent) 8px 9px
+  );
+}
