@@ -52,8 +52,12 @@ proyecto.
   `product`, `spool` y el singleton `companyInfo`.
 - **Despliegue: Vercel**, dos entornos (`main` → producción, `test` → test con `noindex`). Framework
   declarado en `vercel.json`.
-- **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (30
+- **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (33
   comprobaciones en Chrome real a 390×844, por idioma).
+- **Navegación:** en escritorio, la cabecera; en móvil (`< lg`), una **barra inferior fija de cinco
+  iconos** —inicio, productos, bobinas, contacto y el menú completo— al estilo de bonsaiartesania.com.
+  Los textos van **centrados en su sección** en toda la web; el eje central es la decisión de
+  maquetación del sitio, no un detalle de una página.
 
 Detalle y razonamiento en el **README.md**, que es extenso a propósito, y en `.claude/memory/`.
 
@@ -101,6 +105,6 @@ Regla de oro: **el contexto nunca debe quedar desactualizado respecto al estado 
 
 ---
 
-_Última actualización: 2026-07-30 — primera versión completa de la web: trilingüe, con Sanity, el
-programa de catorce bobinas como pieza central y verificada en los tres idiomas (30/30 en
-`check:mobile`, build de 50 rutas)._
+_Última actualización: 2026-07-30 — textos centrados en toda la web y navegación de móvil en una barra
+inferior de iconos, al estilo de bonsaiartesania.com. Verificado en los tres idiomas (33/33 en
+`check:mobile`) y revisado a ojo en escritorio y móvil._

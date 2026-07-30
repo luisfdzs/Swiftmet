@@ -21,14 +21,18 @@ export function SpecList({ specs, className }: { specs: Spec[]; className?: stri
   if (rows.length === 0) return null
 
   return (
-    <dl className={cn('border-t border-line', className)}>
+    // Etiqueta ARRIBA y valor debajo, los dos centrados, en vez de a los dos extremos de la
+    // misma línea. Con el resto de la ficha centrada, una fila que empuja el nombre de la
+    // cota a un borde y la cifra al otro deja un hueco en medio que el ojo tiene que
+    // cruzar; apilados, el par se lee de un golpe. La cifra sigue siendo lo que más pesa
+    // —en mono y en tinta— y las filas siguen separadas por su filete de 1 px.
+    <dl className={cn('border-t border-line text-center', className)}>
       {rows.map((spec) => (
-        <div
-          key={spec.label}
-          className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-line py-3"
-        >
+        <div key={spec.label} className="border-b border-line py-3">
           <dt className="eyebrow">{spec.label}</dt>
-          <dd className={cn('text-small', spec.numeric && 'figure-num text-ink')}>{spec.value}</dd>
+          <dd className={cn('mt-1 text-small', spec.numeric && 'figure-num text-ink')}>
+            {spec.value}
+          </dd>
         </div>
       ))}
     </dl>
