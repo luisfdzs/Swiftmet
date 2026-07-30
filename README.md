@@ -174,8 +174,8 @@ pisaban. Se vio en `/hi` antes de escribir la regla.
 
 ## Fotografía: no hay, y se ve que no hay
 
-**La web está construida sin ninguna fotografía.** No tenemos imágenes de la planta de Palwal, ni del
-hilo, ni de las bobinas. La decisión de diseño fue **no disimularlo**:
+**La web está construida sin ninguna fotografía.** No hay imágenes de la planta de Baghola, ni del
+hilo, ni de las bobinas. La decisión de diseño es **no disimularlo**:
 
 - Los huecos de foto se pintan tramados, con el rótulo de **qué foto falta** y quién la aporta
   (`components/ui/Figure.tsx`). Así la propia web es la lista de la compra.
@@ -193,6 +193,37 @@ sabe si es intencionado.
 **Fotos que hacen falta, por orden de valor:** la línea de trefilado con el calibre en proceso o la
 máquina de tracción (es la prueba visual de toda la página de calidad), un juego de bobinas reales, la
 nave, y una foto de producto por referencia de catálogo.
+
+### Por qué no hay foto de archivo gratuita, y qué se hizo en su lugar
+
+Se intentó rellenar los huecos con fotografía libre y **se descartó después de verlo en pantalla**.
+Queda escrito aquí porque es la clase de decisión que, sin registro, alguien repite dentro de un año:
+
+1. **Wikimedia Commons no tiene este material.** Buscado por término y por categoría: de hilo de
+   aluminio para metalizado, nada; de trefilado en general, grabados del XIX, libros de 1919, archivo
+   histórico americano y **una serie de rollos de hilo de acero de un patio** (`Steel wire 01–05`, del
+   mismo autor y del mismo montón). Las categorías `Wire drawing`, `Wire mills` y `Wire rod` están
+   vacías o casi.
+2. **Con ese material, la foto desmiente a la ficha.** Sobre «1199 · 99,99 % de aluminio» salía hilo
+   **con óxido** —el aluminio no se oxida—, la varilla «de aluminio» eran rollos de acero en un
+   descampado, el hilo para bolsitas de té era hilo dorado de _zari_ de un producto textil, y el
+   carrete de welding wire llevaba legible la **etiqueta de Prysmian**, otro fabricante. La apertura de
+   `/quality` era una foto de 1985 de la Comunidad Europea del Carbón y del Acero.
+3. **La regla que queda:** el archivo puede ambientar, nunca ilustrar una afirmación. Ante un comprador
+   que decide por D1, D2, D3, L1 y L2, una foto que contradice el dato cuesta más que un hueco honesto.
+4. **Las fotos de internet que sí encajarían no se pueden usar:** están en las webs de la competencia
+   —Electrolead incluida—, en catálogos de fabricantes y en agencias de pago. Son material ajeno con
+   derechos.
+5. **Descartada también la imagen generada por IA.** Inventaría una planta y un producto que nadie ha
+   visto, que es justo lo que prohíbe la regla 8 del `CLAUDE.md`; un comprador técnico detecta una
+   bobina imposible; y no deja titularidad ni licencia claras.
+
+**Plan acordado con el cliente del proyecto (2026-07-30): fotografía de stock DE PAGO** —Adobe Stock,
+iStock o Getty, que sí tienen bobinas de aluminio y líneas de trefilado modernas— como puente hasta que
+Swiftmet entregue las suyas. Ambas entran igual, **subiéndolas al panel de Sanity**: no hay que tocar
+código ni añadir ficheros al repo, y la comprada se sustituye por la real el día que llegue. Al
+comprarlas, guardar la licencia junto a la factura: el stock de pago no exige atribución en la web,
+pero sí acreditar la compra si alguien la reclama.
 
 ## Despliegue
 
@@ -277,6 +308,10 @@ señalado también dentro de `scripts/migration/content-snapshot.json`, con la p
 
 **Decisiones abiertas:**
 
+- **Fotografía.** Hoy no hay ninguna y los huecos se ven a propósito (ver «Fotografía» más arriba, que
+  explica por qué se descartó el archivo gratuito y la imagen generada). El puente acordado es **stock
+  de pago**, subido al panel; el destino son las fotos de Swiftmet, que hay que pedirle: planta, hilo y
+  un juego de bobinas.
 - **Logotipo.** No hay logotipo vectorial de Swiftmet. El de la web es provisional: símbolo geométrico
   (la sección de una bobina, la misma vista que dibuja `SpoolDiagram`) + el nombre en la tipografía del
   sistema. Cuando llegue el real, se sustituye el `<svg>` de `components/layout/Wordmark.tsx` y el de

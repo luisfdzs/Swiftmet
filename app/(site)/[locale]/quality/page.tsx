@@ -45,6 +45,12 @@ export default async function QualityPage({ params }: { params: Promise<{ locale
       <p className="mx-auto mt-8 max-w-2xl text-lead text-ink-soft">{t.quality.lead}</p>
 
       <Figure
+        /*
+         * Se probó a abrir esta página con archivo de Wikimedia y se retiró: lo único que
+         * hay de una línea de trefilado es una foto de 1985 de la Comunidad Europea del
+         * Carbón y del Acero, y a 21:9 en la cabecera contradecía lo que la página afirma
+         * —que aquí se mide cada lote, hoy y en Baghola—. Ver README, «Fotografía».
+         */
         image={null}
         locale={locale}
         ratio="21 / 9"
