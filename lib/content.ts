@@ -5,7 +5,11 @@ import { COMPANY_QUERY, PRODUCTS_QUERY, PRODUCT_SLUGS_QUERY, SPOOLS_QUERY } from
 import type { Localized } from '@/lib/i18n/config'
 // `photos.ts` sólo importa un TIPO de este fichero, así que el ciclo desaparece al compilar
 // y en ejecución la dependencia va en un único sentido: contenido → fotos de archivo.
-import { stockPhotoForProduct, unusedStockProductKeys } from '@/lib/photos'
+import {
+  stockPhotoForProduct,
+  stockSecondPhotoForProduct,
+  unusedStockProductKeys,
+} from '@/lib/photos'
 
 /**
  * ÚNICA PUERTA DE ACCESO AL CONTENIDO
@@ -174,14 +178,16 @@ export type SpoolEntry = z.infer<typeof spoolSchema>
 export type CompanyInfo = z.infer<typeof companySchema>
 
 /**
- * El producto que ven las vistas: las listas opcionales ya normalizadas a array y la
- * imagen de portada resuelta. `cover` puede ser `null` —hoy lo es siempre, porque no
- * hay fotografía— y de eso se encarga `<Figure>`, no cada página.
+ * El producto que ven las vistas: las listas opcionales ya normalizadas a array y las
+ * imágenes resueltas. `cover` es la portada; `second` es la que rellena el hueco de la
+ * columna derecha de la ficha. Las dos pueden ser `null` y de eso se encarga `<Figure>`,
+ * no cada página.
  */
 export type ProductEntry = Omit<z.infer<typeof productSchema>, 'images' | 'applications'> & {
   images: DescribedImage[]
   applications: Localized[]
   cover: DescribedImage | null
+  second: DescribedImage | null
 }
 
 /**
@@ -255,6 +261,12 @@ export async function getProducts(): Promise<ProductEntry[]> {
        * panel tenga una imagen, `images[0]` gana y el archivo desaparece solo.
        */
       cover: images[0] ?? stockPhotoForProduct(product.slug),
+      /**
+       * Misma regla para la segunda: la del panel manda, y si no hay, la de archivo. Es
+       * la que crece hasta el fondo de la columna de especificaciones en la ficha, así
+       * que si un día faltan las dos el único efecto es que vuelve el hueco.
+       */
+      second: images[1] ?? stockSecondPhotoForProduct(product.slug),
     }
   })
 }

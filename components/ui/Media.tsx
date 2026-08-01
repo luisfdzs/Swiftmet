@@ -12,6 +12,13 @@ type Props = {
   priority?: boolean
   /** Recorte a una proporción fija (rejilla). Si se omite, respeta la del original. */
   ratio?: string
+  /**
+   * No fija ninguna proporción: la foto ocupa la altura que le dé el contenedor y se
+   * recorta con `object-cover`. Es lo que permite que la segunda foto de una ficha
+   * rellene un hueco cuya altura no se sabe hasta que el navegador maqueta la columna.
+   * Quien lo active tiene que darle altura por `className` —si no, la foto mide cero—.
+   */
+  stretch?: boolean
   className?: string
 }
 
@@ -24,7 +31,15 @@ type Props = {
  * No se usa directamente desde las páginas: se usa a través de `<Figure>`, que decide
  * si hay foto o si toca pintar el hueco marcado.
  */
-export function Media({ image, alt, sizes, priority = false, ratio, className }: Props) {
+export function Media({
+  image,
+  alt,
+  sizes,
+  priority = false,
+  ratio,
+  stretch = false,
+  className,
+}: Props) {
   /**
    * Las imágenes que NO vienen de Sanity —hoy, las fotos de archivo de `public/photos`—
    * se sirven tal cual. El cargador de la web es el de la CDN de Sanity
@@ -42,7 +57,13 @@ export function Media({ image, alt, sizes, priority = false, ratio, className }:
   return (
     <div
       className={cn('relative w-full overflow-hidden bg-paper-deep', className)}
-      style={ratio ? { aspectRatio: ratio } : { aspectRatio: `${image.width} / ${image.height}` }}
+      style={
+        stretch
+          ? undefined
+          : ratio
+            ? { aspectRatio: ratio }
+            : { aspectRatio: `${image.width} / ${image.height}` }
+      }
     >
       <Image
         src={image.src}

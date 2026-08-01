@@ -54,9 +54,13 @@ proyecto.
   declarado en `vercel.json`.
 - **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (33
   comprobaciones en Chrome real a 390×844, por idioma).
-- **Fotografía:** Swiftmet no ha entregado ninguna. Las siete fichas de producto y la apertura de
-  `/quality` llevan **archivo industrial de Pexels** (`lib/photos.ts`, procedencia en
-  `public/photos/CREDITS.md`), que se retira solo en cuanto el panel tiene imagen. **Tres reglas de
+- **Fotografía:** Swiftmet no ha entregado ninguna. Los siete productos —**dos fotos cada uno**,
+  portada y `second`— y la apertura de `/quality` llevan **archivo industrial de Pexels**
+  (`lib/photos.ts`, procedencia en `public/photos/CREDITS.md`), que se retira solo en cuanto el panel
+  tiene imagen. La segunda existe **por maquetación, para que no quede medio ancho vacío a la
+  derecha**: rellena la media fila que sobra en `/products` —cuatro de las cinco familias tienen un
+  solo producto— y el fondo de la columna de especificaciones en la ficha, donde crece hasta el fondo
+  de la fila. Las dos, sólo de `md` para arriba. **Tres reglas de
   selección, aprendidas fallando:** nada de óxido —con material de Wikimedia, el hilo herrumbroso
   desmentía la ficha del 99,99 %, porque el aluminio no se oxida—, ninguna marca ajena legible (pasó con
   Prysmian y con «Reynolds Aluminum»), y `alt` que describen lo que se ve, nunca un grado ni una planta.
@@ -111,11 +115,11 @@ origin --delete`. **Nunca squash** en las promociones `develop` → `test` → `
 Cada rama larga corresponde a **un entorno**, y sólo se sube de nivel lo que ya está validado en el
 anterior:
 
-| Rama | Para qué | Vercel |
-| --- | --- | --- |
-| `develop` | Día a día: desarrollar, depurar, subir al repositorio sin publicar nada | **Nada.** No despliega |
-| `test` | Entorno de test | `swiftmettest` → swiftmettest.vercel.app (`noindex`) |
-| `main` | Producción | `swiftmet` → swiftmet.vercel.app |
+| Rama      | Para qué                                                                | Vercel                                               |
+| --------- | ----------------------------------------------------------------------- | ---------------------------------------------------- |
+| `develop` | Día a día: desarrollar, depurar, subir al repositorio sin publicar nada | **Nada.** No despliega                               |
+| `test`    | Entorno de test                                                         | `swiftmettest` → swiftmettest.vercel.app (`noindex`) |
+| `main`    | Producción                                                              | `swiftmet` → swiftmet.vercel.app                     |
 
 Las ramas temporales nacen y **mueren** en `develop`. El sentido único es
 `develop` → `test` → `main`, siempre con `git merge --no-ff`.
@@ -137,7 +141,16 @@ Regla de oro: **el contexto nunca debe quedar desactualizado respecto al estado 
 
 ---
 
-_Última actualización: 2026-08-01 — **nuevo modelo de ramas: una rama por entorno.** `develop` pasa a
+_Última actualización: 2026-08-01 — **una segunda foto por producto, para que no queden huecos a la
+derecha.** Siete imágenes nuevas de Pexels, verticales (800×1000), que tapan dos huecos: la media fila que
+sobraba en `/products` —es una rejilla de dos columnas y cuatro de las cinco familias tienen un solo
+producto: varilla, bolsitas de té, soldadura y muelles— y el fondo de la columna de especificaciones de
+cada ficha, donde la foto crece hasta el fondo de la fila (`stretch` en `<Figure>`, sin altura mínima: si
+no sobra nada, no se pinta). Las dos sólo de `md` para arriba, porque en una columna no hay derecha que
+cuadrar. Mismas tres reglas de selección de siempre. 21 fichas medidas en los tres idiomas sin un solo
+hueco, y 33/33 en `check:mobile` por idioma._
+
+_2026-08-01 — **nuevo modelo de ramas: una rama por entorno.** `develop` pasa a
 ser el día a día (desarrollar, depurar y subir al repositorio sin desplegar nada, garantizado por
 `git.deploymentEnabled` en `vercel.json`), `test` es el entorno de test y `main` producción; las ramas
 temporales nacen y mueren en `develop` y el camino es `develop` → `test` → `main`. Sustituye al modelo

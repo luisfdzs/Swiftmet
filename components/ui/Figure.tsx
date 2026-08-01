@@ -12,6 +12,12 @@ type Props = {
   /** Proporción de la fotografía real. */
   ratio: string
   /**
+   * La foto ocupa la altura del contenedor en vez de una proporción fija (ver `Media`).
+   * El hueco tramado sí conserva su proporción: un hueco que creciera hasta el fondo de
+   * una columna vacía sería una trama de media pantalla.
+   */
+  stretch?: boolean
+  /**
    * Proporción del HUECO cuando no hay foto. Por defecto es más plana que la de la foto
    * real, y a propósito: ver la explicación abajo.
    */
@@ -61,6 +67,7 @@ export function Figure({
   locale,
   sizes,
   ratio,
+  stretch = false,
   placeholderRatio = '16 / 6',
   priority = false,
   label,
@@ -75,6 +82,7 @@ export function Figure({
         alt={image.alt[locale]}
         sizes={sizes}
         ratio={ratio}
+        stretch={stretch}
         priority={priority}
         className={className}
       />
