@@ -61,7 +61,10 @@ proyecto.
   tiene imagen. La segunda existe **por maquetación, para que no quede medio ancho vacío a la
   derecha**: rellena la media fila que sobra en `/products` —cuatro de las cinco familias tienen un
   solo producto— y el fondo de la columna de especificaciones en la ficha, donde crece hasta el fondo
-  de la fila. Las dos, sólo de `md` para arriba. **Tres reglas de
+  de la fila. Las dos, sólo de `md` para arriba. **Toda foto que esté sola lleva pie** (`caption` en
+  `<Figure>`, el mismo texto del `alt`): en el resto de la web cada imagen tiene un texto al lado que
+  dice qué es, y esas dos eran las únicas mudas. En la ficha el pie va **dentro** de la foto, porque
+  ahí la altura es «lo que sobre» y a veces es cero. **Tres reglas de
   selección, aprendidas fallando:** nada de óxido —con material de Wikimedia, el hilo herrumbroso
   desmentía la ficha del 99,99 %, porque el aluminio no se oxida—, ninguna marca ajena legible (pasó con
   Prysmian y con «Reynolds Aluminum»), y `alt` que describen lo que se ve, nunca un grado ni una planta.
@@ -142,7 +145,16 @@ Regla de oro: **el contexto nunca debe quedar desactualizado respecto al estado 
 
 ---
 
-_Última actualización: 2026-08-01 — **una segunda foto por producto, para que no queden huecos a la
+_Última actualización: 2026-08-01 — **pie de foto donde la imagen estaba muda.** Las dos fotos que se
+añadieron por maquetación —la de relleno del catálogo y la del fondo de la columna de especificaciones—
+eran las únicas del sitio sin ningún texto que dijera qué son. Ahora llevan pie, y el pie es el `alt` que
+ya estaba escrito en los tres idiomas, no una descripción nueva que se separe de la otra con el primer
+retoque; con pie, la imagen pasa a `alt=""` para que no se lea dos veces. En la ficha va **dentro de la
+foto**, sobre un degradado: allí la altura es «lo que sobre» y medirlo lo dejó claro —a 1280 y 1440 px las
+tres fichas de metalizado no tienen hueco y la foto no se pinta—, así que un pie con altura propia
+sobrevivía a su fotografía. 33/33 en `check:mobile` en los tres idiomas._
+
+_2026-08-01 — **una segunda foto por producto, para que no queden huecos a la
 derecha.** Siete imágenes nuevas de Pexels, verticales (800×1000), que tapan dos huecos: la media fila que
 sobraba en `/products` —es una rejilla de dos columnas y cuatro de las cinco familias tienen un solo
 producto: varilla, bolsitas de té, soldadura y muelles— y el fondo de la columna de especificaciones de

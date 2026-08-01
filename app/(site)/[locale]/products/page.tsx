@@ -100,6 +100,11 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
                     ratio="4 / 3"
                     sizes="(max-width: 768px) 100vw, 46vw"
                     label={group.items[group.items.length - 1]?.name ?? ''}
+                    // El pie es lo que la distingue de la tarjeta que tiene al lado sin
+                    // fingir ser una: la tarjeta lleva nombre, pureza, familia y resumen
+                    // bajo un filete; esto lleva una línea suelta que describe la foto. Y
+                    // sigue sin enlace, que era la decisión de fondo.
+                    caption={lastSecondPhoto(group.items)?.alt[locale]}
                   />
                 </Reveal>
               )}

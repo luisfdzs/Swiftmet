@@ -25,6 +25,12 @@ type Props = {
   priority?: boolean
   /** Qué debería verse aquí. Se muestra dentro del hueco. */
   label: string
+  /**
+   * Pie de foto VISIBLE. Se pasa cuando la fotografía está sola, sin ningún texto que
+   * diga qué es (ver la explicación abajo). Con pie, la imagen se marca como decorativa
+   * (`alt=""`): el pie ya dice lo mismo y un lector de pantalla lo leería dos veces.
+   */
+  caption?: string
   className?: string
 }
 
@@ -55,6 +61,20 @@ type Props = {
  * El componente no ha cambiado: sigue pintando el hueco en cuanto se le pasa `image={null}`,
  * y es lo que hay que hacer si un día no hay foto que aguante ese criterio.
  *
+ * **EL PIE DE FOTO (`caption`) EXISTE POR UNA REGLA QUE LA WEB YA CUMPLÍA SIN ESCRIBIRLA:**
+ * en todo el sitio, al lado de cada imagen hay un texto que dice qué es. La portada de una
+ * tarjeta lleva debajo nombre, pureza, familia y resumen; la portada de una ficha lleva los
+ * párrafos del producto; la apertura de `/quality` va entre el titular y los puntos de
+ * control; y el hueco tramado, cuando no hay foto, escribe él mismo qué falta. Las dos
+ * fotografías que se añadieron después —la segunda de la ficha y la que rellena la media
+ * fila del catálogo— eran las únicas mudas: puestas justamente donde no hay texto, y por
+ * eso se notaba. Con pie vuelven a la norma de la casa.
+ *
+ * El pie es **el mismo texto del `alt`**, no uno nuevo. Dos descripciones de la misma foto
+ * se separan con el primer retoque y acaban diciendo cosas distintas; y esa descripción ya
+ * está escrita en los tres idiomas y bajo la regla 3 —lo que se ve, nunca un grado ni una
+ * planta—, que es exactamente lo que un pie puede afirmar de una foto de archivo.
+ *
  * **El hueco es más plano que la foto que lo sustituirá** (`placeholderRatio`), y esto se
  * decidió viendo el resultado: con la proporción 4:3 de la foto real, siete productos sin
  * fotografía convertían el catálogo en un muro de tramas de dos pantallas de alto, con más
@@ -71,21 +91,63 @@ export function Figure({
   placeholderRatio = '16 / 6',
   priority = false,
   label,
+  caption,
   className,
 }: Props) {
   const t = getDictionary(locale)
+  const text = caption?.trim()
 
   if (image) {
-    return (
+    const media = (
       <Media
         image={image}
-        alt={image.alt[locale]}
+        alt={text ? '' : image.alt[locale]}
         sizes={sizes}
         ratio={ratio}
         stretch={stretch}
         priority={priority}
-        className={className}
+        // Sin pie, `className` es de la imagen y manda quien la coloca. Con pie, lo
+        // recibe el `<figure>` y la imagen pasa a ser la parte que crece dentro de él
+        // (`min-h-0`, para que también pueda encoger hasta cero).
+        className={text ? 'grow min-h-0' : className}
       />
+    )
+
+    if (!text) return media
+
+    /**
+     * EL PIE DE UNA FOTO QUE RELLENA UN HUECO VA **DENTRO** DE LA FOTO, y no debajo.
+     *
+     * Con `stretch` la altura de la imagen es la que sobre en la columna, y a veces no
+     * sobra nada: medido a 1440 px, el hueco de las tres fichas de hilo de metalizado es
+     * exactamente cero en los tres idiomas —la columna de datos es la más larga de las
+     * dos— y la foto no se pinta, que es la respuesta correcta. Un pie en el flujo, con
+     * su altura propia, sobrevivía a esa foto: quedaba una línea suelta describiendo una
+     * fotografía que no estaba. Absoluto y sobre la imagen, ocupa cero y lo recorta el
+     * mismo `overflow-hidden` que recorta la foto: si no hay foto, no hay pie.
+     *
+     * El degradado no es adorno: el pie cae sobre fotografía que no controlamos —un
+     * rollo de hilo puede ser casi blanco— y sin él la línea desaparece en las claras.
+     */
+    if (stretch) {
+      return (
+        <figure className={cn('relative flex flex-col overflow-hidden', className)}>
+          {media}
+          <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-4 pt-10 pb-3 text-center text-micro text-white">
+            {text}
+          </figcaption>
+        </figure>
+      )
+    }
+
+    // Con proporción fija la altura se sabe de antemano, así que el pie va debajo, en el
+    // flujo: una línea bajo la foto, como el nombre y el resumen bajo la portada de una
+    // tarjeta de producto.
+    return (
+      <figure className={cn('flex flex-col', className)}>
+        {media}
+        <figcaption className="mt-3 text-small text-ink-faint">{text}</figcaption>
+      </figure>
     )
   }
 

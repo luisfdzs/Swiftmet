@@ -198,19 +198,35 @@ maquetación —para que no quede medio ancho vacío a la derecha— y tapa dos 
 - **En el catálogo `/products`,** la media fila que sobra. Es una rejilla de dos columnas y **cuatro de
   las cinco familias tienen un solo producto** —varilla, bolsitas de té, soldadura, muelles—, así que la
   sección se quedaba medio vacía y parecía una tarjeta que no había cargado; en metalizado pasaba lo
-  mismo con la tercera. Se rellena con la segunda foto del último producto de la familia, **sin rótulo y
-  sin enlace**: es la fotografía de la familia, no una tarjeta más.
+  mismo con la tercera. Se rellena con la segunda foto del último producto de la familia, **con pie y sin
+  enlace**: es la fotografía de la familia, no una tarjeta más.
 - **En la ficha de producto,** el fondo de la columna de especificaciones. Las dos columnas las escribe el
   cliente y nunca miden lo mismo —`tea-bag-wire` no tiene ni una especificación y el `1080` tiene seis—,
   así que a la derecha sobraban entre 220 y 860 px según el producto y el idioma. Aquí la foto **crece
   hasta el fondo de la fila** (de ahí que los ficheros sean verticales, 800×1000, y se recorten con
   `object-cover`), y **sin altura mínima a propósito**: si a un producto no le sobra nada, la foto mide
   cero y no se pinta —no había hueco que tapar—, en vez de dejar una tira de 20 px o pasarse de largo y
-  trasladar el hueco a la izquierda. Hoy sólo le ocurre al `1090`, el de la ficha más cargada, por debajo
-  de unos 1350 px de ancho.
+  trasladar el hueco a la izquierda. Pasa más de lo que parece: **medido en las siete fichas**, a 1280 y a
+  1440 px las tres de hilo de metalizado no tienen hueco ninguno y no pintan la foto, y a 1920 px les
+  quedan entre 50 y 110 px; las otras cuatro van de 76 a 687 px según el ancho.
 
 Las dos, sólo de tableta para arriba: en una sola columna no hay nada a la derecha que cuadrar, y una foto
 de archivo de más sería sólo scroll.
+
+**Toda foto que esté sola lleva pie** (`caption` en `<Figure>`). En el resto de la web cada imagen tiene
+al lado un texto que dice qué es —la portada de una tarjeta lleva debajo nombre, pureza, familia y
+resumen; la de una ficha, los párrafos del producto; y el hueco tramado escribe él mismo qué falta—, y las
+dos fotos de relleno eran las únicas mudas, precisamente por estar donde no hay texto. El pie **es el
+mismo texto del `alt`**, no uno nuevo: ya está escrito en los tres idiomas y bajo la regla de describir lo
+que se ve, que es todo lo que una foto de archivo puede afirmar. Cuando hay pie, la imagen pasa a
+`alt=""`: si no, un lector de pantalla leería la misma frase dos veces.
+
+Dónde se coloca depende de si la altura se sabe de antemano. En el catálogo, celda de proporción fija: pie
+debajo, en el flujo. En la ficha, **dentro de la foto**, sobre un degradado —porque la altura ahí es «lo
+que sobre», y a veces no sobra nada: un pie con altura propia sobreviviría a la foto y dejaría una línea
+suelta describiendo una fotografía que no está—. Absoluto, ocupa cero y lo recorta el mismo `overflow` que
+recorta la imagen. El degradado tampoco es adorno: la foto no la controlamos y un rollo de hilo puede ser
+casi blanco.
 
 - **Licencia Pexels:** uso comercial, modificación permitida y **sin atribución obligatoria**. El fichero
   de créditos existe igualmente, para poder retirar o sustituir una imagen sin arqueología.
