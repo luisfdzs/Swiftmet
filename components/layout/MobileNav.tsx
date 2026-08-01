@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { cn } from '@/lib/cn'
 import { localeNames, locales, type Locale } from '@/lib/i18n/config'
 import type { Dictionary } from '@/lib/i18n/dictionaries'
-import { href, isSection, navigation, type RouteKey } from '@/lib/i18n/routes'
+import { href, isCurrent, navigation, type RouteKey } from '@/lib/i18n/routes'
 import { CloseIcon, ContactIcon, HomeIcon, MenuIcon, ProductsIcon, SpoolsIcon } from './NavIcons'
 
 /**
@@ -54,18 +54,15 @@ export function MobileNav({ locale, dictionary }: { locale: Locale; dictionary: 
   }, [])
 
   const home = href(locale, 'home')
-  /** ¿Estamos en esta página (o en una ficha dentro de ella)? Sólo para rutas reales. */
-  const onRoute = (key: RouteKey) => {
-    const target = href(locale, key)
-    return pathname === target || pathname.startsWith(`${target}/`)
-  }
+  /** ¿Estamos en esta página (o en una ficha dentro de ella)? Misma regla que la cabecera. */
+  const onRoute = (key: RouteKey) => isCurrent(pathname, locale, key)
 
   /**
-   * Estando en Calidad, ninguno de los cuatro destinos de la barra diría dónde está: esa
-   * página vive detrás del menú. Así que el botón que la guarda se marca como activo y la
-   * barra nunca queda sin señalar la página en la que se está.
+   * Calidad y empresa no tienen hueco en la barra: viven detrás del menú. Estando en una
+   * de ellas, ninguno de los cuatro iconos diría dónde se está, así que se marca el botón
+   * que las guarda y la barra nunca queda sin señalar la página actual.
    */
-  const inPanel = onRoute('quality')
+  const inPanel = onRoute('quality') || onRoute('company')
 
   return (
     <>
@@ -91,7 +88,7 @@ export function MobileNav({ locale, dictionary }: { locale: Locale; dictionary: 
           aria-label="Main"
         >
           {navigation.map((key) => {
-            const active = !isSection(key) && onRoute(key)
+            const active = onRoute(key)
             return (
               <Link
                 key={key}
@@ -161,13 +158,14 @@ export function MobileNav({ locale, dictionary }: { locale: Locale; dictionary: 
           <SpoolsIcon className="h-6 w-6" />
         </NavSlot>
 
-        {/* Contacto es un ancla de la portada, no una página, así que nunca se marca como
-            activo: saber si se está viendo esa sección pediría un observador de scroll, y
-            marcarla a la vez que «inicio» sería peor que no marcar ninguna. */}
+        {/* Contacto ya es una página, así que este icono por fin puede marcarse. Cuando
+            era el ancla `/en#contact` estaba condenado a no encenderse nunca: el
+            fragmento no llega a `usePathname()`, y encenderlo a la vez que «inicio»
+            —porque la URL seguía siendo la portada— era peor que dejarlo apagado. */}
         <NavSlot
           href={href(locale, 'contact')}
           label={dictionary.nav.contact}
-          active={false}
+          active={onRoute('contact')}
           onClick={close}
         >
           <ContactIcon className="h-6 w-6" />

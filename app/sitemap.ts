@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next'
 import { site } from '@/content/site'
 import { getProductSlugs } from '@/lib/content'
 import { locales } from '@/lib/i18n/config'
-import { href, isSection, navigation } from '@/lib/i18n/routes'
+import { href, navigation } from '@/lib/i18n/routes'
 
 /**
  * Sitemap generado del contenido real: no hay lista de URLs que mantener a mano y por
@@ -19,9 +19,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const locale of locales) {
     entries.push({ url: `${site.url}/${locale}`, changeFrequency: 'monthly', priority: 1 })
 
-    // Del menú sólo entran las páginas: empresa y contacto son anclas de la portada, que
-    // ya está listada arriba. Un `#` en el sitemap no es una URL distinta.
-    for (const key of navigation.filter((entry) => !isSection(entry))) {
+    // Las cinco entradas del menú, sin excepciones: desde que empresa y contacto son
+    // rutas y no anclas, todas son URLs distintas y todas se pueden indexar. Antes había
+    // que filtrarlas —un `#` no es una URL nueva para un rastreador—, y eso dejaba dos
+    // secciones del sitio fuera del sitemap.
+    for (const key of navigation) {
       entries.push({
         url: `${site.url}${href(locale, key)}`,
         changeFrequency: 'monthly',

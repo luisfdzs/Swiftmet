@@ -38,15 +38,23 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        // «Empresa» y «contacto» no son páginas: son secciones de la portada. Las URLs
-        // que un visitante esperaría por costumbre llevan a su ancla en vez de a un 404.
+        // `/about` es como se llama esta página en media web industrial —y en la de la
+        // competencia—, pero aquí la ruta es `/company`, que es el rótulo del menú.
+        //
+        // Las redirecciones de `/company` y `/contact` que había aquí **se han borrado, y
+        // borrarlas era obligatorio**: llevaban a `/:locale#company`, y desde que esas dos
+        // secciones son páginas de verdad una redirección de `/en/company` a la portada
+        // habría dejado la página nueva inalcanzable —la ruta existe, pero la redirección
+        // se resuelve antes—.
         source: '/:locale(en|hi|es)/about',
-        destination: '/:locale#company',
+        destination: '/:locale/company',
         permanent: true,
       },
       {
-        source: '/:locale(en|hi|es)/contact',
-        destination: '/:locale#contact',
+        // Mismo caso: «contact-us» es el nombre que usa la competencia y el que alguien
+        // teclea de memoria.
+        source: '/:locale(en|hi|es)/contact-us',
+        destination: '/:locale/contact',
         permanent: true,
       },
     ]

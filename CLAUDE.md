@@ -44,19 +44,34 @@ proyecto.
 ## 3. Stack técnico
 
 - **Frontend:** Next.js 16 (App Router, Turbopack) + TypeScript estricto + Tailwind CSS 4, con
-  **zod** validando el contenido. **Estático**: 50 rutas prerrenderizadas; en servidor sólo
-  `proxy.ts` (negocia idioma) y el webhook de revalidación.
+  **zod** validando el contenido. **Estático**: 56 rutas prerrenderizadas; en servidor sólo
+  `proxy.ts` (negocia idioma), el webhook de revalidación y el comodín `[locale]/[...rest]`, que
+  existe para que un enlace roto caiga en el 404 propio y no en el de Next (ver más abajo).
+- **Rutas: toda sección es una ruta, ninguna es un ancla.** Las cinco entradas del menú son páginas
+  (`products`, `spools`, `quality`, `company`, `contact`) y en la navegación no hay un solo `#`; la
+  única almohadilla del sitio es `#main`, el «saltar al contenido». Mezclar `/` con `#` dejaba a las
+  barras marcando la sección equivocada, porque el fragmento no llega a `usePathname()`. Todo en
+  `lib/i18n/routes.ts`, resaltado incluido (`isCurrent`).
 - **Trilingüe:** `en` (por defecto), `hi`, `es`. Sólo el inglés es obligatorio en el CMS; lo que
   falte cae al inglés en `lib/content.ts`.
 - **Contenido: Sanity**, editado en `/admin` dentro de la propia web. Tres tipos de documento:
   `product`, `spool` y el singleton `companyInfo`.
 - **Despliegue: Vercel**, dos entornos (`main` → producción, `test` → test con `noindex`). Framework
   declarado en `vercel.json`.
-- **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (33
+- **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (35
   comprobaciones en Chrome real a 390×844, por idioma).
-- **Fotografía:** Swiftmet no ha entregado ninguna. Las siete fichas de producto y la apertura de
-  `/quality` llevan **archivo industrial de Pexels** (`lib/photos.ts`, procedencia en
-  `public/photos/CREDITS.md`), que se retira solo en cuanto el panel tiene imagen. **Tres reglas de
+- **Fotografía:** Swiftmet no ha entregado ninguna. Los siete productos —**dos fotos cada uno**,
+  portada y `second`— y la apertura de `/quality` llevan **archivo industrial de Pexels**
+  (`lib/photos.ts`, procedencia en `public/photos/CREDITS.md`), que se retira solo en cuanto el panel
+  tiene imagen. La segunda existe **por maquetación, para que no quede medio ancho vacío a la
+  derecha**: rellena la media fila que sobra en `/products` —cuatro de las cinco familias tienen un
+  solo producto— y el fondo de la columna de especificaciones en la ficha, donde crece hasta el fondo
+  de la fila. Las dos, sólo de `md` para arriba. **Toda foto que esté sola lleva pie** (`caption` en
+  `<Figure>`), y con la forma de la casa: bajo un filete, las **cuatro líneas de la tarjeta** —nombre,
+  pureza, familia y, en el lugar del resumen, el `alt` de la foto—, que es el bloque de `ProductCard`
+  (tres si el producto no tiene pureza, que no se inventa). En el resto de la web
+  cada imagen tiene texto al lado; esas dos eran las únicas mudas. Como el bloque ocupa altura, la foto
+  de la ficha tiene mínimo de 192 px: o entra entera o no entra. **Tres reglas de
   selección, aprendidas fallando:** nada de óxido —con material de Wikimedia, el hilo herrumbroso
   desmentía la ficha del 99,99 %, porque el aluminio no se oxida—, ninguna marca ajena legible (pasó con
   Prysmian y con «Reynolds Aluminum»), y `alt` que describen lo que se ve, nunca un grado ni una planta.
@@ -111,11 +126,11 @@ origin --delete`. **Nunca squash** en las promociones `develop` → `test` → `
 Cada rama larga corresponde a **un entorno**, y sólo se sube de nivel lo que ya está validado en el
 anterior:
 
-| Rama | Para qué | Vercel |
-| --- | --- | --- |
-| `develop` | Día a día: desarrollar, depurar, subir al repositorio sin publicar nada | **Nada.** No despliega |
-| `test` | Entorno de test | `swiftmettest` → swiftmettest.vercel.app (`noindex`) |
-| `main` | Producción | `swiftmet` → swiftmet.vercel.app |
+| Rama      | Para qué                                                                | Vercel                                               |
+| --------- | ----------------------------------------------------------------------- | ---------------------------------------------------- |
+| `develop` | Día a día: desarrollar, depurar, subir al repositorio sin publicar nada | **Nada.** No despliega                               |
+| `test`    | Entorno de test                                                         | `swiftmettest` → swiftmettest.vercel.app (`noindex`) |
+| `main`    | Producción                                                              | `swiftmet` → swiftmet.vercel.app                     |
 
 Las ramas temporales nacen y **mueren** en `develop`. El sentido único es
 `develop` → `test` → `main`, siempre con `git merge --no-ff`.
@@ -137,7 +152,41 @@ Regla de oro: **el contexto nunca debe quedar desactualizado respecto al estado 
 
 ---
 
-_Última actualización: 2026-08-01 — **nuevo modelo de ramas: una rama por entorno.** `develop` pasa a
+_Última actualización: 2026-08-01 — **toda sección pasa a ser una ruta; se acabaron las anclas.**
+Empresa y contacto eran secciones de la portada enlazadas con `/en#company` y `/en#contact`, y esa
+mezcla de `#` con `/` era la causa de que la barra de navegación resaltara a veces la entrada
+equivocada: el fragmento no llega ni al servidor ni a `usePathname()`, así que en la portada no se
+marcaba nada —o se marcaba «inicio» mientras se leía contacto—. Ahora son páginas (`/en/company`,
+`/en/contact`) con su titular, su descripción y su entrada en el sitemap; en la portada queda de cada
+una un resumen con enlace, como ya hacía calidad. El resaltado es una sola función (`isCurrent`) para
+las cinco entradas, el icono de contacto de la barra de móvil por fin puede encenderse, y las
+redirecciones `/company` y `/contact` que apuntaban a las anclas **había que borrarlas**: habrían
+dejado inalcanzables las páginas nuevas. `check:mobile` pasa a 35 comprobaciones, dos de ellas nuevas
+y a propósito de esto: que ningún enlace de navegación lleve `#` y que estando en una sección se marque
+esa y sólo esa. 35/35 en los tres idiomas._
+
+_2026-08-01 — **pie de foto donde la imagen estaba muda, con el bloque de la
+casa.** Las dos fotos que se añadieron por maquetación —la de relleno del catálogo y la del fondo de la
+columna de especificaciones— eran las únicas del sitio sin ningún texto que dijera qué son. Ahora llevan
+**las cuatro líneas de la tarjeta de producto bajo un filete**: nombre, pureza, familia y, en el lugar del
+resumen, el `alt` de la foto, que ya estaba escrito en los tres idiomas (con pie, la imagen pasa a
+`alt=""` para no leerse dos veces). Se llegó ahí en tres pasadas —una línea pequeña suelta, luego tres
+líneas, y cuatro cuando quedó claro que con tres las descripciones de una fila del catálogo no casaban por
+20 px—. Tiene un coste medido y aceptado: como el texto ocupa altura y no puede encogerse solo, la foto de
+la ficha necesita mínimo de 192 px, y en las fichas más cargadas el hueco que tapaba a la derecha se
+traslada a la izquierda (373-425 px en las de metalizado a 1440 px). 33/33 en `check:mobile` en los tres
+idiomas._
+
+_2026-08-01 — **una segunda foto por producto, para que no queden huecos a la
+derecha.** Siete imágenes nuevas de Pexels, verticales (800×1000), que tapan dos huecos: la media fila que
+sobraba en `/products` —es una rejilla de dos columnas y cuatro de las cinco familias tienen un solo
+producto: varilla, bolsitas de té, soldadura y muelles— y el fondo de la columna de especificaciones de
+cada ficha, donde la foto crece hasta el fondo de la fila (`stretch` en `<Figure>`, sin altura mínima: si
+no sobra nada, no se pinta). Las dos sólo de `md` para arriba, porque en una columna no hay derecha que
+cuadrar. Mismas tres reglas de selección de siempre. 21 fichas medidas en los tres idiomas sin un solo
+hueco, y 33/33 en `check:mobile` por idioma._
+
+_2026-08-01 — **nuevo modelo de ramas: una rama por entorno.** `develop` pasa a
 ser el día a día (desarrollar, depurar y subir al repositorio sin desplegar nada, garantizado por
 `git.deploymentEnabled` en `vercel.json`), `test` es el entorno de test y `main` producción; las ramas
 temporales nacen y mueren en `develop` y el camino es `develop` → `test` → `main`. Sustituye al modelo
