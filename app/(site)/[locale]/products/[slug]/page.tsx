@@ -158,7 +158,8 @@ export default async function ProductPage({
               // es lo que hace que este bloque se lea igual que todos los demás.
               caption={{
                 title: product.name,
-                subtitle: product.purity,
+                purity: product.purity,
+                subtitle: t.family[product.family],
                 description: product.second.alt[locale],
               }}
             />

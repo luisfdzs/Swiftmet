@@ -41,14 +41,17 @@ function lastSecondPhoto(items: ProductEntry[]) {
 }
 
 /**
- * El texto que va bajo esa foto, con la misma forma que el de la tarjeta de al lado:
- * nombre del producto, pureza y —en el lugar del resumen— qué se ve en la fotografía.
+ * El texto que va bajo esa foto, con las mismas cuatro líneas que el de la tarjeta de al
+ * lado: nombre del producto, pureza, familia y —en el lugar del resumen— qué se ve en la
+ * fotografía. Cuatro y no tres: con tres, las descripciones de las dos celdas de la fila
+ * no quedaban a la misma altura.
  */
 function captionFor(product: ProductEntry | undefined, locale: Locale) {
   if (!product?.second) return undefined
   return {
     title: product.name,
-    subtitle: product.purity,
+    purity: product.purity,
+    subtitle: getDictionary(locale).family[product.family],
     description: product.second.alt[locale],
   }
 }

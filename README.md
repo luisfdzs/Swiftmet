@@ -212,24 +212,27 @@ Las dos, sólo de tableta para arriba: en una sola columna no hay nada a la dere
 de archivo de más sería sólo scroll.
 
 **Toda foto que esté sola lleva pie, y el pie tiene la forma de la casa** (`caption` en `<Figure>`): bajo
-un filete, **título, subtítulo y descripción** — el nombre del producto, su pureza en mono y qué se ve en
-la fotografía. Es exactamente el bloque de `ProductCard`, para que una fila del catálogo se lea pareja y
-la ficha se lea como la portada. En el resto de la web cada imagen ya tenía texto al lado —nombre,
+un filete, las **cuatro líneas de la tarjeta de producto** — nombre, pureza en mono, familia en versalitas
+y, en el lugar del resumen, qué se ve en la fotografía. Son cuatro y no tres porque con tres la
+descripción de la foto quedaba 20 px más alta que la de la tarjeta de al lado, y en una rejilla de dos
+columnas eso se nota. Si el producto no tiene pureza —hoy, las bolsitas de té y el muelle— esa línea no se
+pinta y quedan tres: la web no rellena un dato que el cliente no ha dado. En el resto del sitio cada
+imagen ya tenía texto al lado —nombre,
 pureza, familia y resumen bajo una tarjeta; los párrafos del producto junto a la portada de una ficha; y
 el hueco tramado escribe él mismo qué falta—, y las dos fotos de relleno eran las únicas mudas,
 precisamente por estar donde no hay texto.
 
 La **descripción es el `alt`**, no un texto nuevo: ya está escrito en los tres idiomas y bajo la regla de
-describir lo que se ve, que es todo lo que una foto de archivo puede afirmar. El título y la pureza los
-pone el sitio alrededor, como en cualquier tarjeta, sabiendo que acercan la foto de archivo al producto
-—decisión de Luis, con la regla 8 sobre la mesa—. Cuando hay pie, la imagen pasa a `alt=""`: si no, un
-lector de pantalla leería la misma frase dos veces.
+describir lo que se ve, que es todo lo que una foto de archivo puede afirmar. El nombre, la pureza y la
+familia los pone el sitio alrededor, como en cualquier tarjeta, sabiendo que acercan la foto de archivo al
+producto —decisión de Luis, con la regla 8 sobre la mesa—. Cuando hay pie, la imagen pasa a `alt=""`: si
+no, un lector de pantalla leería la misma frase dos veces.
 
 **Lo que costó, y es visible:** un bloque de texto ocupa altura y no puede encogerse solo, así que la foto
 de la ficha ya no puede medir cero. Con el mínimo de 192 px, el hueco que faltaba a la derecha se traslada
-a la izquierda en las fichas más cargadas —medido: **349-439 px en las tres de metalizado a 1280-1440 px**
-y 160-226 px en la varilla; a 1920 px, unos 190 px; en las otras tres, cero—. Es el precio de que el pie
-esté en el flujo y no dentro de la foto.
+a la izquierda en las fichas más cargadas —medido con las cuatro líneas: **373-425 px en las de metalizado
+a 1440 px** (410-463 a 1280), 184-249 px en la varilla, ~215 px a 1920, y cero en las tres restantes—. Es
+el precio de que el pie esté en el flujo y no dentro de la foto.
 
 - **Licencia Pexels:** uso comercial, modificación permitida y **sin atribución obligatoria**. El fichero
   de créditos existe igualmente, para poder retirar o sustituir una imagen sin arqueología.

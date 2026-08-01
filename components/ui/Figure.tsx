@@ -34,11 +34,13 @@ type Props = {
    * misma frase, y un lector de pantalla la leería dos veces.
    */
   caption?: {
-    /** Título, en el papel del nombre del producto en una tarjeta. */
+    /** Nombre del producto. */
     title: string
-    /** Subtítulo, en el papel de la pureza: cifra corta. Se omite si no hay —y `null` es
-     *  el valor que trae el contenido cuando el cliente no lo ha rellenado. */
-    subtitle?: string | null
+    /** La pureza, en mono: es la cifra por la que se elige entre dos hilos. Se omite si
+     *  no hay —`null` es lo que trae el contenido cuando el cliente no la ha rellenado—. */
+    purity?: string | null
+    /** Subtítulo: la familia, en versalitas, como en la tarjeta. */
+    subtitle?: string
     /** Qué se ve en la fotografía. Es el `alt`, no un texto nuevo. */
     description: string
   }
@@ -154,13 +156,17 @@ export function Figure({
        */
       <figure className={cn('flex min-h-0 flex-col overflow-hidden', className)}>
         {media}
-        {/* Mismo bloque que bajo la portada de una tarjeta: filete, nombre, la cifra en
-            mono y la descripción. Ver `ProductCard`, de donde salen estas clases. */}
+        {/* Mismo bloque que bajo la portada de una tarjeta, y con las mismas CUATRO
+            líneas: filete, nombre, la pureza en mono, la familia en versalitas y la
+            descripción. Las clases salen de `ProductCard` y hay que mantenerlas a la par:
+            con tres líneas, la descripción de una foto de relleno quedaba 20 px más alta
+            que la de la tarjeta de al lado, y en una rejilla de dos columnas eso se ve. */}
         <figcaption className="mt-4 border-t border-line pt-3 text-center">
           <p className="text-lead leading-tight">{caption.title}</p>
-          {caption.subtitle && (
-            <p className="figure-num mt-1 text-small text-signal">{caption.subtitle}</p>
+          {caption.purity && (
+            <p className="figure-num mt-1 text-small text-signal">{caption.purity}</p>
           )}
+          {caption.subtitle && <p className="eyebrow mt-2">{caption.subtitle}</p>}
           <p className="mt-2 text-small text-ink-soft">{caption.description}</p>
         </figcaption>
       </figure>
