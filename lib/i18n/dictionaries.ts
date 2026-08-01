@@ -45,6 +45,11 @@ const en = {
     viewSpools: 'See every dimension',
     qualityTitle: 'Quality',
     viewQuality: 'How each batch is checked',
+    // Empresa y contacto dejaron de leerse enteras en la portada: son páginas, y aquí
+    // queda el enlace, como el de calidad. Los encabezados de esas dos entradas salen de
+    // `company.title` y `contact.title`, que son la misma palabra: no se duplican.
+    viewCompany: 'About Swiftmet',
+    viewContact: 'Ask for a price',
   },
   products: {
     title: 'Products',
@@ -95,6 +100,10 @@ const en = {
   },
   company: {
     title: 'Company',
+    // Entrada de la página. Describe lo que hay en ella —el relato, las cifras
+    // confirmadas y las plantas— sin afirmar nada nuevo sobre Swiftmet: los datos los
+    // pone el panel (regla 8).
+    lead: 'Who draws the wire, the figures on record, and where the plant is.',
     plantsTitle: 'Where we are',
     officeLabel: 'Registered office',
     worksLabel: 'Works',
@@ -167,6 +176,8 @@ const hi: Dictionary = {
     viewSpools: 'सभी आयाम देखें',
     qualityTitle: 'गुणवत्ता',
     viewQuality: 'प्रत्येक बैच की जाँच कैसे होती है',
+    viewCompany: 'स्विफ्टमेट के बारे में',
+    viewContact: 'कीमत पूछें',
   },
   products: {
     title: 'उत्पाद',
@@ -217,6 +228,7 @@ const hi: Dictionary = {
   },
   company: {
     title: 'कंपनी',
+    lead: 'तार कौन खींचता है, दर्ज आँकड़े क्या हैं, और संयंत्र कहाँ है।',
     plantsTitle: 'हम कहाँ हैं',
     officeLabel: 'पंजीकृत कार्यालय',
     worksLabel: 'संयंत्र',
@@ -284,6 +296,8 @@ const es: Dictionary = {
     viewSpools: 'Ver todas las medidas',
     qualityTitle: 'Calidad',
     viewQuality: 'Cómo se comprueba cada lote',
+    viewCompany: 'Sobre Swiftmet',
+    viewContact: 'Pedir precio',
   },
   products: {
     title: 'Productos',
@@ -335,6 +349,7 @@ const es: Dictionary = {
   },
   company: {
     title: 'Empresa',
+    lead: 'Quién trefila el hilo, las cifras que constan y dónde está la planta.',
     plantsTitle: 'Dónde estamos',
     officeLabel: 'Domicilio social',
     worksLabel: 'Planta',

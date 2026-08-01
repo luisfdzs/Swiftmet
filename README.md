@@ -44,7 +44,7 @@ npm run dev        # http://localhost:3000
 | Script                   | Qué hace                                                           |
 | ------------------------ | ------------------------------------------------------------------ |
 | `npm run dev`            | Servidor de desarrollo (Turbopack)                                 |
-| `npm run build`          | Build de producción (prerrenderiza las 50 rutas)                   |
+| `npm run build`          | Build de producción (prerrenderiza las 56 rutas)                   |
 | `npm run check`          | `tsc --noEmit` + ESLint + Prettier — pasar esto antes de commitear |
 | `npm run format`         | Aplica Prettier a todo el proyecto                                 |
 | `npm run brand`          | Genera favicon, icono de iOS e imagen de compartir (OG)            |
@@ -112,10 +112,13 @@ porque el registro de entregas simplemente sale vacío.
 app/
   (site)/[locale]/       ← todas las páginas viven bajo idioma (/en, /hi, /es)
     layout.tsx           · fuentes (latina + devanagari), header/footer, metadata y hreflang
-    page.tsx             · portada: cifras → productos → TABLA DE BOBINAS → empresa → contacto
+    page.tsx             · portada: cifras → productos → TABLA DE BOBINAS → calidad → empresa
+                           → contacto, cada paso resumido y enlazado a su página
     products/            · índice agrupado por familia y ficha de producto [slug]
     spools/              · el programa de bobinas: tabla + leyenda + secciones a escala
     quality/             · puntos de control y certificaciones
+    company/             · el relato, las cifras confirmadas y las plantas
+    contact/             · email, teléfono y a quién preguntar
   (studio)/admin/        ← PANEL de administración (Sanity), con su propio layout raíz
   api/revalidate/        ← webhook: al publicar en el panel, la web se regenera
   globals.css            ← SISTEMA DE DISEÑO: todos los tokens, y sólo aquí
@@ -123,7 +126,7 @@ app/
 components/
   layout/                · Header, MobileNav (barra inferior de iconos), NavIcons, Footer, Wordmark
   sections/              · Hero, HeroMontage (el vídeo de portada), ProductCard, SpoolTable,
-                           SpoolDiagram, CompanySection, ContactSection
+                           SpoolDiagram
   ui/                    · Figure (toda imagen pasa por aquí), Media, SpecList, Reveal
 lib/
   content.ts             ← única puerta de acceso al contenido
@@ -170,6 +173,16 @@ Seis decisiones que conviene entender antes de tocar código:
    motivo: es una decisión del sistema, no de un titular concreto.
 6. **Las cifras van en monoespaciada con `tabular-nums`** (utilidad `figure-num`). Es lo que hace que
    una tabla de catorce bobinas se lea como una tabla y no como un párrafo con números dentro.
+7. **Toda sección del sitio es una ruta. Ninguna es un ancla.** Las cinco entradas del menú son
+   páginas (`/en/products`, `/en/spools`, `/en/quality`, `/en/company`, `/en/contact`) y en la web no
+   hay un solo enlace de navegación con `#`. Empresa y contacto fueron anclas de la portada
+   (`/en#company`) hasta que se vio lo que costaba: el fragmento no llega al servidor ni a
+   `usePathname()`, así que la cabecera y la barra de móvil no podían saber qué se estaba leyendo —en
+   la portada no marcaban nada, o marcaban «inicio» mientras se leía contacto—. Con rutas, el
+   resaltado es una línea (`isCurrent` en `lib/i18n/routes.ts`) igual para las cinco, y cada sección
+   tiene título, descripción, entrada en el sitemap y una URL que se comparte. La única `#` que queda
+   en todo el sitio es `#main`, el «saltar al contenido» que exige WCAG, y `npm run check:mobile`
+   comprueba que no aparezca ninguna otra.
 
 ### Idiomas
 
@@ -361,8 +374,10 @@ para posicionar por «high purity aluminium wire manufacturer», y dos copias co
 
 1. `npm run check` — typecheck, ESLint y Prettier.
 2. `npm run check:mobile` con el servidor levantado. **Obligatorio si has tocado interfaz.** No es un
-   test unitario: es la lista de cosas que ya se han roto. Comprueba 33 cosas, entre ellas tres propias
-   de esta web:
+   test unitario: es la lista de cosas que ya se han roto. Comprueba 35 cosas, entre ellas cuatro
+   propias de esta web:
+   - que **ningún enlace de navegación lleve `#`** y que, estando en una sección, la barra marque esa y
+     sólo esa. Es lo que impide volver a mezclar anclas con rutas (ver el punto 7 de más arriba);
    - que **la tabla de bobinas se desplace ella y no la página** — siete columnas de datos en 390 px es
      el caso que lo provoca, y es el contenido más importante del sitio;
    - que todo objetivo pulsable llegue a 24 px (WCAG 2.2). Encontró el enlace del logotipo, de 16 px:

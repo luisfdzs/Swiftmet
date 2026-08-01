@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { cn } from '@/lib/cn'
 import { localeNames, locales, type Locale } from '@/lib/i18n/config'
 import type { Dictionary } from '@/lib/i18n/dictionaries'
-import { href, isSection, navigation } from '@/lib/i18n/routes'
+import { href, isCurrent, navigation } from '@/lib/i18n/routes'
 import { GlobeIcon } from './NavIcons'
 import { Wordmark } from './Wordmark'
 
@@ -90,12 +90,11 @@ export function Header({ locale, dictionary }: Props) {
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Main">
           {navigation.map((key) => {
             const target = href(locale, key)
-            // Empresa y contacto son anclas de la portada, no páginas: `aria-current`
-            // marcaría las dos a la vez estando en el inicio, que es peor que no
-            // marcar ninguna. Saber cuál se está viendo pediría un observador de
-            // scroll, y esta barra ya carga con todo el JS que se le permite.
-            const active =
-              !isSection(key) && (pathname === target || pathname.startsWith(`${target}/`))
+            // Una regla para las cinco entradas, y vive en `routes.ts` para que la barra
+            // de móvil marque exactamente lo mismo. Antes había que excluir empresa y
+            // contacto —eran anclas, y `usePathname()` no ve el fragmento—, así que en la
+            // portada la barra no marcaba nada o marcaba la entrada equivocada.
+            const active = isCurrent(pathname, locale, key)
             return (
               <Link
                 key={key}
