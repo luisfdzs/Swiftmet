@@ -1,7 +1,5 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { CompanySection } from '@/components/sections/CompanySection'
-import { ContactSection } from '@/components/sections/ContactSection'
 import { Hero } from '@/components/sections/Hero'
 import { ProductCard } from '@/components/sections/ProductCard'
 import { SpoolTable } from '@/components/sections/SpoolTable'
@@ -111,8 +109,39 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </Link>
       </section>
 
-      <CompanySection locale={locale} company={company} />
-      <ContactSection locale={locale} company={company} />
+      {/* EMPRESA Y CONTACTO, QUE ANTES SE LEÍAN ENTERAS AQUÍ.
+          Eran dos secciones de esta página a las que el menú apuntaba con un ancla
+          (`/en#company`). Ahora son páginas, y en la portada queda de cada una lo mismo
+          que ya quedaba de calidad: encabezado, una entrada y el enlace. El recorrido de
+          la portada no cambia —qué vendo, en qué formato, cómo sé que cumple, quién soy,
+          cómo pedir precio—, pero cada paso acaba en una URL propia en vez de en un salto
+          de scroll, y no hay dos sitios con el mismo texto compitiendo en Google.
+
+          La entrada de empresa es el primer párrafo del panel, no un resumen escrito
+          aparte: si Swiftmet reescribe su presentación, esto la sigue. */}
+      <section className="page-gutter pt-(--spacing-section) text-center">
+        <h2 className="eyebrow border-b border-line pb-4">{t.company.title}</h2>
+        <p className="mx-auto mt-10 max-w-3xl text-lead text-balance md:mt-14">
+          {company.statement[locale][0] ?? t.company.lead}
+        </p>
+        <Link
+          href={href(locale, 'company')}
+          className="link-underline tap mt-10 inline-block text-small"
+        >
+          {t.home.viewCompany}
+        </Link>
+      </section>
+
+      <section className="page-gutter pt-(--spacing-section) text-center">
+        <h2 className="eyebrow border-b border-line pb-4">{t.contact.title}</h2>
+        <p className="mx-auto mt-10 max-w-3xl text-lead text-balance md:mt-14">{t.contact.lead}</p>
+        <Link
+          href={href(locale, 'contact')}
+          className="link-underline tap mt-10 inline-block text-small"
+        >
+          {t.home.viewContact}
+        </Link>
+      </section>
     </>
   )
 }

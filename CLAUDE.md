@@ -44,16 +44,21 @@ proyecto.
 ## 3. Stack técnico
 
 - **Frontend:** Next.js 16 (App Router, Turbopack) + TypeScript estricto + Tailwind CSS 4, con
-  **zod** validando el contenido. **Estático**: 50 rutas prerrenderizadas; en servidor sólo
+  **zod** validando el contenido. **Estático**: 56 rutas prerrenderizadas; en servidor sólo
   `proxy.ts` (negocia idioma), el webhook de revalidación y el comodín `[locale]/[...rest]`, que
   existe para que un enlace roto caiga en el 404 propio y no en el de Next (ver más abajo).
+- **Rutas: toda sección es una ruta, ninguna es un ancla.** Las cinco entradas del menú son páginas
+  (`products`, `spools`, `quality`, `company`, `contact`) y en la navegación no hay un solo `#`; la
+  única almohadilla del sitio es `#main`, el «saltar al contenido». Mezclar `/` con `#` dejaba a las
+  barras marcando la sección equivocada, porque el fragmento no llega a `usePathname()`. Todo en
+  `lib/i18n/routes.ts`, resaltado incluido (`isCurrent`).
 - **Trilingüe:** `en` (por defecto), `hi`, `es`. Sólo el inglés es obligatorio en el CMS; lo que
   falte cae al inglés en `lib/content.ts`.
 - **Contenido: Sanity**, editado en `/admin` dentro de la propia web. Tres tipos de documento:
   `product`, `spool` y el singleton `companyInfo`.
 - **Despliegue: Vercel**, dos entornos (`main` → producción, `test` → test con `noindex`). Framework
   declarado en `vercel.json`.
-- **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (33
+- **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (35
   comprobaciones en Chrome real a 390×844, por idioma).
 - **Fotografía:** Swiftmet no ha entregado ninguna. Los siete productos —**dos fotos cada uno**,
   portada y `second`— y la apertura de `/quality` llevan **archivo industrial de Pexels**
@@ -147,7 +152,20 @@ Regla de oro: **el contexto nunca debe quedar desactualizado respecto al estado 
 
 ---
 
-_Última actualización: 2026-08-01 — **pie de foto donde la imagen estaba muda, con el bloque de la
+_Última actualización: 2026-08-01 — **toda sección pasa a ser una ruta; se acabaron las anclas.**
+Empresa y contacto eran secciones de la portada enlazadas con `/en#company` y `/en#contact`, y esa
+mezcla de `#` con `/` era la causa de que la barra de navegación resaltara a veces la entrada
+equivocada: el fragmento no llega ni al servidor ni a `usePathname()`, así que en la portada no se
+marcaba nada —o se marcaba «inicio» mientras se leía contacto—. Ahora son páginas (`/en/company`,
+`/en/contact`) con su titular, su descripción y su entrada en el sitemap; en la portada queda de cada
+una un resumen con enlace, como ya hacía calidad. El resaltado es una sola función (`isCurrent`) para
+las cinco entradas, el icono de contacto de la barra de móvil por fin puede encenderse, y las
+redirecciones `/company` y `/contact` que apuntaban a las anclas **había que borrarlas**: habrían
+dejado inalcanzables las páginas nuevas. `check:mobile` pasa a 35 comprobaciones, dos de ellas nuevas
+y a propósito de esto: que ningún enlace de navegación lleve `#` y que estando en una sección se marque
+esa y sólo esa. 35/35 en los tres idiomas._
+
+_2026-08-01 — **pie de foto donde la imagen estaba muda, con el bloque de la
 casa.** Las dos fotos que se añadieron por maquetación —la de relleno del catálogo y la del fondo de la
 columna de especificaciones— eran las únicas del sitio sin ningún texto que dijera qué son. Ahora llevan
 **las cuatro líneas de la tarjeta de producto bajo un filete**: nombre, pureza, familia y, en el lugar del
