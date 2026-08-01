@@ -90,6 +90,26 @@ export async function Footer({ locale }: { locale: Locale }) {
                   {t.nav.quality}
                 </Link>
               </li>
+              {/* Empresa y contacto entran aquí desde que son páginas. Como anclas no
+                  tenían sitio en esta lista: el pie ya está al final de la página, y un
+                  enlace que sube el scroll a un bloque de la misma portada no es
+                  navegación, es un ascensor. */}
+              <li>
+                <Link
+                  className="link-underline tap text-ink-soft hover:text-ink"
+                  href={href(locale, 'company')}
+                >
+                  {t.nav.company}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="link-underline tap text-ink-soft hover:text-ink"
+                  href={href(locale, 'contact')}
+                >
+                  {t.nav.contact}
+                </Link>
+              </li>
               {company.linkedin && (
                 <li>
                   <a

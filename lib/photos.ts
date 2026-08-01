@@ -140,6 +140,115 @@ const stockPhotos = {
   },
 } satisfies Record<string, DescribedImage>
 
+/**
+ * SEGUNDA FOTO DE CADA FICHA — LA QUE TAPA EL HUECO DE LA DERECHA
+ *
+ * La ficha de producto es de dos columnas: a la izquierda la portada y la prosa, a la
+ * derecha las especificaciones y las aplicaciones. Las dos columnas las escribe el
+ * cliente, y **nunca miden lo mismo**: `tea-bag-wire` no tiene ni una especificación y
+ * `1080` tiene seis, así que la columna derecha se quedaba corta entre 220 y 860 px según
+ * el producto y el idioma. Un hueco así no se lee como aire, se lee como una tabla que no
+ * ha cargado.
+ *
+ * La solución es esta segunda foto, que va **al final de la columna derecha y crece hasta
+ * el fondo de la fila** (`stretch` en `<Figure>`), sea cual sea el hueco que le toque
+ * rellenar. Por eso los ficheros son verticales (800×1000) y por eso se recortan con
+ * `object-cover`: la misma foto sirve para un hueco de 220 px y para uno de 860.
+ *
+ * **Sólo se pinta de `md` para arriba.** En una sola columna no hay hueco a la derecha que
+ * tapar, y una foto de archivo de más sería sólo scroll.
+ *
+ * Valen las mismas tres reglas que arriba —nada de óxido, ninguna marca ajena legible,
+ * `alt` que describen lo que se ve— y el mismo respaldo: si el panel tiene una segunda
+ * imagen del producto, gana la suya. Procedencia en `public/photos/CREDITS.md`.
+ */
+const stockSecondPhotos = {
+  'product-1080-metallising-wire': {
+    id: 'stock:product-1080-metallising-wire-2',
+    src: '/photos/product-1080-metallising-wire-2.webp',
+    width: 800,
+    height: 1000,
+    blur: 'data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAUABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAQFBv/EACEQAAIBBAICAwAAAAAAAAAAAAECAwAEESEFEjGhE0GR/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAH/xAAWEQEBAQAAAAAAAAAAAAAAAAAAARH/2gAMAwEAAhEDEQA/AMgqlmCqCSfAAzmm142foHl6wg+PkOD+VTUQ2CdLdC0mMMxQFj71U25mkZiC3XP1uriac5K4aFmhiARF1rO/dR2Yk7NFFKR//9k=',
+    alt: {
+      en: 'Macro of the twisted strands of a steel wire rope',
+      hi: 'स्टील वायर रोप की बटी हुई लड़ियों का मैक्रो दृश्य',
+      es: 'Macro de las hebras retorcidas de un cable de acero',
+    },
+  },
+  'product-1090-metallising-wire': {
+    id: 'stock:product-1090-metallising-wire-2',
+    src: '/photos/product-1090-metallising-wire-2.webp',
+    width: 800,
+    height: 1000,
+    blur: 'data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAUABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAEDBf/EACEQAAIBAwUAAwAAAAAAAAAAAAECAwARIQQSMUFCE1Fh/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AjDOSqiVFjkJyOd1OKX5wxm04SzYJ7/azzNIHUlN6n2TkVcTOQoKNMC2L+aB6O0kd2ANx9UoWJ1OzhR0MUUVlX//Z',
+    alt: {
+      en: 'Rolls of coiled wire stacked in a warehouse',
+      hi: 'गोदाम में एक के ऊपर एक रखे तार के रोल',
+      es: 'Rollos de hilo bobinado apilados en un almacén',
+    },
+  },
+  'product-1199-metallising-wire': {
+    id: 'stock:product-1199-metallising-wire-2',
+    src: '/photos/product-1199-metallising-wire-2.webp',
+    width: 800,
+    height: 1000,
+    blur: 'data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAUABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAIDBP/EACAQAAICAQQDAQAAAAAAAAAAAAECABEDEiExQTJhgXH/xAAWAQEBAQAAAAAAAAAAAAAAAAAAAQL/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDWWGnZFPyplzImQHVjI/RYjPlbiwPskQx8TDKbsVpV2vvuLdKTyfcIQr//2Q==',
+    alt: {
+      en: 'Close-up of the tightly wound surface of a wire coil',
+      hi: 'तार कुंडल की कसकर लिपटी सतह का नज़दीकी दृश्य',
+      es: 'Detalle de la superficie apretada de un rollo de hilo bobinado',
+    },
+  },
+  'product-aluminium-rod': {
+    id: 'stock:product-aluminium-rod-2',
+    src: '/photos/product-aluminium-rod-2.webp',
+    width: 800,
+    height: 1000,
+    blur: 'data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAUABADASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAECAwb/xAAkEAABAwMBCQAAAAAAAAAAAAACAAERAwQhQQUSIiQxUVKBsf/EABQBAQAAAAAAAAAAAAAAAAAAAAL/xAAWEQEBAQAAAAAAAAAAAAAAAAAAESL/2gAMAwEAAhEDEQA/AOe2bA1w1nCm9YCuauYys7AuZpRoTQ3tK8KK5uPk/wBSuYE1U0OEhdussnWbeI3fvKEIm//Z',
+    alt: {
+      en: 'Bundles of coiled rod stacked in a yard against the sky',
+      hi: 'खुले आसमान के नीचे यार्ड में रखे रॉड के बंडल',
+      es: 'Atados de varilla enrollada apilados en un patio, contra el cielo',
+    },
+  },
+  'product-tea-bag-wire': {
+    id: 'stock:product-tea-bag-wire-2',
+    src: '/photos/product-tea-bag-wire-2.webp',
+    width: 800,
+    height: 1000,
+    blur: 'data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAUABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABQAE/8QAHxAAAgMAAgIDAAAAAAAAAAAAAQIAAxESIQQxBSJB/8QAFgEBAQEAAAAAAAAAAAAAAAAAAgAB/8QAFREBAQAAAAAAAAAAAAAAAAAAAAH/2gAMAwEAAhEDEQA/ACh4yVUIy4VKjWHvZitvJ+gA471s3VOV+P4dc1bcP71kIYEWhs0dRDDNlagEAe4bcgDECUpij//Z',
+    alt: {
+      en: 'A coil of thin drawn wire resting on a workshop floor',
+      hi: 'कार्यशाला के फ़र्श पर रखा महीन ट्रेफिल्ड तार का कुंडल',
+      es: 'Un rollo de hilo fino trefilado, apoyado en el suelo de un taller',
+    },
+  },
+  'product-stainless-steel-mig-welding-wire': {
+    id: 'stock:product-stainless-steel-mig-welding-wire-2',
+    src: '/photos/product-stainless-steel-mig-welding-wire-2.webp',
+    width: 800,
+    height: 1000,
+    blur: 'data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAUABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAQFAv/EACYQAAEEAQIEBwAAAAAAAAAAAAMAAQIEEQUTEiEicSNBYWKBobH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AmxtWjtgVXej5OQTR+8rUaNwj9cg1m9s3d/3CoG1CEG57w+8WdTi6vmWBGcnptIE6tUZMOTin3dPeHXZmGAXzFCEH/9k=',
+    alt: {
+      en: 'Black and white close-up of stranded steel rope',
+      hi: 'बटे हुए स्टील रोप का श्वेत-श्याम नज़दीकी दृश्य',
+      es: 'Detalle en blanco y negro de cable de acero trenzado',
+    },
+  },
+  'product-high-carbon-spring-steel-wire': {
+    id: 'stock:product-high-carbon-spring-steel-wire-2',
+    src: '/photos/product-high-carbon-spring-steel-wire-2.webp',
+    width: 800,
+    height: 1000,
+    blur: 'data:image/jpeg;base64,/9j/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAUABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAIB/8QAIBAAAgICAwADAQAAAAAAAAAAAQIAEQMiEiExMlFhgf/EABUBAQEAAAAAAAAAAAAAAAAAAAAB/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AHOnrLX6JLZUI1fv6IhVGpALAkVQ9FTOCmr4jo3R9P8lA64srklmVR8jKbIy9Yzw2B1FREo//2Q==',
+    alt: {
+      en: 'Stacked sheets of welded wire mesh',
+      hi: 'वेल्डेड वायर मेश की एक के ऊपर एक रखी चादरें',
+      es: 'Planchas apiladas de malla de alambre electrosoldada',
+    },
+  },
+} satisfies Record<string, DescribedImage>
+
 /** Apertura de `/quality`: hilo bobinado en carretes dentro de una nave. */
 export const stockQualityPhoto: DescribedImage = stockPhotos['quality-drawing-line']
 
@@ -151,6 +260,15 @@ export const stockQualityPhoto: DescribedImage = stockPhotos['quality-drawing-li
  */
 export function stockPhotoForProduct(slug: string): DescribedImage | null {
   return stockPhotos[`product-${slug}` as keyof typeof stockPhotos] ?? null
+}
+
+/**
+ * Segunda foto de archivo de un producto, la que rellena el hueco de la columna derecha.
+ * Devuelve `null` igual que la anterior, y con la misma consecuencia benigna: la columna
+ * vuelve a quedarse corta, que es exactamente como estaba antes de existir esto.
+ */
+export function stockSecondPhotoForProduct(slug: string): DescribedImage | null {
+  return stockSecondPhotos[`product-${slug}` as keyof typeof stockSecondPhotos] ?? null
 }
 
 /**
@@ -168,5 +286,6 @@ export function stockPhotoForProduct(slug: string): DescribedImage | null {
  */
 export function unusedStockProductKeys(slugs: readonly string[]): string[] {
   const known = new Set(slugs.map((slug) => `product-${slug}`))
-  return Object.keys(stockPhotos).filter((key) => key.startsWith('product-') && !known.has(key))
+  const declared = [...Object.keys(stockPhotos), ...Object.keys(stockSecondPhotos)]
+  return declared.filter((key) => key.startsWith('product-') && !known.has(key))
 }

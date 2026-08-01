@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ProductCard } from '@/components/sections/ProductCard'
+import { Figure } from '@/components/ui/Figure'
 import { Reveal } from '@/components/ui/Reveal'
-import { getProducts, productFamilies } from '@/lib/content'
-import { isLocale } from '@/lib/i18n/config'
+import { getProducts, productFamilies, type ProductEntry } from '@/lib/content'
+import { isLocale, type Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 
 export async function generateMetadata({
@@ -29,6 +30,32 @@ export async function generateMetadata({
  * alfabético: el hilo para metalizado es el producto principal y las familias que
  * comparten planta van después.
  */
+/**
+ * La segunda foto del último producto de una familia, que es con lo que se rellena la
+ * media fila que sobra. Devuelve `null` si ese producto no tiene ninguna, y entonces no se
+ * pinta nada: mejor media fila vacía que un hueco tramado pidiendo una foto que no falta
+ * —el hueco marcado es para las fotos de producto, y aquí no hay ningún producto—.
+ */
+function lastSecondPhoto(items: ProductEntry[]) {
+  return items[items.length - 1]?.second ?? null
+}
+
+/**
+ * El texto que va bajo esa foto, con las mismas cuatro líneas que el de la tarjeta de al
+ * lado: nombre del producto, pureza, familia y —en el lugar del resumen— qué se ve en la
+ * fotografía. Cuatro y no tres: con tres, las descripciones de las dos celdas de la fila
+ * no quedaban a la misma altura.
+ */
+function captionFor(product: ProductEntry | undefined, locale: Locale) {
+  if (!product?.second) return undefined
+  return {
+    title: product.name,
+    purity: product.purity,
+    subtitle: getDictionary(locale).family[product.family],
+    description: product.second.alt[locale],
+  }
+}
+
 export default async function ProductsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
   if (!isLocale(locale)) notFound()
@@ -66,6 +93,38 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
                   />
                 </Reveal>
               ))}
+
+              {/* LA MITAD QUE SOBRA DE LA ÚLTIMA FILA.
+                  Este catálogo es de dos columnas y cuatro de las cinco familias tienen
+                  **un solo producto** —varilla, bolsitas de té, soldadura, muelles—, así
+                  que la fila se quedaba medio vacía y la sección parecía una tarjeta que
+                  no había cargado. En metalizado pasa igual con la tercera.
+
+                  Se rellena con la segunda foto del último producto de la familia, la
+                  misma que lleva su ficha (`product.second`). Va sin rótulo y sin enlace a
+                  propósito: es la fotografía de esa familia, no una tarjeta más, y una
+                  tarjeta falsa a la que se puede hacer clic sería peor que el hueco.
+
+                  Sólo de `md` para arriba: en una columna no hay media fila que rellenar. */}
+              {group.items.length % 2 === 1 && lastSecondPhoto(group.items) && (
+                // El `hidden` va en la celda de la rejilla, no en la foto: si lo llevara
+                // la foto, en móvil quedaría una celda vacía con su hueco de 56 px.
+                <Reveal step={1} className="hidden md:block">
+                  <Figure
+                    image={lastSecondPhoto(group.items)}
+                    locale={locale}
+                    ratio="4 / 3"
+                    sizes="(max-width: 768px) 100vw, 46vw"
+                    label={group.items[group.items.length - 1]?.name ?? ''}
+                    // Mismo bloque de texto que la tarjeta que tiene al lado —nombre,
+                    // pureza y una descripción bajo el filete—, para que la fila se lea
+                    // pareja. Lo que cambia es la descripción: la tarjeta resume el
+                    // producto, esto describe la fotografía. Y sigue **sin enlace**, que
+                    // era la decisión de fondo: es la foto de la familia, no una tarjeta.
+                    caption={captionFor(group.items[group.items.length - 1], locale)}
+                  />
+                </Reveal>
+              )}
             </div>
           </section>
         ))

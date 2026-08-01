@@ -44,7 +44,7 @@ npm run dev        # http://localhost:3000
 | Script                   | Qué hace                                                           |
 | ------------------------ | ------------------------------------------------------------------ |
 | `npm run dev`            | Servidor de desarrollo (Turbopack)                                 |
-| `npm run build`          | Build de producción (prerrenderiza las 50 rutas)                   |
+| `npm run build`          | Build de producción (prerrenderiza las 56 rutas)                   |
 | `npm run check`          | `tsc --noEmit` + ESLint + Prettier — pasar esto antes de commitear |
 | `npm run format`         | Aplica Prettier a todo el proyecto                                 |
 | `npm run brand`          | Genera favicon, icono de iOS e imagen de compartir (OG)            |
@@ -112,10 +112,13 @@ porque el registro de entregas simplemente sale vacío.
 app/
   (site)/[locale]/       ← todas las páginas viven bajo idioma (/en, /hi, /es)
     layout.tsx           · fuentes (latina + devanagari), header/footer, metadata y hreflang
-    page.tsx             · portada: cifras → productos → TABLA DE BOBINAS → empresa → contacto
+    page.tsx             · portada: cifras → productos → TABLA DE BOBINAS → calidad → empresa
+                           → contacto, cada paso resumido y enlazado a su página
     products/            · índice agrupado por familia y ficha de producto [slug]
     spools/              · el programa de bobinas: tabla + leyenda + secciones a escala
     quality/             · puntos de control y certificaciones
+    company/             · el relato, las cifras confirmadas y las plantas
+    contact/             · email, teléfono y a quién preguntar
   (studio)/admin/        ← PANEL de administración (Sanity), con su propio layout raíz
   api/revalidate/        ← webhook: al publicar en el panel, la web se regenera
   globals.css            ← SISTEMA DE DISEÑO: todos los tokens, y sólo aquí
@@ -123,7 +126,7 @@ app/
 components/
   layout/                · Header, MobileNav (barra inferior de iconos), NavIcons, Footer, Wordmark
   sections/              · Hero, HeroMontage (el vídeo de portada), ProductCard, SpoolTable,
-                           SpoolDiagram, CompanySection, ContactSection
+                           SpoolDiagram
   ui/                    · Figure (toda imagen pasa por aquí), Media, SpecList, Reveal
 lib/
   content.ts             ← única puerta de acceso al contenido
@@ -135,7 +138,8 @@ sanity/                  ← esquemas del panel, consultas GROQ, cliente, cargad
 scripts/
   migration/             · content-snapshot.json (volcado del listado maestro, con procedencia)
   build-sanity-import.mjs
-  generate-brand-assets.mjs  ← favicon + OG, dibujados en SVG (no hay logotipo de Swiftmet)
+  generate-brand-assets.mjs  ← favicon (app/) + imagen de compartir (public/opengraph-image.jpg),
+                               dibujados en SVG porque no hay logotipo de Swiftmet
   hero-montage-shots.mjs     ← GUION del montaje de portada: once planos, con su encuadre
   build-hero-montage.mjs     ← lo corta, lo trata y lo codifica (`npm run hero`, pide ffmpeg)
   check-mobile.mjs
@@ -156,12 +160,29 @@ Seis decisiones que conviene entender antes de tocar código:
    del revés sin que nada fallara. `npm run migrate:build` hace la misma comprobación antes de
    importar.
 4. **Todo es estático.** Las 50 rutas se prerrenderizan en build. Lo único que corre en el servidor es
-   `proxy.ts`, que negocia el idioma, y el webhook de revalidación.
+   `proxy.ts` (negocia el idioma), el webhook de revalidación y el comodín
+   `app/(site)/[locale]/[...rest]/page.tsx`, que no se puede prerrenderizar porque sus caminos son
+   infinitos. Ese comodín existe para una cosa: **que un enlace roto vea el 404 de Swiftmet**. Sin él,
+   `/en/lo-que-sea` no casa con ningún segmento, Next se cae al `not-found` de la raíz de `app/` —donde
+   no hay layout, porque `(site)` y `(studio)` traen el suyo— y sirve su 404 negro por defecto, sin
+   marca, sin menú y sin manera de volver. El 404 propio sólo salía en
+   `/en/products/<slug-inexistente>`, que es el único sitio donde había una página llamando a
+   `notFound()`.
 5. **Los tokens de diseño están sólo en `app/globals.css`.** Si un color o un espaciado no está en ese
    `@theme`, no se usa. Ahí está también la corrección de interlínea para el devanagari, por el mismo
    motivo: es una decisión del sistema, no de un titular concreto.
 6. **Las cifras van en monoespaciada con `tabular-nums`** (utilidad `figure-num`). Es lo que hace que
    una tabla de catorce bobinas se lea como una tabla y no como un párrafo con números dentro.
+7. **Toda sección del sitio es una ruta. Ninguna es un ancla.** Las cinco entradas del menú son
+   páginas (`/en/products`, `/en/spools`, `/en/quality`, `/en/company`, `/en/contact`) y en la web no
+   hay un solo enlace de navegación con `#`. Empresa y contacto fueron anclas de la portada
+   (`/en#company`) hasta que se vio lo que costaba: el fragmento no llega al servidor ni a
+   `usePathname()`, así que la cabecera y la barra de móvil no podían saber qué se estaba leyendo —en
+   la portada no marcaban nada, o marcaban «inicio» mientras se leía contacto—. Con rutas, el
+   resaltado es una línea (`isCurrent` en `lib/i18n/routes.ts`) igual para las cinco, y cada sección
+   tiene título, descripción, entrada en el sitemap y una URL que se comparte. La única `#` que queda
+   en todo el sitio es `#main`, el «saltar al contenido» que exige WCAG, y `npm run check:mobile`
+   comprueba que no aparezca ninguna otra.
 
 ### Idiomas
 
@@ -181,8 +202,50 @@ pisaban. Se vio en `/hi` antes de escribir la regla.
 **Swiftmet no ha entregado ninguna fotografía.** No hay imágenes de la planta de Baghola, ni del hilo, ni
 de las bobinas. Hasta que lleguen, **las siete fichas de producto y la apertura de `/quality` llevan
 fotografía industrial de archivo de [Pexels](https://www.pexels.com)**, recortada a la proporción de cada
-hueco: ocho ficheros en `public/photos`, declarados en `lib/photos.ts`, con la procedencia en
+hueco: quince ficheros en `public/photos`, declarados en `lib/photos.ts`, con la procedencia en
 `public/photos/CREDITS.md`.
+
+Cada producto lleva **dos**: la portada y una segunda (`product.second`). La segunda existe por
+maquetación —para que no quede medio ancho vacío a la derecha— y tapa dos huecos distintos:
+
+- **En el catálogo `/products`,** la media fila que sobra. Es una rejilla de dos columnas y **cuatro de
+  las cinco familias tienen un solo producto** —varilla, bolsitas de té, soldadura, muelles—, así que la
+  sección se quedaba medio vacía y parecía una tarjeta que no había cargado; en metalizado pasaba lo
+  mismo con la tercera. Se rellena con la segunda foto del último producto de la familia, **con pie y sin
+  enlace**: es la fotografía de la familia, no una tarjeta más.
+- **En la ficha de producto,** el fondo de la columna de especificaciones. Las dos columnas las escribe el
+  cliente y nunca miden lo mismo —`tea-bag-wire` no tiene ni una especificación y el `1080` tiene seis—,
+  así que a la derecha sobraban entre 220 y 860 px según el producto y el idioma. Aquí la foto **crece
+  hasta el fondo de la fila** (de ahí que los ficheros sean verticales, 800×1000, y se recorten con
+  `object-cover`), y **sin altura mínima a propósito**: si a un producto no le sobra nada, la foto mide
+  cero y no se pinta. Eso valió mientras la foto iba muda; con pie ya no (ver el párrafo siguiente), así
+  que hoy la foto tiene **altura mínima de 192 px**: o hay bloque entero, o no hay nada.
+
+Las dos, sólo de tableta para arriba: en una sola columna no hay nada a la derecha que cuadrar, y una foto
+de archivo de más sería sólo scroll.
+
+**Toda foto que esté sola lleva pie, y el pie tiene la forma de la casa** (`caption` en `<Figure>`): bajo
+un filete, las **cuatro líneas de la tarjeta de producto** — nombre, pureza en mono, familia en versalitas
+y, en el lugar del resumen, qué se ve en la fotografía. Son cuatro y no tres porque con tres la
+descripción de la foto quedaba 20 px más alta que la de la tarjeta de al lado, y en una rejilla de dos
+columnas eso se nota. Si el producto no tiene pureza —hoy, las bolsitas de té y el muelle— esa línea no se
+pinta y quedan tres: la web no rellena un dato que el cliente no ha dado. En el resto del sitio cada
+imagen ya tenía texto al lado —nombre,
+pureza, familia y resumen bajo una tarjeta; los párrafos del producto junto a la portada de una ficha; y
+el hueco tramado escribe él mismo qué falta—, y las dos fotos de relleno eran las únicas mudas,
+precisamente por estar donde no hay texto.
+
+La **descripción es el `alt`**, no un texto nuevo: ya está escrito en los tres idiomas y bajo la regla de
+describir lo que se ve, que es todo lo que una foto de archivo puede afirmar. El nombre, la pureza y la
+familia los pone el sitio alrededor, como en cualquier tarjeta, sabiendo que acercan la foto de archivo al
+producto —decisión de Luis, con la regla 8 sobre la mesa—. Cuando hay pie, la imagen pasa a `alt=""`: si
+no, un lector de pantalla leería la misma frase dos veces.
+
+**Lo que costó, y es visible:** un bloque de texto ocupa altura y no puede encogerse solo, así que la foto
+de la ficha ya no puede medir cero. Con el mínimo de 192 px, el hueco que faltaba a la derecha se traslada
+a la izquierda en las fichas más cargadas —medido con las cuatro líneas: **373-425 px en las de metalizado
+a 1440 px** (410-463 a 1280), 184-249 px en la varilla, ~215 px a 1920, y cero en las tres restantes—. Es
+el precio de que el pie esté en el flujo y no dentro de la foto.
 
 - **Licencia Pexels:** uso comercial, modificación permitida y **sin atribución obligatoria**. El fichero
   de créditos existe igualmente, para poder retirar o sustituir una imagen sin arqueología.
@@ -191,7 +254,8 @@ hueco: ocho ficheros en `public/photos`, declarados en `lib/photos.ts`, con la p
   varilla genéricos, en su mayoría de acero: **ambienta el oficio, no acredita el producto.**
 - **En cuanto alguien suba la imagen al panel, la de archivo deja de usarse.** No hay nada que borrar en
   el código: el respaldo sólo actúa si el producto no tiene imagen en Sanity (`getProducts` en
-  `lib/content.ts`). Para retirarlas del todo, borrar los ficheros.
+  `lib/content.ts`). La primera imagen del panel sustituye a la portada y la segunda, a la foto de la
+  columna derecha. Para retirarlas del todo, borrar los ficheros.
 - **El programa de bobinas no lleva fotografía de archivo.** Las catorce bobinas se dibujan a escala
   desde sus cotas: es información que la competencia no publica, y una bobina de stock que no midiera lo
   que dice la tabla convertiría el único dato firme de la web en decoración.
@@ -284,6 +348,14 @@ _push_:
 > `POST .../link` y varios más, y todos lo rechazan o lo ignoran en silencio. Si se crea un tercer
 > entorno, es el único paso manual.
 
+**La imagen que se ve al compartir un enlace se declara a mano**, en el `generateMetadata` del layout
+de idioma, y el fichero vive en `public/opengraph-image.jpg`. No se usa la convención de nombres de
+Next (`app/opengraph-image.jpg`), y no por gusto: ahí estuvo, y **la web no emitió una sola etiqueta
+`og:image`** en ningún idioma. La convención se hereda por el árbol de segmentos y aquí `(site)` y
+`(studio)` traen cada uno su layout raíz, así que la raíz de `app/` no es padre de ninguna página a
+esos efectos. El fallo no daba ninguna señal —el build pasaba y el fichero se servía—; lo único que
+se veía era que los enlaces compartidos en WhatsApp o LinkedIn salían como texto pelado.
+
 El framework se declara en **`vercel.json`** (`"framework": "nextjs"`), que se versiona y se aplica
 igual a los dos entornos, así que no hace falta tocar el panel de Vercel.
 
@@ -302,8 +374,10 @@ para posicionar por «high purity aluminium wire manufacturer», y dos copias co
 
 1. `npm run check` — typecheck, ESLint y Prettier.
 2. `npm run check:mobile` con el servidor levantado. **Obligatorio si has tocado interfaz.** No es un
-   test unitario: es la lista de cosas que ya se han roto. Comprueba 33 cosas, entre ellas tres propias
-   de esta web:
+   test unitario: es la lista de cosas que ya se han roto. Comprueba 35 cosas, entre ellas cuatro
+   propias de esta web:
+   - que **ningún enlace de navegación lleve `#`** y que, estando en una sección, la barra marque esa y
+     sólo esa. Es lo que impide volver a mezclar anclas con rutas (ver el punto 7 de más arriba);
    - que **la tabla de bobinas se desplace ella y no la página** — siete columnas de datos en 390 px es
      el caso que lo provoca, y es el contenido más importante del sitio;
    - que todo objetivo pulsable llegue a 24 px (WCAG 2.2). Encontró el enlace del logotipo, de 16 px:

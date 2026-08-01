@@ -180,26 +180,47 @@ async function main() {
   }
 
   // --- Resto de plantillas --------------------------------------------------------------
-  for (const route of ['products', 'quality']) {
+  // Las cinco secciones del sitio son páginas. Empresa y contacto llegaron aquí desde las
+  // anclas de la portada: lo que antes se comprobaba era que `#company` quedara bajo la
+  // barra fija; ahora, que la página existe, tiene su titular y la barra la señala.
+  for (const route of ['products', 'quality', 'company', 'contact']) {
     await page.goto(`${BASE}/${LOCALE}/${route}`, { waitUntil: 'networkidle' })
     check((await horizontalOverflow(page)) <= 1, `/${route} no desborda en horizontal`)
+    check(
+      (await page.locator('main h1').count()) === 1,
+      `/${route} tiene un solo <h1> (es una página, no un trozo de otra)`,
+    )
   }
 
-  // Empresa y contacto son secciones de la portada, no páginas: se comprueba que el ancla
-  // existe y que al entrar por su URL el bloque queda por debajo de la barra fija
-  // (`scroll-padding-top` en globals.css), no tapado por ella.
-  for (const id of ['company', 'contact']) {
-    await page.goto(`${BASE}/${LOCALE}#${id}`, { waitUntil: 'networkidle' })
-    // El ancla se mide con la página ya asentada.
-    await page.waitForTimeout(1500)
-    const top = await page.evaluate((anchor) => {
-      const section = document.getElementById(anchor)
-      return section ? Math.round(section.getBoundingClientRect().top) : null
-    }, id)
-    check(top !== null, `la portada tiene la sección #${id}`)
-    check(top !== null && top >= 0 && top < 200, `#${id} queda justo bajo la barra (${top} px)`)
-    check((await horizontalOverflow(page)) <= 1, `#${id} no desborda en horizontal`)
-  }
+  // --- NI UN SOLO `#` EN LA NAVEGACIÓN ----------------------------------------------------
+  // El fallo que motivó todo esto: mezclar `/en/products` con `/en#company` dejaba a las
+  // barras sin forma de saber qué se estaba leyendo, porque el fragmento no llega a
+  // `usePathname()`. La regla es que toda sección es una ruta; esto lo vigila.
+  await page.goto(`${BASE}/${LOCALE}/contact`, { waitUntil: 'networkidle' })
+  const hashed = await page.evaluate(() =>
+    [...document.querySelectorAll('header a, footer a, nav a')]
+      .map((a) => a.getAttribute('href') ?? '')
+      // `#main` es el salto al contenido, que es un salto dentro de la página y lo que
+      // pide WCAG: ese sí puede llevar almohadilla.
+      .filter((href) => href.includes('#') && href !== '#main'),
+  )
+  check(
+    hashed.length === 0,
+    hashed.length === 0
+      ? 'ningún enlace de navegación usa una almohadilla'
+      : `enlaces con # (deberían ser rutas): ${hashed.join(', ')}`,
+  )
+
+  // Y la consecuencia buscada: estando en una sección, la barra marca ESA y sólo esa.
+  const current = await page.evaluate(() =>
+    [...document.querySelectorAll('nav a[aria-current="page"]')].map(
+      (a) => a.getAttribute('href') ?? '',
+    ),
+  )
+  check(
+    current.length > 0 && current.every((href) => href.endsWith('/contact')),
+    `en /contact la navegación marca contacto y nada más (${current.join(', ') || 'nada marcado'})`,
+  )
 
   // --- Enlaces absolutos, comprobado desde una página PROFUNDA ---------------------------
   // `href()` devolvía rutas relativas en el proyecto de referencia (`en/products`): desde

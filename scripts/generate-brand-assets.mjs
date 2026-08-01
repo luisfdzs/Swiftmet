@@ -2,11 +2,19 @@
 /**
  * ASSETS DE MARCA · `npm run brand`
  *
- * Genera los tres ficheros que Next sirve por convención de nombre:
+ * Genera los tres ficheros de marca:
  *
- *   app/icon.png             favicon 512×512
- *   app/apple-icon.png       icono 180×180 para iOS
- *   app/opengraph-image.jpg  1200×630 para compartir en WhatsApp, LinkedIn, X…
+ *   app/icon.png                    favicon 512×512        (convención de Next)
+ *   app/apple-icon.png              icono 180×180 para iOS (convención de Next)
+ *   public/opengraph-image.jpg      1200×630 para compartir en WhatsApp, LinkedIn, X…
+ *
+ * La imagen de compartir va en `public/` y **no** por convención de nombre, aunque Next
+ * la soporte. Estuvo en `app/opengraph-image.jpg` y durante todo ese tiempo la web no
+ * emitió una sola etiqueta `og:image`: la convención se hereda por el árbol de segmentos,
+ * y como aquí `(site)` y `(studio)` traen cada uno su layout raíz, la raíz de `app/` no
+ * es padre de ninguna página a estos efectos. El fichero se servía —parecía todo
+ * correcto— y ningún enlace compartido mostraba imagen. Desde `public/`, la ruta es fija
+ * y el layout la declara a mano, que es lo que se puede comprobar de un vistazo.
  *
  * **No parte de ningún archivo de imagen**, y ahí está la diferencia con el proyecto de
  * referencia: allí el favicon se recortaba del logotipo real del estudio. Swiftmet no
@@ -28,6 +36,10 @@ import sharp from 'sharp'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const APP = path.join(ROOT, 'app')
+const PUBLIC = path.join(ROOT, 'public')
+
+/** Nombre del fichero de compartir. El layout lo declara con esta misma ruta. */
+const SHARE_IMAGE = 'opengraph-image.jpg'
 
 // Los mismos valores que `app/globals.css`. Están duplicados a propósito: este script
 // corre en Node, sin PostCSS, y no puede leer tokens de CSS. Si cambian allí, cambiar aquí.
@@ -101,11 +113,10 @@ async function main() {
       </text>
     </svg>`)
 
-  await sharp(card)
-    .jpeg({ quality: 90, mozjpeg: true })
-    .toFile(path.join(APP, 'opengraph-image.jpg'))
+  await mkdir(PUBLIC, { recursive: true })
+  await sharp(card).jpeg({ quality: 90, mozjpeg: true }).toFile(path.join(PUBLIC, SHARE_IMAGE))
 
-  console.log('✓ app/icon.png · app/apple-icon.png · app/opengraph-image.jpg')
+  console.log(`✓ app/icon.png · app/apple-icon.png · public/${SHARE_IMAGE}`)
   console.log('  Marca provisional dibujada en SVG (no hay logotipo de Swiftmet). Ver README.')
 }
 
