@@ -26,11 +26,22 @@ type Props = {
   /** Qué debería verse aquí. Se muestra dentro del hueco. */
   label: string
   /**
-   * Pie de foto VISIBLE. Se pasa cuando la fotografía está sola, sin ningún texto que
-   * diga qué es (ver la explicación abajo). Con pie, la imagen se marca como decorativa
-   * (`alt=""`): el pie ya dice lo mismo y un lector de pantalla lo leería dos veces.
+   * Pie de foto VISIBLE, con la misma forma que el texto de una tarjeta de producto:
+   * título, subtítulo y descripción bajo un filete. Se pasa cuando la fotografía está
+   * sola, sin ningún texto alrededor que diga qué es (ver la explicación abajo).
+   *
+   * Con pie, la imagen se marca como decorativa (`alt=""`): la descripción del pie es la
+   * misma frase, y un lector de pantalla la leería dos veces.
    */
-  caption?: string
+  caption?: {
+    /** Título, en el papel del nombre del producto en una tarjeta. */
+    title: string
+    /** Subtítulo, en el papel de la pureza: cifra corta. Se omite si no hay —y `null` es
+     *  el valor que trae el contenido cuando el cliente no lo ha rellenado. */
+    subtitle?: string | null
+    /** Qué se ve en la fotografía. Es el `alt`, no un texto nuevo. */
+    description: string
+  }
   className?: string
 }
 
@@ -70,10 +81,17 @@ type Props = {
  * fila del catálogo— eran las únicas mudas: puestas justamente donde no hay texto, y por
  * eso se notaba. Con pie vuelven a la norma de la casa.
  *
- * El pie es **el mismo texto del `alt`**, no uno nuevo. Dos descripciones de la misma foto
- * se separan con el primer retoque y acaban diciendo cosas distintas; y esa descripción ya
+ * Y vuelven **con la forma de la casa**, que es lo segundo que hubo que corregir: el primer
+ * intento fue una línea pequeña suelta, y el patrón de esta web es un bloque de tres —
+ * título, subtítulo y descripción bajo un filete, exactamente el de `ProductCard`—. Aquí el
+ * título es el nombre del producto, el subtítulo su pureza y la descripción, la foto.
+ *
+ * La descripción es **el mismo texto del `alt`**, no uno nuevo. Dos descripciones de la
+ * misma foto se separan con el primer retoque y acaban diciendo cosas distintas; y esa ya
  * está escrita en los tres idiomas y bajo la regla 3 —lo que se ve, nunca un grado ni una
- * planta—, que es exactamente lo que un pie puede afirmar de una foto de archivo.
+ * planta—, que es exactamente lo que se puede afirmar de una foto de archivo. El título y
+ * la pureza los pone el sitio alrededor, como en cualquier tarjeta: es lo que Luis pidió,
+ * sabiendo que acerca la foto de archivo al producto (regla 8, corolario de imágenes).
  *
  * **El hueco es más plano que la foto que lo sustituirá** (`placeholderRatio`), y esto se
  * decidió viendo el resultado: con la proporción 4:3 de la foto real, siete productos sin
@@ -95,58 +113,56 @@ export function Figure({
   className,
 }: Props) {
   const t = getDictionary(locale)
-  const text = caption?.trim()
 
   if (image) {
     const media = (
       <Media
         image={image}
-        alt={text ? '' : image.alt[locale]}
+        alt={caption ? '' : image.alt[locale]}
         sizes={sizes}
         ratio={ratio}
         stretch={stretch}
         priority={priority}
         // Sin pie, `className` es de la imagen y manda quien la coloca. Con pie, lo
-        // recibe el `<figure>` y la imagen pasa a ser la parte que crece dentro de él
-        // (`min-h-0`, para que también pueda encoger hasta cero).
-        className={text ? 'grow min-h-0' : className}
+        // recibe el `<figure>` y la imagen pasa a ser la parte que crece dentro de él.
+        //
+        // `min-h-48` sólo importa con `stretch`, y es el cambio que trajo el pie: la foto
+        // crecía hasta llenar el hueco que sobrara y, si no sobraba, medía cero y no se
+        // pintaba —correcto mientras no llevaba texto—. Con un bloque de texto debajo,
+        // que sí ocupa altura y no puede encogerse solo, esa foto de cero px dejaba un
+        // nombre de producto y una descripción bajo una imagen invisible. Con mínimo, o
+        // hay bloque entero o no hay nada; el precio es que en las fichas sin hueco la
+        // columna de datos se pasa de largo, y eso se ve y se acepta.
+        className={caption ? cn('grow', stretch && 'min-h-48') : className}
       />
     )
 
-    if (!text) return media
+    if (!caption) return media
 
-    /**
-     * EL PIE DE UNA FOTO QUE RELLENA UN HUECO VA **DENTRO** DE LA FOTO, y no debajo.
-     *
-     * Con `stretch` la altura de la imagen es la que sobre en la columna, y a veces no
-     * sobra nada: medido a 1440 px, el hueco de las tres fichas de hilo de metalizado es
-     * exactamente cero en los tres idiomas —la columna de datos es la más larga de las
-     * dos— y la foto no se pinta, que es la respuesta correcta. Un pie en el flujo, con
-     * su altura propia, sobrevivía a esa foto: quedaba una línea suelta describiendo una
-     * fotografía que no estaba. Absoluto y sobre la imagen, ocupa cero y lo recorta el
-     * mismo `overflow-hidden` que recorta la foto: si no hay foto, no hay pie.
-     *
-     * El degradado no es adorno: el pie cae sobre fotografía que no controlamos —un
-     * rollo de hilo puede ser casi blanco— y sin él la línea desaparece en las claras.
-     */
-    if (stretch) {
-      return (
-        <figure className={cn('relative flex flex-col overflow-hidden', className)}>
-          {media}
-          <figcaption className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-4 pt-10 pb-3 text-center text-micro text-white">
-            {text}
-          </figcaption>
-        </figure>
-      )
-    }
-
-    // Con proporción fija la altura se sabe de antemano, así que el pie va debajo, en el
-    // flujo: una línea bajo la foto, como el nombre y el resumen bajo la portada de una
-    // tarjeta de producto.
     return (
-      <figure className={cn('flex flex-col', className)}>
+      /**
+       * `min-h-0` + `overflow-hidden` NO SON DECORACIÓN, y sólo importan con `stretch`.
+       *
+       * Ahí la altura de este bloque es la que sobre en la columna, y a veces no sobra
+       * nada: medido a 1280 y a 1440 px, las tres fichas de hilo de metalizado no dejan
+       * hueco en los tres idiomas —la columna de datos es la larga— y la foto no se
+       * pinta, que es la respuesta correcta. Sin `min-h-0`, el pie, que sí tiene altura
+       * propia, impediría al bloque encoger y **alargaría la columna** justo en las
+       * fichas donde no había hueco que tapar; sin `overflow-hidden`, sobreviviría a su
+       * fotografía y quedaría un nombre de producto suelto bajo una imagen que no está.
+       * Con los dos, foto y texto aparecen y desaparecen juntos.
+       */
+      <figure className={cn('flex min-h-0 flex-col overflow-hidden', className)}>
         {media}
-        <figcaption className="mt-3 text-small text-ink-faint">{text}</figcaption>
+        {/* Mismo bloque que bajo la portada de una tarjeta: filete, nombre, la cifra en
+            mono y la descripción. Ver `ProductCard`, de donde salen estas clases. */}
+        <figcaption className="mt-4 border-t border-line pt-3 text-center">
+          <p className="text-lead leading-tight">{caption.title}</p>
+          {caption.subtitle && (
+            <p className="figure-num mt-1 text-small text-signal">{caption.subtitle}</p>
+          )}
+          <p className="mt-2 text-small text-ink-soft">{caption.description}</p>
+        </figcaption>
       </figure>
     )
   }

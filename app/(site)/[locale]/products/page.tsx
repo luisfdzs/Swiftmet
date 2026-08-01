@@ -4,7 +4,7 @@ import { ProductCard } from '@/components/sections/ProductCard'
 import { Figure } from '@/components/ui/Figure'
 import { Reveal } from '@/components/ui/Reveal'
 import { getProducts, productFamilies, type ProductEntry } from '@/lib/content'
-import { isLocale } from '@/lib/i18n/config'
+import { isLocale, type Locale } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 
 export async function generateMetadata({
@@ -38,6 +38,19 @@ export async function generateMetadata({
  */
 function lastSecondPhoto(items: ProductEntry[]) {
   return items[items.length - 1]?.second ?? null
+}
+
+/**
+ * El texto que va bajo esa foto, con la misma forma que el de la tarjeta de al lado:
+ * nombre del producto, pureza y —en el lugar del resumen— qué se ve en la fotografía.
+ */
+function captionFor(product: ProductEntry | undefined, locale: Locale) {
+  if (!product?.second) return undefined
+  return {
+    title: product.name,
+    subtitle: product.purity,
+    description: product.second.alt[locale],
+  }
 }
 
 export default async function ProductsPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -100,11 +113,12 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
                     ratio="4 / 3"
                     sizes="(max-width: 768px) 100vw, 46vw"
                     label={group.items[group.items.length - 1]?.name ?? ''}
-                    // El pie es lo que la distingue de la tarjeta que tiene al lado sin
-                    // fingir ser una: la tarjeta lleva nombre, pureza, familia y resumen
-                    // bajo un filete; esto lleva una línea suelta que describe la foto. Y
-                    // sigue sin enlace, que era la decisión de fondo.
-                    caption={lastSecondPhoto(group.items)?.alt[locale]}
+                    // Mismo bloque de texto que la tarjeta que tiene al lado —nombre,
+                    // pureza y una descripción bajo el filete—, para que la fila se lea
+                    // pareja. Lo que cambia es la descripción: la tarjeta resume el
+                    // producto, esto describe la fotografía. Y sigue **sin enlace**, que
+                    // era la decisión de fondo: es la foto de la familia, no una tarjeta.
+                    caption={captionFor(group.items[group.items.length - 1], locale)}
                   />
                 </Reveal>
               )}

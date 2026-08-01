@@ -205,28 +205,31 @@ maquetación —para que no quede medio ancho vacío a la derecha— y tapa dos 
   así que a la derecha sobraban entre 220 y 860 px según el producto y el idioma. Aquí la foto **crece
   hasta el fondo de la fila** (de ahí que los ficheros sean verticales, 800×1000, y se recorten con
   `object-cover`), y **sin altura mínima a propósito**: si a un producto no le sobra nada, la foto mide
-  cero y no se pinta —no había hueco que tapar—, en vez de dejar una tira de 20 px o pasarse de largo y
-  trasladar el hueco a la izquierda. Pasa más de lo que parece: **medido en las siete fichas**, a 1280 y a
-  1440 px las tres de hilo de metalizado no tienen hueco ninguno y no pintan la foto, y a 1920 px les
-  quedan entre 50 y 110 px; las otras cuatro van de 76 a 687 px según el ancho.
+  cero y no se pinta. Eso valió mientras la foto iba muda; con pie ya no (ver el párrafo siguiente), así
+  que hoy la foto tiene **altura mínima de 192 px**: o hay bloque entero, o no hay nada.
 
 Las dos, sólo de tableta para arriba: en una sola columna no hay nada a la derecha que cuadrar, y una foto
 de archivo de más sería sólo scroll.
 
-**Toda foto que esté sola lleva pie** (`caption` en `<Figure>`). En el resto de la web cada imagen tiene
-al lado un texto que dice qué es —la portada de una tarjeta lleva debajo nombre, pureza, familia y
-resumen; la de una ficha, los párrafos del producto; y el hueco tramado escribe él mismo qué falta—, y las
-dos fotos de relleno eran las únicas mudas, precisamente por estar donde no hay texto. El pie **es el
-mismo texto del `alt`**, no uno nuevo: ya está escrito en los tres idiomas y bajo la regla de describir lo
-que se ve, que es todo lo que una foto de archivo puede afirmar. Cuando hay pie, la imagen pasa a
-`alt=""`: si no, un lector de pantalla leería la misma frase dos veces.
+**Toda foto que esté sola lleva pie, y el pie tiene la forma de la casa** (`caption` en `<Figure>`): bajo
+un filete, **título, subtítulo y descripción** — el nombre del producto, su pureza en mono y qué se ve en
+la fotografía. Es exactamente el bloque de `ProductCard`, para que una fila del catálogo se lea pareja y
+la ficha se lea como la portada. En el resto de la web cada imagen ya tenía texto al lado —nombre,
+pureza, familia y resumen bajo una tarjeta; los párrafos del producto junto a la portada de una ficha; y
+el hueco tramado escribe él mismo qué falta—, y las dos fotos de relleno eran las únicas mudas,
+precisamente por estar donde no hay texto.
 
-Dónde se coloca depende de si la altura se sabe de antemano. En el catálogo, celda de proporción fija: pie
-debajo, en el flujo. En la ficha, **dentro de la foto**, sobre un degradado —porque la altura ahí es «lo
-que sobre», y a veces no sobra nada: un pie con altura propia sobreviviría a la foto y dejaría una línea
-suelta describiendo una fotografía que no está—. Absoluto, ocupa cero y lo recorta el mismo `overflow` que
-recorta la imagen. El degradado tampoco es adorno: la foto no la controlamos y un rollo de hilo puede ser
-casi blanco.
+La **descripción es el `alt`**, no un texto nuevo: ya está escrito en los tres idiomas y bajo la regla de
+describir lo que se ve, que es todo lo que una foto de archivo puede afirmar. El título y la pureza los
+pone el sitio alrededor, como en cualquier tarjeta, sabiendo que acercan la foto de archivo al producto
+—decisión de Luis, con la regla 8 sobre la mesa—. Cuando hay pie, la imagen pasa a `alt=""`: si no, un
+lector de pantalla leería la misma frase dos veces.
+
+**Lo que costó, y es visible:** un bloque de texto ocupa altura y no puede encogerse solo, así que la foto
+de la ficha ya no puede medir cero. Con el mínimo de 192 px, el hueco que faltaba a la derecha se traslada
+a la izquierda en las fichas más cargadas —medido: **349-439 px en las tres de metalizado a 1280-1440 px**
+y 160-226 px en la varilla; a 1920 px, unos 190 px; en las otras tres, cero—. Es el precio de que el pie
+esté en el flujo y no dentro de la foto.
 
 - **Licencia Pexels:** uso comercial, modificación permitida y **sin atribución obligatoria**. El fichero
   de créditos existe igualmente, para poder retirar o sustituir una imagen sin arqueología.

@@ -150,12 +150,17 @@ export default async function ProductPage({
               stretch
               sizes="(max-width: 768px) 100vw, 40vw"
               label={product.name}
-              // Con pie: es la única fotografía de la ficha que no tiene ningún texto
-              // cerca —la portada tiene los párrafos del producto al lado, esta cae al
-              // fondo de la columna de datos—, así que sin él es una imagen que aparece
-              // debajo de una tabla de especificaciones sin decir qué es. El pie dice lo
-              // que se ve, que es todo lo que una foto de archivo puede decir.
-              caption={product.second.alt[locale]}
+              // Con pie, y con el MISMO bloque que en la portada y el catálogo: nombre,
+              // pureza y descripción de la foto bajo un filete. Es la única fotografía de
+              // la ficha que no tiene texto cerca —la portada tiene los párrafos del
+              // producto al lado, esta cae al fondo de la columna de datos—, y quedaba
+              // muda. El nombre y la pureza se repiten (están arriba y en la tabla), pero
+              // es lo que hace que este bloque se lea igual que todos los demás.
+              caption={{
+                title: product.name,
+                subtitle: product.purity,
+                description: product.second.alt[locale],
+              }}
             />
           )}
         </div>
