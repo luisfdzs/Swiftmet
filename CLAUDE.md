@@ -87,9 +87,9 @@ Heredadas de la metodología de `sangilstudio`:
    ejecuta el commit.
 4. **Sincronizar antes de trabajar** — `fetch`/`pull` antes de empezar una modificación.
 5. **Rama por tarea, y la rama se BORRA al mergear** — rama con nombre representativo sacada de
-   `test`; al terminar, `git merge --no-ff` en `test`, push, y `git branch -d` + `git push origin
---delete`. **Nunca squash** en las promociones `test` → `develop` → `main`: el squash crea SHA
-   nuevos, las ramas dejan de compartir historia y cada promoción reabre conflictos ya resueltos.
+   `develop`; al terminar, `git merge --no-ff` en `develop`, push, y `git branch -d` + `git push
+origin --delete`. **Nunca squash** en las promociones `develop` → `test` → `main`: el squash crea
+   SHA nuevos, las ramas dejan de compartir historia y cada promoción reabre conflictos ya resueltos.
 6. **Una tarea de interfaz no está hecha hasta verla en móvil** — `npm run check:mobile` antes de
    cerrarla.
 7. **Los despliegues se validan con un preview real de Vercel**, nunca con `vercel build` en local:
@@ -108,8 +108,20 @@ Heredadas de la metodología de `sangilstudio`:
 
 ### Modelo de ramas
 
-`main` (producción) · `develop` (lo que va a producción) · `test` (día a día) · ramas temporales que
-nacen y **mueren** en `test`.
+Cada rama larga corresponde a **un entorno**, y sólo se sube de nivel lo que ya está validado en el
+anterior:
+
+| Rama | Para qué | Vercel |
+| --- | --- | --- |
+| `develop` | Día a día: desarrollar, depurar, subir al repositorio sin publicar nada | **Nada.** No despliega |
+| `test` | Entorno de test | `swiftmettest` → swiftmettest.vercel.app (`noindex`) |
+| `main` | Producción | `swiftmet` → swiftmet.vercel.app |
+
+Las ramas temporales nacen y **mueren** en `develop`. El sentido único es
+`develop` → `test` → `main`, siempre con `git merge --no-ff`.
+
+Que `develop` no toque Vercel no es una convención: está en `vercel.json`
+(`git.deploymentEnabled: {"develop": false}`), versionado y aplicado igual a los dos proyectos.
 
 ## 5. Protocolo de mantenimiento
 
@@ -125,7 +137,13 @@ Regla de oro: **el contexto nunca debe quedar desactualizado respecto al estado 
 
 ---
 
-_Última actualización: 2026-07-30 — tres cambios el mismo día. (1) Textos centrados en toda la web y
+_Última actualización: 2026-08-01 — **nuevo modelo de ramas: una rama por entorno.** `develop` pasa a
+ser el día a día (desarrollar, depurar y subir al repositorio sin desplegar nada, garantizado por
+`git.deploymentEnabled` en `vercel.json`), `test` es el entorno de test y `main` producción; las ramas
+temporales nacen y mueren en `develop` y el camino es `develop` → `test` → `main`. Sustituye al modelo
+heredado de `sangilstudio`, donde el día a día era `test` y `develop` un escalón sin entorno._
+
+_2026-07-30 — tres cambios el mismo día. (1) Textos centrados en toda la web y
 navegación de móvil en una barra inferior de iconos, al estilo de bonsaiartesania.com. (2) La portada
 abre con un montaje de vídeo en bucle de 24,3 s —el proceso del aluminio a cámara rápida, once planos de
 dominio público tratados—, al estilo de la portada de sanity.io y reproducible con `npm run hero`. (3)

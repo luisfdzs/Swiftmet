@@ -273,6 +273,10 @@ _push_:
 - **Test:** proyecto `swiftmettest`, rama `test` →
   [swiftmettest.vercel.app](https://swiftmettest.vercel.app). Emite `noindex` y `robots: disallow`
   automáticamente para no competir en Google con el dominio real.
+- **`develop` no despliega nada.** Es la rama de trabajo: se desarrolla, se depura y se sube al
+  repositorio sin publicar. Lo impone `git.deploymentEnabled` en `vercel.json`, así que vale para los
+  dos proyectos sin tocar el panel. El camino de un cambio es `develop` → `test` → `main`, siempre
+  con `git merge --no-ff`.
 
 > La rama de producción de cada proyecto (`main` y `test`) **sólo se puede fijar desde el panel de
 > Vercel**: Settings › Environments › Production › Branch Tracking. La API pública no acepta
