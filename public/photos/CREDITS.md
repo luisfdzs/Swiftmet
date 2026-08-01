@@ -22,6 +22,23 @@ cada imagen es lo que permite retirarla o sustituirla sin arqueología.
 | `product-stainless-steel-mig-welding-wire.webp` | [36397788](https://www.pexels.com/photo/36397788/) | Industrial worker amongst coiled wire bundles |
 | `product-high-carbon-spring-steel-wire.webp` | [36397791](https://www.pexels.com/photo/36397791/) | Industrial worker among stacked steel coils in warehouse |
 
+### Segundas fotos de ficha (`-2`)
+
+Rellenan el hueco que dejaba la columna de especificaciones cuando el producto tiene pocos
+datos —`tea-bag-wire` no tiene ninguno—. Van recortadas en **vertical (800×1000)** porque el hueco
+que tapan es alto y estrecho, y sólo se ven de tableta para arriba: en móvil no hay columna derecha
+que cuadrar. Ver `lib/photos.ts`.
+
+| Fichero | Original en Pexels | Título |
+| --- | --- | --- |
+| `product-1080-metallising-wire-2.webp` | [28219577](https://www.pexels.com/photo/28219577/) | Iron Rope in Shadow |
+| `product-1090-metallising-wire-2.webp` | [38280705](https://www.pexels.com/photo/38280705/) | Coiled Steel Wire Mesh Rolls in Warehouse |
+| `product-1199-metallising-wire-2.webp` | [6156593](https://www.pexels.com/photo/6156593/) | Abstract background of rows with thin wires |
+| `product-aluminium-rod-2.webp` | [4674424](https://www.pexels.com/photo/4674424/) | Cold Rolled Steel Bar |
+| `product-tea-bag-wire-2.webp` | [15059762](https://www.pexels.com/photo/15059762/) | A pile of wire that is wrapped in a coil |
+| `product-stainless-steel-mig-welding-wire-2.webp` | [35551117](https://www.pexels.com/photo/35551117/) | Close-Up of Twisted Steel Wire Ropes |
+| `product-high-carbon-spring-steel-wire-2.webp` | [36398160](https://www.pexels.com/photo/36398160/) | Welded wire mesh sheets stacked |
+
 ## El criterio con el que se eligieron, que hay que respetar al cambiarlas
 
 Un primer intento con material de Wikimedia se descartó **después de verlo en pantalla**: eran rollos de
@@ -42,5 +59,6 @@ desde sus cotas, que es el único dato firme de la web.
 ## Cuando lleguen las fotos de Swiftmet
 
 No hay que tocar código: en cuanto un producto tiene imagen en el panel de Sanity, la suya gana y la de
-archivo deja de usarse (ver `getProducts` en `lib/content.ts`). Para retirar una de aquí basta con borrar
-su fichero `.webp`, su entrada en `lib/photos.ts` y su fila de esta tabla.
+archivo deja de usarse (ver `getProducts` en `lib/content.ts`) — la primera imagen del panel sustituye a
+la portada y la segunda, a la foto `-2`. Para retirar una de aquí basta con borrar su fichero `.webp`,
+su entrada en `lib/photos.ts` y su fila de esta tabla.

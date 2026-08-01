@@ -181,8 +181,28 @@ pisaban. Se vio en `/hi` antes de escribir la regla.
 **Swiftmet no ha entregado ninguna fotografía.** No hay imágenes de la planta de Baghola, ni del hilo, ni
 de las bobinas. Hasta que lleguen, **las siete fichas de producto y la apertura de `/quality` llevan
 fotografía industrial de archivo de [Pexels](https://www.pexels.com)**, recortada a la proporción de cada
-hueco: ocho ficheros en `public/photos`, declarados en `lib/photos.ts`, con la procedencia en
+hueco: quince ficheros en `public/photos`, declarados en `lib/photos.ts`, con la procedencia en
 `public/photos/CREDITS.md`.
+
+Cada producto lleva **dos**: la portada y una segunda (`product.second`). La segunda existe por
+maquetación —para que no quede medio ancho vacío a la derecha— y tapa dos huecos distintos:
+
+- **En el catálogo `/products`,** la media fila que sobra. Es una rejilla de dos columnas y **cuatro de
+  las cinco familias tienen un solo producto** —varilla, bolsitas de té, soldadura, muelles—, así que la
+  sección se quedaba medio vacía y parecía una tarjeta que no había cargado; en metalizado pasaba lo
+  mismo con la tercera. Se rellena con la segunda foto del último producto de la familia, **sin rótulo y
+  sin enlace**: es la fotografía de la familia, no una tarjeta más.
+- **En la ficha de producto,** el fondo de la columna de especificaciones. Las dos columnas las escribe el
+  cliente y nunca miden lo mismo —`tea-bag-wire` no tiene ni una especificación y el `1080` tiene seis—,
+  así que a la derecha sobraban entre 220 y 860 px según el producto y el idioma. Aquí la foto **crece
+  hasta el fondo de la fila** (de ahí que los ficheros sean verticales, 800×1000, y se recorten con
+  `object-cover`), y **sin altura mínima a propósito**: si a un producto no le sobra nada, la foto mide
+  cero y no se pinta —no había hueco que tapar—, en vez de dejar una tira de 20 px o pasarse de largo y
+  trasladar el hueco a la izquierda. Hoy sólo le ocurre al `1090`, el de la ficha más cargada, por debajo
+  de unos 1350 px de ancho.
+
+Las dos, sólo de tableta para arriba: en una sola columna no hay nada a la derecha que cuadrar, y una foto
+de archivo de más sería sólo scroll.
 
 - **Licencia Pexels:** uso comercial, modificación permitida y **sin atribución obligatoria**. El fichero
   de créditos existe igualmente, para poder retirar o sustituir una imagen sin arqueología.
@@ -191,7 +211,8 @@ hueco: ocho ficheros en `public/photos`, declarados en `lib/photos.ts`, con la p
   varilla genéricos, en su mayoría de acero: **ambienta el oficio, no acredita el producto.**
 - **En cuanto alguien suba la imagen al panel, la de archivo deja de usarse.** No hay nada que borrar en
   el código: el respaldo sólo actúa si el producto no tiene imagen en Sanity (`getProducts` en
-  `lib/content.ts`). Para retirarlas del todo, borrar los ficheros.
+  `lib/content.ts`). La primera imagen del panel sustituye a la portada y la segunda, a la foto de la
+  columna derecha. Para retirarlas del todo, borrar los ficheros.
 - **El programa de bobinas no lleva fotografía de archivo.** Las catorce bobinas se dibujan a escala
   desde sus cotas: es información que la competencia no publica, y una bobina de stock que no midiera lo
   que dice la tabla convertiría el único dato firme de la web en decoración.
