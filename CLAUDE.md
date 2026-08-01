@@ -45,7 +45,8 @@ proyecto.
 
 - **Frontend:** Next.js 16 (App Router, Turbopack) + TypeScript estricto + Tailwind CSS 4, con
   **zod** validando el contenido. **Estático**: 50 rutas prerrenderizadas; en servidor sólo
-  `proxy.ts` (negocia idioma) y el webhook de revalidación.
+  `proxy.ts` (negocia idioma), el webhook de revalidación y el comodín `[locale]/[...rest]`, que
+  existe para que un enlace roto caiga en el 404 propio y no en el de Next (ver más abajo).
 - **Trilingüe:** `en` (por defecto), `hi`, `es`. Sólo el inglés es obligatorio en el CMS; lo que
   falte cae al inglés en `lib/content.ts`.
 - **Contenido: Sanity**, editado en `/admin` dentro de la propia web. Tres tipos de documento:
@@ -111,11 +112,11 @@ origin --delete`. **Nunca squash** en las promociones `develop` → `test` → `
 Cada rama larga corresponde a **un entorno**, y sólo se sube de nivel lo que ya está validado en el
 anterior:
 
-| Rama | Para qué | Vercel |
-| --- | --- | --- |
-| `develop` | Día a día: desarrollar, depurar, subir al repositorio sin publicar nada | **Nada.** No despliega |
-| `test` | Entorno de test | `swiftmettest` → swiftmettest.vercel.app (`noindex`) |
-| `main` | Producción | `swiftmet` → swiftmet.vercel.app |
+| Rama      | Para qué                                                                | Vercel                                               |
+| --------- | ----------------------------------------------------------------------- | ---------------------------------------------------- |
+| `develop` | Día a día: desarrollar, depurar, subir al repositorio sin publicar nada | **Nada.** No despliega                               |
+| `test`    | Entorno de test                                                         | `swiftmettest` → swiftmettest.vercel.app (`noindex`) |
+| `main`    | Producción                                                              | `swiftmet` → swiftmet.vercel.app                     |
 
 Las ramas temporales nacen y **mueren** en `develop`. El sentido único es
 `develop` → `test` → `main`, siempre con `git merge --no-ff`.

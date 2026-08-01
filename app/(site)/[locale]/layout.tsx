@@ -47,6 +47,25 @@ export const viewport: Viewport = {
   themeColor: '#0b0e10',
 }
 
+/**
+ * LA IMAGEN QUE SE VE AL COMPARTIR UN ENLACE, declarada a mano y servida desde
+ * `public/` (la genera `npm run brand`).
+ *
+ * Estuvo puesta por la convención de ficheros de Next, en `app/opengraph-image.jpg`, y
+ * durante todo ese tiempo **la web no emitió una sola etiqueta `og:image`**: la
+ * convención se hereda por el árbol de segmentos, y aquí `(site)` y `(studio)` traen
+ * cada uno su layout raíz, así que la raíz de `app/` no es padre de ninguna página a
+ * estos efectos. Moverla a este segmento sí funcionaba, pero la URL salía con el
+ * marcador del segmento dinámico dentro (`/-/opengraph-image-….jpg`), y bajarla al grupo
+ * `(site)` volvía a no emitir nada.
+ *
+ * El fallo no daba señal: el fichero se servía, el build pasaba y los enlaces
+ * compartidos en WhatsApp o LinkedIn salían como texto pelado —encima con
+ * `summary_large_image` prometiendo una imagen—. Por eso ahora es explícito: una ruta
+ * fija que se lee aquí mismo. `metadataBase` la convierte en absoluta.
+ */
+const shareImage = { url: '/opengraph-image.jpg', width: 1200, height: 630 }
+
 /** Las tres versiones de idioma se generan en build; no hay renderizado dinámico. */
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -92,10 +111,9 @@ export async function generateMetadata({
       title,
       description,
       url: `/${locale}`,
+      images: [shareImage],
     },
-    // La imagen la aporta app/opengraph-image.jpg (convención de ficheros de Next),
-    // generada por `npm run brand`. Aquí sólo se declara el formato de tarjeta.
-    twitter: { card: 'summary_large_image', title, description },
+    twitter: { card: 'summary_large_image', title, description, images: [shareImage] },
     // Sólo la rama main se indexa; test y previews van con noindex. El criterio y el
     // motivo (test es "production" en su propio proyecto) en lib/site-env.ts.
     robots: isIndexable() ? { index: true, follow: true } : { index: false, follow: false },

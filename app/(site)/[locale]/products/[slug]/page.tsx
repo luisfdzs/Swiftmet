@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Figure } from '@/components/ui/Figure'
 import { SpecList } from '@/components/ui/SpecList'
-import { getProduct, getProductNeighbours, getProductSlugs } from '@/lib/content'
+import { getCompanyInfo, getProduct, getProductNeighbours, getProductSlugs } from '@/lib/content'
 import { isLocale, locales } from '@/lib/i18n/config'
 import { getDictionary } from '@/lib/i18n/dictionaries'
 import { href } from '@/lib/i18n/routes'
@@ -50,7 +50,15 @@ export default async function ProductPage({
   if (!product) notFound()
 
   const t = getDictionary(locale)
-  const neighbours = await getProductNeighbours(slug)
+  const [neighbours, company] = await Promise.all([getProductNeighbours(slug), getCompanyInfo()])
+
+  /**
+   * El asunto del correo trae ya el producto por su nombre. Es el mismo truco que la
+   * sección de contacto de la portada —allí el asunto es lo que hay que contarnos—, y
+   * aquí ahorra la pregunta que abre todas las consultas: de cuál de los siete estamos
+   * hablando.
+   */
+  const enquiry = `mailto:${company.email}?subject=${encodeURIComponent(product.name)}`
 
   return (
     <article className="page-gutter pt-32 text-center md:pt-40">
@@ -100,6 +108,18 @@ export default async function ProductPage({
               </ul>
             </>
           )}
+
+          {/* LA CONSULTA, EN LA FICHA. Estaba traducida a los tres idiomas desde el
+              principio y no se había llegado a poner: se salía de una ficha por «volver
+              a productos» o por el menú, y la consulta —que es lo que esta página
+              existe para provocar— quedaba a dos pantallas de scroll, en la portada.
+              Va al final de la columna de datos porque es donde termina de decidirse:
+              el comprador acaba de leer diámetro, pureza y embalaje. */}
+          <p className="mt-12 border-t border-line pt-8">
+            <a className="link-underline tap text-lead text-ink" href={enquiry}>
+              {t.product.enquire}
+            </a>
+          </p>
         </div>
 
         <div className="md:order-1 md:col-span-7">

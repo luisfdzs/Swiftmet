@@ -45,6 +45,14 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        // `/company` es la más adivinable de las tres: es literalmente el rótulo de la
+        // entrada del menú y el `id` del ancla. Faltaba, y era la única de la familia
+        // que caía en un 404.
+        source: '/:locale(en|hi|es)/company',
+        destination: '/:locale#company',
+        permanent: true,
+      },
+      {
         source: '/:locale(en|hi|es)/contact',
         destination: '/:locale#contact',
         permanent: true,
