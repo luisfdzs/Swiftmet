@@ -45,7 +45,8 @@ proyecto.
 
 - **Frontend:** Next.js 16 (App Router, Turbopack) + TypeScript estricto + Tailwind CSS 4, con
   **zod** validando el contenido. **Estático**: 50 rutas prerrenderizadas; en servidor sólo
-  `proxy.ts` (negocia idioma) y el webhook de revalidación.
+  `proxy.ts` (negocia idioma), el webhook de revalidación y el comodín `[locale]/[...rest]`, que
+  existe para que un enlace roto caiga en el 404 propio y no en el de Next (ver más abajo).
 - **Trilingüe:** `en` (por defecto), `hi`, `es`. Sólo el inglés es obligatorio en el CMS; lo que
   falte cae al inglés en `lib/content.ts`.
 - **Contenido: Sanity**, editado en `/admin` dentro de la propia web. Tres tipos de documento:

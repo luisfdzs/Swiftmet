@@ -135,7 +135,8 @@ sanity/                  ← esquemas del panel, consultas GROQ, cliente, cargad
 scripts/
   migration/             · content-snapshot.json (volcado del listado maestro, con procedencia)
   build-sanity-import.mjs
-  generate-brand-assets.mjs  ← favicon + OG, dibujados en SVG (no hay logotipo de Swiftmet)
+  generate-brand-assets.mjs  ← favicon (app/) + imagen de compartir (public/opengraph-image.jpg),
+                               dibujados en SVG porque no hay logotipo de Swiftmet
   hero-montage-shots.mjs     ← GUION del montaje de portada: once planos, con su encuadre
   build-hero-montage.mjs     ← lo corta, lo trata y lo codifica (`npm run hero`, pide ffmpeg)
   check-mobile.mjs
@@ -156,7 +157,14 @@ Seis decisiones que conviene entender antes de tocar código:
    del revés sin que nada fallara. `npm run migrate:build` hace la misma comprobación antes de
    importar.
 4. **Todo es estático.** Las 50 rutas se prerrenderizan en build. Lo único que corre en el servidor es
-   `proxy.ts`, que negocia el idioma, y el webhook de revalidación.
+   `proxy.ts` (negocia el idioma), el webhook de revalidación y el comodín
+   `app/(site)/[locale]/[...rest]/page.tsx`, que no se puede prerrenderizar porque sus caminos son
+   infinitos. Ese comodín existe para una cosa: **que un enlace roto vea el 404 de Swiftmet**. Sin él,
+   `/en/lo-que-sea` no casa con ningún segmento, Next se cae al `not-found` de la raíz de `app/` —donde
+   no hay layout, porque `(site)` y `(studio)` traen el suyo— y sirve su 404 negro por defecto, sin
+   marca, sin menú y sin manera de volver. El 404 propio sólo salía en
+   `/en/products/<slug-inexistente>`, que es el único sitio donde había una página llamando a
+   `notFound()`.
 5. **Los tokens de diseño están sólo en `app/globals.css`.** Si un color o un espaciado no está en ese
    `@theme`, no se usa. Ahí está también la corrección de interlínea para el devanagari, por el mismo
    motivo: es una decisión del sistema, no de un titular concreto.
@@ -304,6 +312,14 @@ _push_:
 > `productionBranch` en ningún endpoint ni versión — se probaron `PATCH /v9|v10|v11/projects`, el
 > `POST .../link` y varios más, y todos lo rechazan o lo ignoran en silencio. Si se crea un tercer
 > entorno, es el único paso manual.
+
+**La imagen que se ve al compartir un enlace se declara a mano**, en el `generateMetadata` del layout
+de idioma, y el fichero vive en `public/opengraph-image.jpg`. No se usa la convención de nombres de
+Next (`app/opengraph-image.jpg`), y no por gusto: ahí estuvo, y **la web no emitió una sola etiqueta
+`og:image`** en ningún idioma. La convención se hereda por el árbol de segmentos y aquí `(site)` y
+`(studio)` traen cada uno su layout raíz, así que la raíz de `app/` no es padre de ninguna página a
+esos efectos. El fallo no daba ninguna señal —el build pasaba y el fichero se servía—; lo único que
+se veía era que los enlaces compartidos en WhatsApp o LinkedIn salían como texto pelado.
 
 El framework se declara en **`vercel.json`** (`"framework": "nextjs"`), que se versiona y se aplica
 igual a los dos entornos, así que no hace falta tocar el panel de Vercel.

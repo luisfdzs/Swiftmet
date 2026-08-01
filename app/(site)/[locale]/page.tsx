@@ -94,6 +94,23 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         </Link>
       </section>
 
+      {/* CALIDAD. La portada no la enlazaba en absoluto —sólo se llegaba por el menú o
+          por el pie—, aunque el titular y el enlace llevaban traducidos a los tres
+          idiomas desde el principio. Va después de las bobinas y antes de la empresa,
+          que es el orden de la pregunta del comprador: qué me vendes, en qué formato,
+          cómo sé que cumple, y quién eres. El párrafo es el de la propia página de
+          calidad, para no escribir dos veces lo mismo con otras palabras. */}
+      <section className="page-gutter pt-(--spacing-section) text-center">
+        <h2 className="eyebrow border-b border-line pb-4">{t.home.qualityTitle}</h2>
+        <p className="mx-auto mt-10 max-w-3xl text-lead text-balance md:mt-14">{t.quality.lead}</p>
+        <Link
+          href={href(locale, 'quality')}
+          className="link-underline tap mt-10 inline-block text-small"
+        >
+          {t.home.viewQuality}
+        </Link>
+      </section>
+
       <CompanySection locale={locale} company={company} />
       <ContactSection locale={locale} company={company} />
     </>
