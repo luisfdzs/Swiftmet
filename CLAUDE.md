@@ -19,7 +19,7 @@ replicando el stack, la arquitectura y la metodología del proyecto `C:\Proyecto
 (rama `test`).
 
 **Estado actual (2026-07-30): DESPLEGADA.**
-[swiftmet.vercel.app](https://swiftmet.vercel.app) (producción, rama `main`) y
+[swiftmet.vercel.app](https://swiftmet.vercel.app) (producción, rama `prod`) y
 [swiftmettest.vercel.app](https://swiftmettest.vercel.app) (test, rama `test`), con Sanity `3caofriy`
 y los webhooks de revalidación funcionando —publicar se refleja en 9 segundos, sin desplegar—. IDs y
 detalles en la memoria `despliegue`.
@@ -56,7 +56,7 @@ proyecto.
   falte cae al inglés en `lib/content.ts`.
 - **Contenido: Sanity**, editado en `/admin` dentro de la propia web. Tres tipos de documento:
   `product`, `spool` y el singleton `companyInfo`.
-- **Despliegue: Vercel**, dos entornos (`main` → producción, `test` → test con `noindex`). Framework
+- **Despliegue: Vercel**, dos entornos (`prod` → producción, `test` → test con `noindex`). Framework
   declarado en `vercel.json`.
 - **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (35
   comprobaciones en Chrome real a 390×844, por idioma).
@@ -102,8 +102,8 @@ Heredadas de la metodología de `sangilstudio`:
    ejecuta el commit.
 4. **Sincronizar antes de trabajar** — `fetch`/`pull` antes de empezar una modificación.
 5. **Rama por tarea, y la rama se BORRA al mergear** — rama con nombre representativo sacada de
-   `develop`; al terminar, `git merge --no-ff` en `develop`, push, y `git branch -d` + `git push
-origin --delete`. **Nunca squash** en las promociones `develop` → `test` → `main`: el squash crea
+   `dev`; al terminar, `git merge --no-ff` en `dev`, push, y `git branch -d` + `git push
+origin --delete`. **Nunca squash** en las promociones `dev` → `test` → `prod`: el squash crea
    SHA nuevos, las ramas dejan de compartir historia y cada promoción reabre conflictos ya resueltos.
 6. **Una tarea de interfaz no está hecha hasta verla en móvil** — `npm run check:mobile` antes de
    cerrarla.
@@ -128,15 +128,15 @@ anterior:
 
 | Rama      | Para qué                                                                | Vercel                                               |
 | --------- | ----------------------------------------------------------------------- | ---------------------------------------------------- |
-| `develop` | Día a día: desarrollar, depurar, subir al repositorio sin publicar nada | **Nada.** No despliega                               |
+| `dev`     | Día a día: desarrollar, depurar, subir al repositorio sin publicar nada | **Nada.** No despliega                               |
 | `test`    | Entorno de test                                                         | `swiftmettest` → swiftmettest.vercel.app (`noindex`) |
-| `main`    | Producción                                                              | `swiftmet` → swiftmet.vercel.app                     |
+| `prod`    | Producción                                                              | `swiftmet` → swiftmet.vercel.app                     |
 
-Las ramas temporales nacen y **mueren** en `develop`. El sentido único es
-`develop` → `test` → `main`, siempre con `git merge --no-ff`.
+Las ramas temporales nacen y **mueren** en `dev`. El sentido único es
+`dev` → `test` → `prod`, siempre con `git merge --no-ff`.
 
-Que `develop` no toque Vercel no es una convención: está en `vercel.json`
-(`git.deploymentEnabled: {"develop": false}`), versionado y aplicado igual a los dos proyectos.
+Que `dev` no toque Vercel no es una convención: está en `vercel.json`
+(`git.deploymentEnabled: {"dev": false}`), versionado y aplicado igual a los dos proyectos.
 
 ## 5. Protocolo de mantenimiento
 
@@ -151,6 +151,14 @@ En **cada cambio relevante**, sin que se lo pidan:
 Regla de oro: **el contexto nunca debe quedar desactualizado respecto al estado real del proyecto.**
 
 ---
+
+_Última actualización: 2026-09-18 — **ramas renombradas: `develop` → `dev`, `main` → `prod`.**
+Mismo modelo de tres entornos, solo cambian los nombres (`test` sigue igual). Renombradas en GitHub
+con la API de renombrado de rama (conserva historia, PRs y la rama por defecto se actualiza sola) y
+en local con `git branch -m`. `vercel.json` actualizado (`git.deploymentEnabled: {"dev": false}`);
+falta reflejarlo en los dos proyectos de Vercel: production branch de `swiftmet` de `main` a `prod`,
+y el branch tracking de `swiftmettest` de `develop`/`test` según corresponda — pendiente de hacerlo
+en el dashboard, que requiere sesión iniciada del usuario._
 
 _Última actualización: 2026-08-01 — **toda sección pasa a ser una ruta; se acabaron las anclas.**
 Empresa y contacto eran secciones de la portada enlazadas con `/en#company` y `/en#contact`, y esa
