@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode } from 'react'
+import { createElement, type ElementType, type ReactNode } from 'react'
 import { cn } from '@/lib/cn'
 
 type Props = {
@@ -16,12 +16,12 @@ type Props = {
  * contenido invisible por una animación que no corre.
  */
 export function Reveal({ children, as: Tag = 'div', step = 0, className }: Props) {
-  return (
-    <Tag
-      className={cn('reveal', className)}
-      style={step > 0 ? { animationDelay: `${step * 60}ms` } : undefined}
-    >
-      {children}
-    </Tag>
+  return createElement(
+    Tag,
+    {
+      className: cn('reveal', className),
+      style: step > 0 ? { animationDelay: `${step * 60}ms` } : undefined,
+    },
+    children,
   )
 }

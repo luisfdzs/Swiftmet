@@ -333,16 +333,16 @@ dos megas y medio de vídeo.
 En **Vercel** (cuenta `luis-fernandez`), con dos proyectos que se publican automáticamente al hacer
 _push_:
 
-- **Producción:** proyecto `swiftmet`, rama `main` → [swiftmet.vercel.app](https://swiftmet.vercel.app).
+- **Producción:** proyecto `swiftmet`, rama `prod` → [swiftmet.vercel.app](https://swiftmet.vercel.app).
 - **Test:** proyecto `swiftmettest`, rama `test` →
   [swiftmettest.vercel.app](https://swiftmettest.vercel.app). Emite `noindex` y `robots: disallow`
   automáticamente para no competir en Google con el dominio real.
-- **`develop` no despliega nada.** Es la rama de trabajo: se desarrolla, se depura y se sube al
+- **`dev` no despliega nada.** Es la rama de trabajo: se desarrolla, se depura y se sube al
   repositorio sin publicar. Lo impone `git.deploymentEnabled` en `vercel.json`, así que vale para los
-  dos proyectos sin tocar el panel. El camino de un cambio es `develop` → `test` → `main`, siempre
+  dos proyectos sin tocar el panel. El camino de un cambio es `dev` → `test` → `prod`, siempre
   con `git merge --no-ff`.
 
-> La rama de producción de cada proyecto (`main` y `test`) **sólo se puede fijar desde el panel de
+> La rama de producción de cada proyecto (`prod` y `test`) **sólo se puede fijar desde el panel de
 > Vercel**: Settings › Environments › Production › Branch Tracking. La API pública no acepta
 > `productionBranch` en ningún endpoint ni versión — se probaron `PATCH /v9|v10|v11/projects`, el
 > `POST .../link` y varios más, y todos lo rechazan o lo ignoran en silencio. Si se crea un tercer
@@ -359,7 +359,7 @@ se veía era que los enlaces compartidos en WhatsApp o LinkedIn salían como tex
 El framework se declara en **`vercel.json`** (`"framework": "nextjs"`), que se versiona y se aplica
 igual a los dos entornos, así que no hace falta tocar el panel de Vercel.
 
-Sólo la rama `main` se indexa, y el criterio está en `lib/site-env.ts`: **no** puede basarse en
+Sólo la rama `prod` se indexa, y el criterio está en `lib/site-env.ts`: **no** puede basarse en
 `VERCEL_ENV`, porque el proyecto de test despliega su rama como su propia «production» y allí
 `VERCEL_ENV === 'production'` también. Aquí importa más que en un portfolio: toda la web está pensada
 para posicionar por «high purity aluminium wire manufacturer», y dos copias compitiendo se estorban.

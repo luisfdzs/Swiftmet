@@ -3,7 +3,7 @@ import { site } from '@/content/site'
 import { isIndexable } from '@/lib/site-env'
 
 /**
- * Sólo la rama `main` se indexa. El entorno de test devuelve `disallow: /` para no
+ * Sólo la rama `prod` se indexa. El entorno de test devuelve `disallow: /` para no
  * competir en Google con el dominio real por las mismas búsquedas.
  * El criterio vive en `lib/site-env.ts`, con el porqué explicado.
  */

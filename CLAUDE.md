@@ -60,7 +60,10 @@ proyecto.
   declarado en `vercel.json`.
 - **Calidad:** `npm run check` (typecheck + ESLint + Prettier) y `npm run check:mobile` (35
   comprobaciones en Chrome real a 390×844, por idioma).
-- **Fotografía:** Swiftmet no ha entregado ninguna. Los siete productos —**dos fotos cada uno**,
+- **Fotografía:** Swiftmet no ha entregado ninguna para el sitio publicado todavía — desde el
+  2026-09-18 sí hay fotos reales de fábrica (bobinas y hilo troceado) pasadas por WhatsApp, en
+  evaluación en el sandbox `/lab-3d` (ver más abajo), pero **ninguna página real las usa aún**. Los
+  siete productos —**dos fotos cada uno**,
   portada y `second`— y la apertura de `/quality` llevan **archivo industrial de Pexels**
   (`lib/photos.ts`, procedencia en `public/photos/CREDITS.md`), que se retira solo en cuanto el panel
   tiene imagen. La segunda existe **por maquetación, para que no quede medio ancho vacío a la
@@ -86,6 +89,12 @@ proyecto.
   **dominio público** (archive.org), tratados hasta la abstracción. Guion en
   `scripts/hero-montage-shots.mjs`, render con `npm run hero` (pide ffmpeg), salida en `public/hero/`.
   **No es la planta de Swiftmet** y nada en la web dice que lo sea.
+- **Sandbox `/lab-3d`:** fuera de `(site)/[locale]`, sin idioma, sin nav, `noindex` — grupo de rutas
+  propio `app/(lab)/` con su propio `<html>`, igual que `(studio)/admin`. Fotos reales de bobinas
+  recortadas (`rembg`, no IA generativa) flotando como planos con textura en una escena
+  `react-three-fiber` (`components/three/SpoolLabScene.tsx`), orbitable. Es sólo para decidir si el
+  material aguanta el tratamiento antes de que algo entre en una página real. Detalle en
+  `.claude/memory/lab-3d.md`.
 
 Detalle y razonamiento en el **README.md**, que es extenso a propósito, y en `.claude/memory/`.
 
@@ -126,11 +135,11 @@ origin --delete`. **Nunca squash** en las promociones `dev` → `test` → `prod
 Cada rama larga corresponde a **un entorno**, y sólo se sube de nivel lo que ya está validado en el
 anterior:
 
-| Rama      | Para qué                                                                | Vercel                                               |
-| --------- | ----------------------------------------------------------------------- | ---------------------------------------------------- |
-| `dev`     | Día a día: desarrollar, depurar, subir al repositorio sin publicar nada | **Nada.** No despliega                               |
-| `test`    | Entorno de test                                                         | `swiftmettest` → swiftmettest.vercel.app (`noindex`) |
-| `prod`    | Producción                                                              | `swiftmet` → swiftmet.vercel.app                     |
+| Rama   | Para qué                                                                | Vercel                                               |
+| ------ | ----------------------------------------------------------------------- | ---------------------------------------------------- |
+| `dev`  | Día a día: desarrollar, depurar, subir al repositorio sin publicar nada | **Nada.** No despliega                               |
+| `test` | Entorno de test                                                         | `swiftmettest` → swiftmettest.vercel.app (`noindex`) |
+| `prod` | Producción                                                              | `swiftmet` → swiftmet.vercel.app                     |
 
 Las ramas temporales nacen y **mueren** en `dev`. El sentido único es
 `dev` → `test` → `prod`, siempre con `git merge --no-ff`.
@@ -152,7 +161,23 @@ Regla de oro: **el contexto nunca debe quedar desactualizado respecto al estado 
 
 ---
 
-_Última actualización: 2026-09-18 — **ramas renombradas: `develop` → `dev`, `main` → `prod`.**
+_Última actualización: 2026-09-18 — **sandbox `/lab-3d`: primeras fotos reales de fábrica, recortadas
+y flotando en 3D.** Luis pasó fotos de bobinas y de hilo troceado por WhatsApp — la primera
+fotografía real de Swiftmet que existe para este proyecto, todo lo demás sigue siendo archivo de
+Pexels (ver [[sin-fotografia]] en la memoria). Cuatro bobinas recortadas con `rembg` en local (nada
+de IA generativa) y montadas en `/lab-3d`, una ruta fuera de `(site)/[locale]` —sin idioma, sin nav,
+`noindex`— con una escena `react-three-fiber`: cada recorte es un plano con textura en `Billboard`,
+repartidos en anillo, con balanceo y `OrbitControls`. Añade `three`, `@react-three/fiber`,
+`@react-three/drei` y `gsap` al `package.json` (con `--legacy-peer-deps`: `@react-three/fiber@9.7`
+fija react `<19.3` por sus dependencias opcionales de Expo, que aquí no se usan). Efecto colateral
+real: instalar `@react-three/fiber` amplía `JSX.IntrinsicElements` globalmente y rompía el tipado de
+`components/ui/Reveal.tsx`; arreglado con `createElement` en vez de JSX ahí. **Nada de esto toca una
+página real ni Sanity.** Aparte, una de las fotos (una caja de embalaje) trae un email
+(`info@aluswiftmet.com`) y una dirección de planta (Faridabad) reales pero sin confirmar, distintos
+de los que hoy constan en el sitio — anotado en `.claude/memory/datos-pendientes.md`, sin tocar nada
+hasta que Swiftmet lo confirme (regla 8)._
+
+_2026-09-18 — **ramas renombradas: `develop` → `dev`, `main` → `prod`.**
 Mismo modelo de tres entornos, solo cambian los nombres (`test` sigue igual). Renombradas en GitHub
 con la API de renombrado de rama (conserva historia, PRs y la rama por defecto se actualiza sola) y
 en local con `git branch -m`. `vercel.json` actualizado (`git.deploymentEnabled: {"dev": false}`);
